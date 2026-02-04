@@ -1,6 +1,6 @@
 # 🛒 MySmartBasket – Web Oficial
 
-Landing page oficial de **MySmartBasket**, una aplicación inteligente diseñada para optimizar la compra en supermercados mediante tecnología y análisis de datos.
+Página web oficial de **MySmartBasket**, una aplicación inteligente diseñada para optimizar la compra en supermercados mediante tecnología y análisis de datos.
 
 Este repositorio contiene el código fuente de la **página web corporativa**, utilizada para presentación del proyecto, validación temprana y comunicación con usuarios, partners e inversores.
 
@@ -31,9 +31,5 @@ La web actúa como **punto de entrada al proyecto**, explicando la propuesta de 
 - HTML5
 - CSS3
 - JavaScript  
-*(Añade aquí frameworks si aplica: React, Next.js, Tailwind, etc.)*
-
 ---
-
-## 📂 Estructura del proyecto
 
