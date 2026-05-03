@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://mysmartbasket.app/sitemap.xml
