@@ -1,35 +1,78 @@
-# 🛒 MySmartBasket – Web Oficial
+# 🛒 MySmartBasket – Lista de la compra inteligente
 
-Página web oficial de **MySmartBasket**, una aplicación inteligente diseñada para optimizar la compra en supermercados mediante tecnología y análisis de datos.
-
-Este repositorio contiene el código fuente de la **página web corporativa**, utilizada para presentación del proyecto, validación temprana y comunicación con usuarios, partners e inversores.
+🌐 **Web oficial:** https://mysmartbasket.app  
 
 ---
 
-## 🚀 Sobre el proyecto
+## 🚀 ¿Qué es MySmartBasket?
 
-**MySmartBasket** es una startup tecnológica enfocada en mejorar la experiencia de compra diaria, ayudando a los usuarios a:
-- Optimizar su cesta de la compra
-- Ahorrar tiempo y dinero
-- Tomar decisiones de consumo más inteligentes
+**MySmartBasket** es una aplicación inteligente diseñada para optimizar la compra en supermercados mediante tecnología y análisis de datos.
 
-La web actúa como **punto de entrada al proyecto**, explicando la propuesta de valor y el estado del desarrollo de la aplicación.
+Nuestro objetivo es ayudar a los usuarios a tomar mejores decisiones de consumo, ahorrando tiempo y dinero en su día a día.
 
 ---
 
-## 🖥️ Contenido del repositorio
+## 💡 Propuesta de valor
 
-- Landing page informativa
-- Diseño orientado a presentación de producto
-- Estructura preparada para futuras ampliaciones
-- Código enfocado a MVP / validación temprana
+Con MySmartBasket podrás:
+
+- 🧠 Crear listas de la compra inteligentes  
+- 💰 Comparar precios y optimizar el gasto  
+- ⏱️ Ahorrar tiempo en cada compra  
+- 👥 Compartir listas con otras personas  
+- 🌱 Tomar decisiones más sostenibles  
+
+---
+
+## 🌍 Estado del proyecto
+
+Actualmente, MySmartBasket se encuentra en fase de **MVP (Minimum Viable Product)** enfocado en:
+
+- Validación de mercado  
+- Testeo de propuesta de valor  
+- Recogida de feedback de usuarios  
+
+👉 Accede a la web:  
+https://mysmartbasket.app  
+
+---
+
+## 🖥️ Sobre este repositorio
+
+Este repositorio contiene el código fuente de la **landing page oficial**, utilizada para:
+
+- Presentación del proyecto  
+- Validación temprana  
+- Comunicación con usuarios, partners e inversores  
 
 ---
 
 ## 🛠️ Tecnologías utilizadas
 
-- HTML5
-- CSS3
+- HTML5  
+- CSS3  
 - JavaScript  
+
 ---
 
+## 📈 Próximos pasos
+
+- Desarrollo de funcionalidades avanzadas  
+- Integración con supermercados  
+- Sistema de personalización basado en datos  
+- Escalado del producto  
+
+---
+
+## 🤝 Contacto
+
+Si quieres colaborar, invertir o saber más sobre el proyecto:
+
+📩 contacto@mysmartbasket.app  
+
+---
+
+## ⚠️ Nota
+
+Este repositorio corresponde únicamente a la **parte pública del proyecto (landing web)**.  
+El desarrollo completo de la aplicación se encuentra en evolución continua.
