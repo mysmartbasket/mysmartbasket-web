@@ -20,6 +20,16 @@
         content="Crea listas inteligentes, compara precios y ahorra tiempo en tu compra diaria con MySmartBasket." />
     <meta property="og:url" content="https://mysmartbasket.app/" />
     <meta property="og:type" content="website" />
+    <meta property="og:image" content="https://mysmartbasket.app/og-image.png" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="MySmartBasket | Lista de la compra inteligente" />
+    <meta name="twitter:description"
+        content="Crea listas inteligentes, compara precios y ahorra tiempo en tu compra diaria con MySmartBasket." />
+    <meta name="twitter:image" content="https://mysmartbasket.app/og-image.png" />
+
+    <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+    <link rel="manifest" href="site.webmanifest" />
 
     <link rel="stylesheet" href="styles.css" />
 </head>
@@ -219,8 +229,7 @@
                     </label>
 
                     <button class="btn btn-primary" type="submit">Quiero acceso anticipado</button>
-                    <p class="muted small">Al enviar aceptas recibir emails sobre el lanzamiento. Puedes darte de baja
-                        cuando quieras.</p>
+                    <p class="muted small">Al enviar aceptas recibir emails sobre el lanzamiento y nuestra <a href="/privacidad.html">política de privacidad</a>. Puedes darte de baja cuando quieras.</p>
                 </form>
 
                 <div class="success" id="success" hidden>
@@ -234,8 +243,33 @@
                 <h2>FAQ</h2>
 
                 <details class="faq">
+                    <summary>¿Cuándo estará disponible la app?</summary>
+                    <p>Estamos en fase de validación y desarrollo del MVP. Los usuarios de la lista de espera serán los primeros en recibir acceso cuando abramos las puertas, antes que nadie.</p>
+                </details>
+
+                <details class="faq">
+                    <summary>¿Es gratis?</summary>
+                    <p>La versión básica será gratuita. Habrá una versión Pro con funcionalidades avanzadas — los miembros de la lista de espera tendrán condiciones especiales de lanzamiento.</p>
+                </details>
+
+                <details class="faq">
+                    <summary>¿Funciona en iOS y Android?</summary>
+                    <p>Sí. La app estará disponible tanto en App Store como en Google Play. También estamos explorando una versión web accesible desde cualquier dispositivo.</p>
+                </details>
+
+                <details class="faq">
+                    <summary>¿Qué datos necesitáis para registrarme?</summary>
+                    <p>Solo tu email para la lista de espera. Cuando lancemos, pediremos únicamente lo necesario para personalizar tu experiencia. No vendemos datos ni enviamos spam.</p>
+                </details>
+
+                <details class="faq">
                     <summary>¿Puedo cancelar mi suscripción Pro?</summary>
-                    <p>Sí, puedes cancelar la suscripción en cualquier momento</p>
+                    <p>Sí, puedes cancelar en cualquier momento desde la app, sin penalizaciones ni letra pequeña.</p>
+                </details>
+
+                <details class="faq">
+                    <summary>Soy inversor o partner, ¿cómo puedo contactaros?</summary>
+                    <p>Apúntate a la lista de espera seleccionando "Inversor" o "Partner" en el formulario. Nos pondremos en contacto contigo directamente para agendar una llamada.</p>
                 </details>
             </div>
         </section>
@@ -244,7 +278,7 @@
     <footer class="footer">
         <div class="container footer-inner">
             <span>© <span id="year"></span> MySmartBasket™</span>
-            <span class="muted">Hecho con HTML</span>
+            <a href="/privacidad.html" style="color:var(--muted2); font-size:13px;">Política de privacidad</a>
         </div>
     </footer>
 
