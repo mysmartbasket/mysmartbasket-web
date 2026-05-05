@@ -1,0 +1,21 @@
+{
+  "name": "MySmartBasket",
+  "short_name": "MSB",
+  "description": "La compra inteligente que te ahorra tiempo y dinero",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#22C55E",
+  "icons": [
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon.ico",
+      "sizes": "48x48",
+      "type": "image/x-icon"
+    }
+  ]
+}
