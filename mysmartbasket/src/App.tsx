@@ -94,16 +94,13 @@ const SectionHeading = ({ children, title, subtitle, centered = false }: { child
 );
 
 const FeatureCard = ({ icon: Icon, title, description }: { icon: any, title: string, description: string }) => (
-  <motion.div 
-    whileHover={{ y: -5 }}
-    className="p-8 bg-white rounded-3xl border border-slate-100 shadow-sm hover:shadow-xl hover:border-green-100 transition-all"
-  >
+  <div className="p-8 bg-white rounded-3xl border border-slate-100 shadow-sm hover:shadow-xl hover:border-green-100 hover:-translate-y-1 transition-all duration-200">
     <div className="w-14 h-14 bg-green-50 rounded-2xl flex items-center justify-center text-brand-green mb-6">
       <Icon size={28} />
     </div>
     <h3 className="text-xl font-bold text-brand-black mb-3">{title}</h3>
     <p className="text-slate-500 leading-relaxed text-sm">{description}</p>
-  </motion.div>
+  </div>
 );
 
 const MockupApp = () => (
@@ -161,12 +158,8 @@ const MockupApp = () => (
       </div>
     </div>
     
-    {/* Floating Elements (Badges) */}
-    <motion.div 
-      animate={{ y: [0, -10, 0] }}
-      transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-      className="absolute top-1/4 -right-12 bg-white p-4 rounded-2xl shadow-xl border border-slate-100 hidden lg:block z-20"
-    >
+    {/* Savings badge */}
+    <div className="absolute top-1/4 -right-12 bg-white p-4 rounded-2xl shadow-xl border border-slate-100 hidden lg:block z-20">
       <div className="flex items-center gap-3">
         <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center text-brand-green">
           <TrendingDown size={16} />
@@ -176,7 +169,7 @@ const MockupApp = () => (
           <div className="text-lg font-bold text-brand-black">1.240€ <span className="text-xs text-brand-green">/ año</span></div>
         </div>
       </div>
-    </motion.div>
+    </div>
   </div>
 );
 
@@ -277,11 +270,11 @@ export default function App() {
       {/* --- HERO SECTION --- */}
       <section className="pt-32 pb-20 px-6 relative overflow-hidden bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-green-50 via-white to-white">
         <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 items-center">
-          <motion.div 
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
+            transition={{ duration: 0.4 }}
           >
             <a 
               href="https://mysmartbasket.github.io/MySmartBasket-MVP/?utm_source=ig&utm_medium=social&utm_content=link_in_bio&fbclid=PAZXh0bgNhZW0CMTEAc3J0YwZhcHBfaWQMMjU2MjgxMDQwNTU4AAGn2uTY1CbJdkMm9zfq7B5PIArIki5epKBGwMpNLf_VFIw3kCiexPTnFtlw6Mw_aem_aUFges3q7c2KTlDQP2RQpw" 
@@ -335,11 +328,11 @@ export default function App() {
             </div>
           </motion.div>
 
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.8, rotateY: 20 }}
-            whileInView={{ opacity: 1, scale: 1, rotateY: 0 }}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 1, delay: 0.2 }}
+            transition={{ duration: 0.4, delay: 0.15 }}
             className="perspective-1000"
           >
             <MockupApp />
@@ -379,18 +372,15 @@ export default function App() {
         <div className="max-w-7xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <div className="relative">
-              <motion.div 
-                animate={{ y: [0, 20, 0] }}
-                transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-                className="relative z-10"
-              >
-                <img 
-                  src="https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=800&h=600" 
-                  alt="Healthy groceries" 
+              <div className="relative z-10">
+                <img
+                  src="https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=800&h=600"
+                  alt="Compra saludable"
                   className="rounded-[2.5rem] shadow-2xl border-4 border-white"
+                  loading="lazy"
                   referrerPolicy="no-referrer"
                 />
-              </motion.div>
+              </div>
               <div className="absolute -top-10 -left-10 w-40 h-40 bg-brand-green/10 rounded-full blur-3xl"></div>
               <div className="absolute -bottom-10 -right-10 w-60 h-60 bg-green-200/20 rounded-full blur-3xl"></div>
               
@@ -508,10 +498,9 @@ export default function App() {
                     { name: 'Leche Desnatada 6pk', basePrice: '5.40€', savings: '0.60€', brand: 'Hacendado' },
                     { name: 'Aguacate Hass (2u)', basePrice: '3.20€', savings: '0.45€', brand: 'Bio' }
                   ].map((item, idx) => (
-                    <motion.div 
+                    <div
                       key={idx}
-                      whileHover={{ x: 5 }}
-                      className="p-5 bg-white rounded-2xl border border-slate-100 flex justify-between items-center group cursor-default shadow-sm"
+                      className="p-5 bg-white rounded-2xl border border-slate-100 flex justify-between items-center group cursor-default shadow-sm hover:border-green-100 transition-colors duration-150"
                     >
                       <div className="flex items-center gap-4">
                         <div className="w-10 h-10 bg-green-50 rounded-xl flex items-center justify-center text-brand-green font-bold text-xs">
@@ -526,7 +515,7 @@ export default function App() {
                         <div className="text-sm font-bold">{item.basePrice}</div>
                         <div className="text-[10px] font-bold text-brand-green">Ahorras {item.savings}</div>
                       </div>
-                    </motion.div>
+                    </div>
                   ))}
                 </div>
               </div>
