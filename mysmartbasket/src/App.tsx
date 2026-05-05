@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useForm, ValidationError } from '@formspree/react';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
   ShoppingBasket, 
@@ -180,28 +181,9 @@ const MockupApp = () => (
 );
 
 export default function App() {
-  const [email, setEmail] = useState('');
-  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [formState, handleSubmit] = useForm('mwvybvog');
   const [isVideoOpen, setIsVideoOpen] = useState(false);
   const [isCanvaOpen, setIsCanvaOpen] = useState(false);
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!email) return;
-    setIsSubmitted(true);
-    try {
-      const res = await fetch('https://formspree.io/f/REPLACE_WITH_YOUR_FORMSPREE_ID', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email }),
-      });
-      if (res.ok) {
-        setEmail('');
-      }
-    } finally {
-      setIsSubmitted(false);
-    }
-  };
 
   return (
     <div className="min-h-screen selection:bg-green-100 selection:text-brand-green">
@@ -701,23 +683,29 @@ export default function App() {
             Prueba el modo demo ahora de forma gratuita y recibe las actualizaciones de nuestro equipo directamente en tu bandeja de entrada.
           </p>
           
-          <form onSubmit={handleSubmit} className="relative max-w-lg mx-auto">
-            <input 
-              type="email" 
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="tu@email.com" 
-              className="w-full px-8 py-6 rounded-3xl bg-slate-50 border border-slate-200 text-lg focus:ring-4 focus:ring-green-100 focus:border-brand-green outline-none transition-all pr-44"
-            />
-            <button 
-              type="submit"
-              disabled={isSubmitted}
-              className="absolute right-2 top-2 bottom-2 px-8 bg-brand-black text-white rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-slate-800 transition-all disabled:opacity-50"
-            >
-              {isSubmitted ? 'Registrando...' : 'Reservar sitio'} <ChevronRight size={18} />
-            </button>
-          </form>
+          {formState.succeeded ? (
+            <div className="max-w-lg mx-auto p-6 rounded-3xl bg-green-50 border border-green-100 text-brand-green font-semibold text-lg">
+              ¡Listo! Estás en la lista. Te avisaremos cuando abramos acceso. 🎉
+            </div>
+          ) : (
+            <form onSubmit={handleSubmit} className="relative max-w-lg mx-auto">
+              <input
+                type="email"
+                name="email"
+                required
+                placeholder="tu@email.com"
+                className="w-full px-8 py-6 rounded-3xl bg-slate-50 border border-slate-200 text-lg focus:ring-4 focus:ring-green-100 focus:border-brand-green outline-none transition-all pr-44"
+              />
+              <ValidationError field="email" errors={formState.errors} className="mt-2 text-sm text-red-500 text-left" />
+              <button
+                type="submit"
+                disabled={formState.submitting}
+                className="absolute right-2 top-2 bottom-2 px-8 bg-brand-black text-white rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-slate-800 transition-all disabled:opacity-50"
+              >
+                {formState.submitting ? 'Enviando...' : 'Reservar sitio'} <ChevronRight size={18} />
+              </button>
+            </form>
+          )}
           <p className="mt-6 text-sm text-slate-400">Sin spam. Solo una invitación cuando estemos listos.</p>
         </div>
       </section>
