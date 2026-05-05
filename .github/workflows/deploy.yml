@@ -24,13 +24,11 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
-          cache: npm
-          cache-dependency-path: mysmartbasket/package-lock.json
+          node-version: 22
 
       - name: Install dependencies
         working-directory: mysmartbasket
-        run: npm ci
+        run: npm install
 
       - name: Build
         working-directory: mysmartbasket
