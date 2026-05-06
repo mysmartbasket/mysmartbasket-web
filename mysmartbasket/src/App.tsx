@@ -203,12 +203,12 @@ const StickyCTA = memo(() => {
 
 /* ── FAQ ── */
 const FAQ_ITEMS = [
-  { q: '¿Es gratis?',                           a: 'Sí. Durante la beta es completamente gratis. Cuando lancemos planes de pago, quienes estén en la lista tendrán precio especial para siempre — no es solo un descuento de bienvenida.' },
-  { q: '¿Cómo consigue la app los precios?',    a: 'Tenemos nuestro propio sistema que revisa precios en más de 45 cadenas cada 30 minutos. No dependemos de datos de terceros, así que lo que ves es lo que hay en ese momento.' },
-  { q: '¿Cuándo puedo empezar a usarla?',       a: 'Ahora mismo estamos en beta cerrada con los primeros usuarios. Vamos abriendo plazas poco a poco para que la experiencia sea buena desde el primer día. Apúntate y te avisamos cuando te toque.' },
-  { q: '¿Funciona con mi supermercado?',        a: 'Cubrimos las principales cadenas en España: Mercadona, Lidl, Carrefour, Alcampo, El Corte Inglés, Día, Aldi, Eroski y más. Si la tuya no está, dínoslo — las añadimos por orden de demanda.' },
-  { q: '¿Puedo usarlo con mi pareja o familia?', a: 'Sí. Creas un hogar compartido y todos ven y editan la misma lista en tiempo real. Se acabó el "pensé que ya lo habías comprado tú" o llegar a casa con dos paquetes de pasta.' },
-  { q: '¿Qué hacéis con mis datos?',            a: 'Guardamos tu email y tus preferencias de compra, nada más. No vendemos ni cedemos datos a nadie. Si quieres borrarlo todo, mándanos un email y lo hacemos en menos de 24 horas.' },
+  { q: '¿Es gratuito?',                              a: 'Sí, completamente gratuito durante la fase beta. Cuando lancemos planes de pago, los usuarios de la lista de espera mantendrán condiciones especiales de forma permanente.' },
+  { q: '¿Cómo obtiene la app los precios?',          a: 'Contamos con un sistema propio que monitoriza precios en más de 45 cadenas cada 30 minutos. No dependemos de fuentes externas, lo que garantiza mayor fiabilidad y actualización en tiempo real.' },
+  { q: '¿Cuándo está disponible?',                   a: 'Actualmente estamos en beta cerrada con los primeros usuarios. Ampliamos el acceso de forma gradual para asegurar una buena experiencia desde el primer día. Apúntate y te notificamos cuando tu plaza esté lista.' },
+  { q: '¿Está disponible en mi supermercado?',       a: 'Cubrimos las principales cadenas en España: Mercadona, Lidl, Carrefour, Alcampo, El Corte Inglés, Día, Aldi, Eroski y más. Si tu cadena habitual no aparece, puedes solicitarla — la incorporamos por orden de demanda.' },
+  { q: '¿Puedo compartirlo con mi familia?',         a: 'Sí. Puedes crear un hogar compartido con hasta 5 miembros. Todos acceden a la misma lista en tiempo real, sin duplicados ni necesidad de coordinación adicional.' },
+  { q: '¿Cómo se tratan mis datos personales?',      a: 'Solo almacenamos tu correo electrónico y tus preferencias de compra. No vendemos ni compartimos datos con terceros. Puedes solicitar la eliminación completa de tu cuenta en cualquier momento escribiéndonos a contacto@mysmartbasket.app.' },
 ];
 const FAQItem = ({ question, answer }: { question: string; answer: string }) => {
   const [open, setOpen] = useState(false);
@@ -996,11 +996,11 @@ export default function App() {
             </a>
 
             <h1 className="text-5xl lg:text-7xl font-bold text-brand-black dark:text-white leading-[1.1] tracking-tight mb-8">
-              Para de tirar dinero{' '}
-              <span className="text-brand-green">en el súper sin darte cuenta.</span>
+              Ahorra en la compra semanal{' '}
+              <span className="text-brand-green">sin cambiar lo que compras.</span>
             </h1>
             <p className="text-xl text-slate-500 dark:text-slate-400 leading-relaxed mb-10 max-w-lg">
-              Cada semana gastas más de lo que deberías y no sabes exactamente por qué. MySmartBasket mira los precios de los supermercados de tu zona, te arma la lista y te dice dónde comprar cada cosa para gastar lo menos posible.
+              Cada semana pagas más de lo que deberías sin saber exactamente por qué. MySmartBasket analiza los precios de los supermercados de tu zona, genera tu lista y te indica dónde comprar cada producto para gastar lo menos posible.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center">
@@ -1021,7 +1021,7 @@ export default function App() {
             {/* Trust badges */}
             <div className="mt-8 flex flex-wrap items-center gap-6 text-sm text-slate-500">
               <span className="flex items-center gap-1.5"><CheckCircle2 size={15} className="text-brand-green" /> Sin spam</span>
-              <span className="flex items-center gap-1.5"><CheckCircle2 size={15} className="text-brand-green" /> Acceso anticipado gratuito</span>
+              <span className="flex items-center gap-1.5"><CheckCircle2 size={15} className="text-brand-green" /> Acceso anticipado, sin coste</span>
               <span className="flex items-center gap-1.5"><CheckCircle2 size={15} className="text-brand-green" /> Cancelas cuando quieras</span>
             </div>
 
@@ -1062,12 +1062,12 @@ export default function App() {
       {/* PROBLEM */}
       <section id="problem" className="py-24 px-6 bg-slate-50 dark:bg-slate-900">
         <div className="max-w-7xl mx-auto">
-          <FadeUp><SectionHeading centered title="El Problema" subtitle="¿Te suena alguna de estas cosas?" /></FadeUp>
+          <FadeUp><SectionHeading centered title="El Problema" subtitle="Tres problemas que tienen solución" /></FadeUp>
           <div className="grid md:grid-cols-3 gap-8 text-center">
             {[
-              { icon: Clock,        title: 'Llegas al súper sin lista',   text: 'Acabas comprando lo primero que ves, gastando más de lo previsto y olvidando la mitad de lo que necesitabas.' },
-              { icon: TrendingDown, title: 'Pagas de más sin saberlo',    text: 'La misma botella de aceite puede costar 2€ más según dónde la compres. Nadie tiene tiempo de comparar tiendas cada semana.' },
-              { icon: Leaf,         title: 'La nevera siempre a medias',  text: 'Compramos sin planificar, tiramos lo que se pone malo y a mitad de semana no hay nada para comer.' },
+              { icon: Clock,        title: 'Comprar sin planificar',       text: 'Sin una lista clara es fácil gastar más de lo previsto, olvidar productos y volver al supermercado a mitad de semana.' },
+              { icon: TrendingDown, title: 'Pagar de más sin saberlo',     text: 'El mismo producto puede variar hasta un 40% de precio según la cadena. Comparar manualmente cada semana no es viable.' },
+              { icon: Leaf,         title: 'Desperdiciar comida y dinero', text: 'Comprar sin planificar los menús lleva a tirar alimentos y a que falten productos justo cuando más se necesitan.' },
             ].map((p, i) => (
               <div key={i}><FadeUp delay={i * 0.15}>
                 <div className="p-8">
@@ -1121,16 +1121,16 @@ export default function App() {
               viewport={{ once: true, margin: '-60px' }}
               transition={{ duration: 0.7, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
             >
-              <SectionHeading title="La Solución" subtitle="Una app que realmente te ayuda.">
+              <SectionHeading title="La Solución" subtitle="Tecnología al servicio de tu compra diaria.">
                 <p className="text-slate-500 text-lg leading-relaxed mb-8">
-                  No hace falta que seas un experto en ahorro. MySmartBasket analiza lo que sueles comprar, compara precios entre tus supermercados de siempre y te dice exactamente qué comprar y dónde esta semana.
+                  MySmartBasket analiza tus hábitos de compra, compara precios entre tus supermercados habituales y genera la lista óptima para cada semana — sin que tengas que hacer nada manualmente.
                 </p>
                 <div className="space-y-4">
                   {[
-                    'Compara precios entre supermercados sin que tengas que mirar',
-                    'Recuerda lo que sueles comprar y te lo añade cuando toca',
-                    'Sugiere recetas con lo que ya tienes o lo que vas a comprar',
-                    'Hace el pedido online si no te apetece salir',
+                    'Comparativa automática de precios entre supermercados',
+                    'Listas inteligentes basadas en tus hábitos de consumo',
+                    'Planificación de menús adaptada a lo que vas a comprar',
+                    'Integración con servicios de entrega a domicilio',
                   ].map((item, i) => (
                     <motion.div
                       key={i}
@@ -1156,15 +1156,15 @@ export default function App() {
       {/* FEATURES */}
       <section id="features" className="py-24 px-6 bg-slate-50 dark:bg-slate-900 rounded-[4rem] mx-4">
         <div className="max-w-7xl mx-auto">
-          <FadeUp><SectionHeading centered title="Funcionalidades" subtitle="Lo que hace por ti cada semana" /></FadeUp>
+          <FadeUp><SectionHeading centered title="Funcionalidades" subtitle="Qué hace MySmartBasket por ti" /></FadeUp>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[
-              { icon: Zap,          title: 'Sabe cuándo te queda poco',              description: '¿Compras yogures cada martes? Ya los ponemos en tu lista. Sin que tengas que acordarte tú ni escribir nada.' },
-              { icon: TrendingDown, title: 'Compra donde conviene esta semana',      description: 'El pollo está más barato en Lidl y el aceite en Mercadona. Te lo decimos y tú decides si merece ir a los dos.' },
-              { icon: Users,        title: 'Toda la familia en la misma lista',      description: 'Tu pareja añade el pan desde el trabajo, tú el café desde casa. Sin mensajes, sin duplicados, sin sorpresas.' },
-              { icon: ShieldCheck,  title: 'Más sano sin esfuerzo ni sermones',      description: 'Si sueles coger bollería industrial, te proponemos algo igual de rico con mejores ingredientes. Sin obligarte a nada.' },
-              { icon: Leaf,         title: 'Menos desperdicio, más dinero ahorrado', description: 'Te avisamos de lo que caduca pronto para usarlo antes. Así tiras menos comida y gastas menos cada mes.' },
-              { icon: Search,       title: '45 cadenas, precios cada 30 minutos',   description: 'Mercadona, Lidl, Carrefour, Alcampo, Día y 40 más. Los precios se actualizan solos, tú no haces nada.' },
+              { icon: Zap,          title: 'Reposición automática',                  description: 'Aprende tus ciclos de consumo y anticipa lo que vas a necesitar antes de que se agote, sin intervención manual.' },
+              { icon: TrendingDown, title: 'Optimización por supermercado',          description: 'Identifica en qué cadena cada producto está más barato en ese momento y propone la combinación más rentable.' },
+              { icon: Users,        title: 'Listas compartidas en tiempo real',      description: 'Varios miembros del hogar pueden editar la misma lista simultáneamente, sin duplicados ni coordinación extra.' },
+              { icon: ShieldCheck,  title: 'Alternativas más saludables',            description: 'Cuando hay opciones con mejor perfil nutricional y sabor equivalente, las sugiere como alternativa sin imponer nada.' },
+              { icon: Leaf,         title: 'Reducción de desperdicio alimentario',   description: 'Registra las fechas de caducidad y avisa de qué consumir primero para minimizar lo que se tira cada semana.' },
+              { icon: Search,       title: 'Cobertura de más de 45 cadenas',        description: 'Mercadona, Lidl, Carrefour, Alcampo, Día y 40 cadenas más. Precios actualizados cada 30 minutos de forma automática.' },
             ].map((f, i) => (
               <div key={i}><FadeUp delay={i * 0.08}>
                 <FeatureCard icon={f.icon} title={f.title} description={f.description} />
@@ -1180,7 +1180,7 @@ export default function App() {
       {/* HOW IT WORKS */}
       <section id="how-it-works" className="py-24 px-6">
         <div className="max-w-7xl mx-auto">
-          <FadeUp><SectionHeading centered title="Cómo funciona" subtitle="Sin tecnicismos, en tres pasos" /></FadeUp>
+          <FadeUp><SectionHeading centered title="Cómo funciona" subtitle="Tres pasos para empezar a ahorrar" /></FadeUp>
           <div className="grid md:grid-cols-3 gap-12 relative">
             <div className="hidden md:block absolute top-8 left-[25%] right-[25%] h-px -z-10 overflow-hidden">
               <motion.div
@@ -1192,9 +1192,9 @@ export default function App() {
               />
             </div>
             {[
-              { step: '01', title: 'Cuéntanos cómo es tu semana',    text: '¿Cocinas para dos o para cinco? ¿Tienes un Lidl al lado o prefieres Mercadona? Eso es todo lo que necesitamos.' },
-              { step: '02', title: 'Recibe tu lista para esta semana', text: 'Basada en lo que comes habitualmente, lo que ya tienes en casa y dónde está más barato hoy.' },
-              { step: '03', title: 'Ve al súper o pide desde casa',   text: 'Usa la lista en el móvil mientras haces la compra, o haz el pedido online directamente desde la app.' },
+              { step: '01', title: 'Configura tu perfil de compra',    text: 'Indícanos cuántas personas sois, qué supermercados tienes cerca y cuál es tu presupuesto habitual.' },
+              { step: '02', title: 'Recibe tu lista semanal',          text: 'Generada en base a tus hábitos de consumo, lo que ya tienes en casa y los precios actuales de tu zona.' },
+              { step: '03', title: 'Compra en tienda o desde casa',    text: 'Usa la lista en el móvil durante la compra, o realiza el pedido online directamente desde la app.' },
             ].map((s, i) => (
               <div key={i}><FadeUp delay={i * 0.2}>
                 <div className="text-center group">
@@ -1221,11 +1221,11 @@ export default function App() {
         <div className="max-w-7xl mx-auto relative z-10">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <FadeUp>
-              <span className="text-brand-green font-bold text-xs uppercase mb-3 block">Números reales</span>
-              <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-12">No es magia. Es que nadie lo había hecho bien hasta ahora.</h2>
+              <span className="text-brand-green font-bold text-xs uppercase mb-3 block">Resultados reales</span>
+              <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-12">Datos de personas que ya lo están usando.</h2>
               <div className="grid grid-cols-2 gap-8">
-                <AnimatedStat value="20%" label="De ahorro de media en la primera compra" />
-                <AnimatedStat value="90m" label="Menos al mes pensando en qué comprar" />
+                <AnimatedStat value="20%" label="De ahorro medio en la primera compra" />
+                <AnimatedStat value="90m" label="Menos de gestión de la compra al mes" />
                 <motion.div
                   className="pt-8 col-span-2 border-t border-slate-800"
                   initial={{ opacity: 0 }}
@@ -1259,8 +1259,8 @@ export default function App() {
 
             <div className="space-y-6">
               {[
-                { name: 'Marta G.', role: 'Madre de 3 hijos, Madrid', quote: 'El primer mes ahorré 150€ comprando exactamente lo mismo de siempre. Solo dejé de ir por costumbre al sitio más caro.' },
-                { name: 'Jorge R.', role: 'Vive solo, Barcelona',     quote: 'Siempre acababa tirando cosas que se ponían malas. Desde que lo uso, compro lo que necesito y la nevera no está nunca medio vacía.' },
+                { name: 'Marta G.', role: 'Madre de 3 hijos, Madrid', quote: 'El primer mes ahorré 150€ comprando exactamente lo mismo. Solo dejé de ir al supermercado más caro por inercia.' },
+                { name: 'Jorge R.', role: 'Profesional independiente, Barcelona', quote: 'Antes tiraba comida cada semana. Ahora compro lo que necesito y la nevera no acaba medio vacía a mitad de semana.' },
               ].map((t, i) => (
                 <motion.div
                   key={i}
@@ -1286,7 +1286,7 @@ export default function App() {
       {/* FAQ */}
       <section id="faq" className="py-24 px-6 dark:bg-slate-950">
         <div className="max-w-2xl mx-auto">
-          <FadeUp><SectionHeading centered title="Preguntas frecuentes" subtitle="Lo que nos suelen preguntar" /></FadeUp>
+          <FadeUp><SectionHeading centered title="Preguntas frecuentes" subtitle="Resolvemos las dudas más habituales" /></FadeUp>
           <FadeUp delay={0.1}>
             <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-100 dark:border-slate-800 px-8 py-2 shadow-sm">
               {FAQ_ITEMS.map((item, i) => (
@@ -1317,10 +1317,10 @@ export default function App() {
               </motion.span>
               <span className="text-sm font-medium text-brand-green">personas ya apuntadas</span>
             </div>
-            <SectionHeading centered title="Apúntate antes de que abramos" subtitle="Las plazas son limitadas." />
+            <SectionHeading centered title="Solicita tu acceso anticipado" subtitle="Las plazas son limitadas." />
           </FadeUp>
           <p className="text-slate-500 dark:text-slate-400 text-xl mb-12">
-            Estamos en beta y abrimos plazas poco a poco. Apúntate y te mandamos el acceso cuando te toque — sin spam, lo prometemos.
+            Estamos ampliando el acceso gradualmente. Deja tu correo y te notificamos en cuanto tu plaza esté disponible. Sin comunicaciones comerciales, solo el aviso de acceso.
           </p>
 
           <AnimatePresence mode="wait">
@@ -1332,8 +1332,8 @@ export default function App() {
                 className="max-w-lg mx-auto p-8 rounded-3xl bg-green-50 dark:bg-green-900/20 border border-green-100 dark:border-green-800"
               >
                 <div className="text-4xl mb-3">🎉</div>
-                <p className="text-brand-green font-bold text-xl mb-1">¡Ya estás en la lista!</p>
-                <p className="text-slate-500 dark:text-slate-400 text-sm">Te escribimos cuando tengamos tu plaza lista. Revisa la carpeta de spam por si acaso.</p>
+                <p className="text-brand-green font-bold text-xl mb-1">Solicitud recibida</p>
+                <p className="text-slate-500 dark:text-slate-400 text-sm">Te notificaremos cuando tu plaza esté disponible. Revisa también la carpeta de correo no deseado.</p>
               </motion.div>
             ) : formStep === 'spending' ? (
               <motion.div
@@ -1343,7 +1343,7 @@ export default function App() {
                 exit={{ opacity: 0, x: -40 }}
                 className="max-w-lg mx-auto"
               >
-                <p className="font-bold text-slate-900 dark:text-white text-lg mb-6">Una pregunta rápida para conocerte mejor:</p>
+                <p className="font-bold text-slate-900 dark:text-white text-lg mb-6">¿Cuánto sueles gastar al mes en la compra?</p>
                 <div className="grid grid-cols-2 gap-3 mb-6">
                   {['Menos de 200€', '200 – 400€', '400 – 600€', 'Más de 600€'].map((opt) => (
                     <motion.button
