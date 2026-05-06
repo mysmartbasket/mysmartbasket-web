@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useForm, ValidationError } from '@formspree/react';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion, AnimatePresence, useScroll, useSpring, useInView } from 'motion/react';
 import {
   ShoppingBasket,
   Search,
@@ -19,6 +19,42 @@ import {
   Zap,
   Leaf,
 } from 'lucide-react';
+
+const ScrollProgress = () => {
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, { stiffness: 120, damping: 30, restDelta: 0.001 });
+  return <motion.div style={{ scaleX }} className="fixed top-0 left-0 right-0 h-[3px] bg-brand-green origin-left z-[60] shadow-[0_0_8px_rgba(34,197,94,0.6)]" />;
+};
+
+const FadeUp = ({ children, delay = 0, className = '', index }: { children: React.ReactNode; delay?: number; className?: string; index?: number }) => (
+  <motion.div
+    initial={{ opacity: 0, y: 28 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true, margin: '-60px' }}
+    transition={{ duration: 0.55, delay: delay + (index ?? 0) * 0.12, ease: [0.22, 1, 0.36, 1] }}
+    className={className}
+  >
+    {children}
+  </motion.div>
+);
+
+const AnimatedStat = ({ value, label }: { value: string; label: string }) => {
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true, margin: '-80px' });
+  return (
+    <div ref={ref}>
+      <motion.div
+        initial={{ opacity: 0, scale: 0.6 }}
+        animate={isInView ? { opacity: 1, scale: 1 } : {}}
+        transition={{ duration: 0.6, type: 'spring', bounce: 0.4 }}
+        className="text-5xl font-bold text-brand-green mb-2"
+      >
+        {value}
+      </motion.div>
+      <p className="text-slate-400 text-sm">{label}</p>
+    </div>
+  );
+};
 
 const STORES = [
   { label: 'FreshMart',   price: '41,20€', status: 'Mejor precio', width: '70%',  color: 'bg-brand-green', active: true  },
@@ -419,6 +455,7 @@ export default function App() {
 
   return (
     <div id="top" className="min-h-screen selection:bg-green-100 selection:text-brand-green">
+      <ScrollProgress />
       <Navbar />
 
       {/* VIDEO MODAL */}
@@ -544,20 +581,26 @@ export default function App() {
       {/* PROBLEM */}
       <section id="problem" className="py-24 px-6 bg-slate-50">
         <div className="max-w-7xl mx-auto">
-          <SectionHeading centered title="El Problema" subtitle="¿Por qué comprar comida sigue siendo un dolor de cabeza?" />
+          <FadeUp><SectionHeading centered title="El Problema" subtitle="¿Por qué comprar comida sigue siendo un dolor de cabeza?" /></FadeUp>
           <div className="grid md:grid-cols-3 gap-8 text-center">
             {[
               { icon: Clock,        title: 'Pérdida de tiempo',    text: 'Pasamos más de 200 horas al año planificando y comprando sin una estrategia clara.' },
               { icon: TrendingDown, title: 'Inflación invisible',   text: 'Los precios varían hasta un 30% entre supermercados para los mismos productos.' },
               { icon: Leaf,         title: 'Mala alimentación',    text: 'La falta de tiempo nos lleva a elegir ultraprocesados en lugar de cestas equilibradas.' },
             ].map((p, i) => (
-              <div key={i} className="p-8">
-                <div className="inline-flex items-center justify-center w-16 h-16 bg-white rounded-2xl shadow-sm mb-6 text-slate-400">
-                  <p.icon size={32} />
+              <div key={i}><FadeUp delay={i * 0.15}>
+                <div className="p-8">
+                  <motion.div
+                    whileHover={{ scale: 1.08, rotate: 3 }}
+                    transition={{ type: 'spring', stiffness: 300 }}
+                    className="inline-flex items-center justify-center w-16 h-16 bg-white rounded-2xl shadow-sm mb-6 text-slate-400"
+                  >
+                    <p.icon size={32} />
+                  </motion.div>
+                  <h3 className="text-xl font-bold mb-4">{p.title}</h3>
+                  <p className="text-slate-500">{p.text}</p>
                 </div>
-                <h3 className="text-xl font-bold mb-4">{p.title}</h3>
-                <p className="text-slate-500">{p.text}</p>
-              </div>
+              </FadeUp></div>
             ))}
           </div>
         </div>
@@ -567,7 +610,13 @@ export default function App() {
       <section id="solution" className="py-24 px-6 overflow-hidden">
         <div className="max-w-7xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
-            <div className="relative">
+            <motion.div
+              className="relative"
+              initial={{ opacity: 0, x: -50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, margin: '-60px' }}
+              transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+            >
               <div className="relative z-10">
                 <img
                   src="https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=800&h=600"
@@ -583,9 +632,14 @@ export default function App() {
                 <div className="text-3xl font-bold mb-1">Ahorro</div>
                 <div className="text-sm text-slate-400">Nuestro algoritmo detecta bajadas de precios en tiempo real.</div>
               </div>
-            </div>
+            </motion.div>
 
-            <div>
+            <motion.div
+              initial={{ opacity: 0, x: 50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, margin: '-60px' }}
+              transition={{ duration: 0.7, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+            >
               <SectionHeading title="La Solución" subtitle="La primera app que hace la compra por ti.">
                 <p className="text-slate-500 text-lg leading-relaxed mb-8">
                   MySmartBasket no es solo una lista. Es un copiloto financiero y nutricional.
@@ -599,16 +653,23 @@ export default function App() {
                     'Planificación de menús saludables',
                     'Integración con pedidos a domicilio',
                   ].map((item, i) => (
-                    <div key={i} className="flex items-center gap-3">
+                    <motion.div
+                      key={i}
+                      initial={{ opacity: 0, x: 20 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.4, delay: 0.3 + i * 0.1 }}
+                      className="flex items-center gap-3"
+                    >
                       <div className="w-6 h-6 bg-green-100 text-brand-green rounded-full flex items-center justify-center flex-shrink-0">
                         <CheckCircle2 size={14} />
                       </div>
                       <span className="font-medium text-slate-700">{item}</span>
-                    </div>
+                    </motion.div>
                   ))}
                 </div>
               </SectionHeading>
-            </div>
+            </motion.div>
           </div>
         </div>
       </section>
@@ -616,14 +677,20 @@ export default function App() {
       {/* FEATURES */}
       <section id="features" className="py-24 px-6 bg-slate-50 rounded-[4rem] mx-4">
         <div className="max-w-7xl mx-auto">
-          <SectionHeading centered title="Funcionalidades" subtitle="Ingeniería de datos para tu nevera" />
+          <FadeUp><SectionHeading centered title="Funcionalidades" subtitle="Ingeniería de datos para tu nevera" /></FadeUp>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <FeatureCard icon={Zap}         title="Listas Proactivas"  description="Sabemos cuándo se te va a acabar la leche. Generamos tu lista básica antes de que te des cuenta." />
-            <FeatureCard icon={TrendingDown} title="Split Shopping"     description="Detectamos en qué tienda cada producto es más barato y te proponemos el mix perfecto para ahorrar al máximo." />
-            <FeatureCard icon={Users}        title="Cestas Familiares"  description="Sincroniza la lista con tu pareja o compañeros de piso en tiempo real. Se acabó el comprar dos veces lo mismo." />
-            <FeatureCard icon={ShieldCheck}  title="Nutri-Scan"         description="Sustituimos automáticamente productos procesados por alternativas más saludables con el mismo sabor." />
-            <FeatureCard icon={Leaf}         title="Impacto Zero"       description="Priorizamos productos locales y de temporada para reducir la huella de carbono de tu compra." />
-            <FeatureCard icon={Search}       title="Comparador Global"  description="Acceso a precios de más de 45 cadenas de supermercados actualizados cada 30 minutos." />
+            {[
+              { icon: Zap,         title: 'Listas Proactivas',  description: 'Sabemos cuándo se te va a acabar la leche. Generamos tu lista básica antes de que te des cuenta.' },
+              { icon: TrendingDown, title: 'Split Shopping',     description: 'Detectamos en qué tienda cada producto es más barato y te proponemos el mix perfecto para ahorrar al máximo.' },
+              { icon: Users,        title: 'Cestas Familiares',  description: 'Sincroniza la lista con tu pareja o compañeros de piso en tiempo real. Se acabó el comprar dos veces lo mismo.' },
+              { icon: ShieldCheck,  title: 'Nutri-Scan',         description: 'Sustituimos automáticamente productos procesados por alternativas más saludables con el mismo sabor.' },
+              { icon: Leaf,         title: 'Impacto Zero',       description: 'Priorizamos productos locales y de temporada para reducir la huella de carbono de tu compra.' },
+              { icon: Search,       title: 'Comparador Global',  description: 'Acceso a precios de más de 45 cadenas de supermercados actualizados cada 30 minutos.' },
+            ].map((f, i) => (
+              <div key={i}><FadeUp delay={i * 0.08}>
+                <FeatureCard icon={f.icon} title={f.title} description={f.description} />
+              </FadeUp></div>
+            ))}
           </div>
         </div>
       </section>
@@ -744,21 +811,35 @@ export default function App() {
       {/* HOW IT WORKS */}
       <section id="how-it-works" className="py-24 px-6">
         <div className="max-w-7xl mx-auto">
-          <SectionHeading centered title="El Método" subtitle="Compra inteligente en 3 pasos" />
+          <FadeUp><SectionHeading centered title="El Método" subtitle="Compra inteligente en 3 pasos" /></FadeUp>
           <div className="grid md:grid-cols-3 gap-12 relative">
-            <div className="hidden md:block absolute top-1/2 left-[20%] right-[20%] h-px border-t border-dashed border-slate-200 -z-10"></div>
+            <div className="hidden md:block absolute top-8 left-[25%] right-[25%] h-px -z-10 overflow-hidden">
+              <motion.div
+                initial={{ scaleX: 0 }}
+                whileInView={{ scaleX: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 1, delay: 0.4, ease: 'easeInOut' }}
+                className="h-px border-t-2 border-dashed border-slate-200 origin-left w-full"
+              />
+            </div>
             {[
               { step: '01', title: 'Conecta tus hábitos',    text: 'Dinos qué te gusta, qué tiendas tienes cerca y tu presupuesto.' },
               { step: '02', title: 'Recibe tu Cesta Óptima', text: 'Nuestra IA genera la compra ideal maximizando ahorro y salud.' },
               { step: '03', title: 'Confirma y Sonríe',      text: 'Pide el envío a casa o ve a la tienda con la ruta más eficiente.' },
             ].map((s, i) => (
-              <div key={i} className="text-center group">
-                <div className="w-16 h-16 bg-white border border-slate-100 shadow-sm rounded-full flex items-center justify-center mx-auto mb-8 text-xl font-bold text-brand-green group-hover:bg-brand-green group-hover:text-white transition-all cursor-default">
-                  {s.step}
+              <div key={i}><FadeUp delay={i * 0.2}>
+                <div className="text-center group">
+                  <motion.div
+                    whileHover={{ scale: 1.12 }}
+                    transition={{ type: 'spring', stiffness: 300 }}
+                    className="w-16 h-16 bg-white border border-slate-100 shadow-sm rounded-full flex items-center justify-center mx-auto mb-8 text-xl font-bold text-brand-green group-hover:bg-brand-green group-hover:text-white transition-colors cursor-default"
+                  >
+                    {s.step}
+                  </motion.div>
+                  <h3 className="text-xl font-bold mb-4">{s.title}</h3>
+                  <p className="text-slate-500 px-4">{s.text}</p>
                 </div>
-                <h3 className="text-xl font-bold mb-4">{s.title}</h3>
-                <p className="text-slate-500 px-4">{s.text}</p>
-              </div>
+              </FadeUp></div>
             ))}
           </div>
         </div>
@@ -767,27 +848,39 @@ export default function App() {
       {/* SOCIAL PROOF */}
       <section id="social-proof" className="py-24 px-6 bg-brand-black text-white rounded-[4rem] mx-4 overflow-hidden relative">
         <div className="absolute top-0 right-0 w-[50%] h-full bg-gradient-to-l from-green-500/10 to-transparent pointer-events-none"></div>
+        <motion.div
+          className="absolute bottom-0 left-0 w-72 h-72 rounded-full bg-brand-green/5 blur-3xl pointer-events-none"
+          animate={{ scale: [1, 1.2, 1], opacity: [0.5, 0.8, 0.5] }}
+          transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
+        />
         <div className="max-w-7xl mx-auto relative z-10">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
-            <div>
+            <FadeUp>
               <span className="text-brand-green font-bold text-xs uppercase mb-3 block">Métricas que importan</span>
               <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-12">No es solo una app, es un cambio de vida.</h2>
               <div className="grid grid-cols-2 gap-8">
-                <div>
-                  <div className="text-5xl font-bold text-brand-green mb-2">20%</div>
-                  <p className="text-slate-400 text-sm">Ahorro mensual medio por hogar</p>
-                </div>
-                <div>
-                  <div className="text-5xl font-bold text-brand-green mb-2">90m</div>
-                  <p className="text-slate-400 text-sm">Menos tiempo de gestión semanal</p>
-                </div>
-                <div className="pt-8 col-span-2 border-t border-slate-800">
+                <AnimatedStat value="20%" label="Ahorro mensual medio por hogar" />
+                <AnimatedStat value="90m" label="Menos tiempo de gestión semanal" />
+                <motion.div
+                  className="pt-8 col-span-2 border-t border-slate-800"
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: 0.5 }}
+                >
                   <div className="flex items-center gap-4">
                     <div className="flex -space-x-3">
                       {[1, 2, 3, 4].map(idx => (
-                        <div key={idx} className="w-11 h-11 rounded-full border-4 border-brand-black overflow-hidden bg-slate-700 flex items-center justify-center text-white font-bold text-xs">
+                        <motion.div
+                          key={idx}
+                          initial={{ opacity: 0, x: -10 }}
+                          whileInView={{ opacity: 1, x: 0 }}
+                          viewport={{ once: true }}
+                          transition={{ delay: 0.6 + idx * 0.1 }}
+                          className="w-11 h-11 rounded-full border-4 border-brand-black overflow-hidden bg-slate-700 flex items-center justify-center text-white font-bold text-xs"
+                        >
                           {['AR', 'CM', 'PG', 'RL'][idx - 1]}
-                        </div>
+                        </motion.div>
                       ))}
                     </div>
                     <div>
@@ -795,22 +888,30 @@ export default function App() {
                       <p className="text-xs text-slate-500">Esperando el lanzamiento oficial</p>
                     </div>
                   </div>
-                </div>
+                </motion.div>
               </div>
-            </div>
+            </FadeUp>
 
             <div className="space-y-6">
               {[
                 { name: 'Marta G.', role: 'Madre de 3 hijos', quote: 'Antes gastaba 800€ al mes sin control. El primer mes que lo usé bajé a 630€ comprando exactamente lo mismo.' },
                 { name: 'Jorge R.', role: 'Consultor independiente', quote: 'Odio hacer la compra. Ahora solo reviso la app 2 minutos el domingo y ya sé que tengo la mejor oferta.' },
               ].map((t, i) => (
-                <div key={i} className="p-8 bg-white/5 border border-white/10 rounded-[2rem] hover:bg-white/10 transition-colors">
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.55, delay: i * 0.2, ease: [0.22, 1, 0.36, 1] }}
+                  whileHover={{ scale: 1.02, backgroundColor: 'rgba(255,255,255,0.1)' }}
+                  className="p-8 bg-white/5 border border-white/10 rounded-[2rem] transition-colors cursor-default"
+                >
                   <p className="text-xl text-slate-300 italic mb-6">"{t.quote}"</p>
                   <div>
                     <div className="font-bold text-lg">{t.name}</div>
                     <div className="text-sm text-brand-green font-medium">{t.role}</div>
                   </div>
-                </div>
+                </motion.div>
               ))}
             </div>
           </div>
@@ -820,7 +921,7 @@ export default function App() {
       {/* WAITLIST */}
       <section id="waitlist" className="py-32 px-6">
         <div className="max-w-3xl mx-auto text-center">
-          <SectionHeading centered title="Únete a la Revolución" subtitle="Sé de los primeros en comprar mejor." />
+          <FadeUp><SectionHeading centered title="Únete a la Revolución" subtitle="Sé de los primeros en comprar mejor." /></FadeUp>
           <p className="text-slate-500 text-xl mb-12">
             Apúntate a la lista de espera y recibe acceso anticipado cuando abramos.
             Sin spam — solo una invitación cuando estemos listos.
