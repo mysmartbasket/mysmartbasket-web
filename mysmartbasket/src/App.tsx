@@ -242,9 +242,245 @@ const FAQItem = ({ question, answer }: { question: string; answer: string }) => 
 
 const STORES = [
   { label: 'FreshMart',   price: '41,20€', status: 'Mejor precio', width: '70%',  color: 'bg-brand-green', active: true  },
-  { label: 'MaxiMarket',  price: '43,80€', status: '+2.60€',        width: '85%',  color: 'bg-slate-200',   active: false },
-  { label: 'EcoSuper',    price: '44,30€', status: '+3.10€',        width: '100%', color: 'bg-slate-200',   active: false },
+  { label: 'MaxiMarket',  price: '43,80€', status: '+2.60€',        width: '85%',  color: 'bg-slate-200 dark:bg-slate-600',   active: false },
+  { label: 'EcoSuper',    price: '44,30€', status: '+3.10€',        width: '100%', color: 'bg-slate-200 dark:bg-slate-600',   active: false },
 ];
+
+const DEMO_CATALOG = [
+  { name: 'Aceite de Oliva Virgen Extra 1L',   basePrice: '9,50€',  savings: '1,20€', brand: 'Hacendado'       },
+  { name: 'Leche Entera 1L',                   basePrice: '0,95€',  savings: '0,10€', brand: 'Puleva'          },
+  { name: 'Leche Desnatada 6 pack',            basePrice: '5,40€',  savings: '0,60€', brand: 'Marca propia'    },
+  { name: 'Pan de Molde Integral 500g',        basePrice: '1,85€',  savings: '0,30€', brand: 'Bimbo'           },
+  { name: 'Yogur Natural x4 125g',             basePrice: '1,20€',  savings: '0,20€', brand: 'Danone'          },
+  { name: 'Huevos Camperos M (12 u.)',         basePrice: '3,40€',  savings: '0,45€', brand: 'Camping'         },
+  { name: 'Pechuga de Pollo 500g',             basePrice: '4,90€',  savings: '0,60€', brand: 'Aves Nobles'     },
+  { name: 'Salmón Noruego Fresco 300g',        basePrice: '6,20€',  savings: '0,80€', brand: 'Lidl'            },
+  { name: 'Tomate Triturado 800g',             basePrice: '0,85€',  savings: '0,15€', brand: 'Solís'           },
+  { name: 'Arroz Redondo 1kg',                 basePrice: '1,45€',  savings: '0,25€', brand: 'Nomen'           },
+  { name: 'Pasta Espagueti 500g',              basePrice: '0,75€',  savings: '0,10€', brand: 'Gallo'           },
+  { name: 'Aguacate Hass (2 u.)',              basePrice: '3,20€',  savings: '0,45€', brand: 'Bio'             },
+  { name: 'Plátano de Canarias 1kg',           basePrice: '2,30€',  savings: '0,40€', brand: 'IGP Canarias'    },
+  { name: 'Manzana Fuji 1kg',                  basePrice: '2,10€',  savings: '0,30€', brand: 'Local'           },
+  { name: 'Queso Manchego Curado 200g',        basePrice: '3,80€',  savings: '0,50€', brand: 'García Baquero'  },
+  { name: 'Jamón Serrano Loncheado 100g',      basePrice: '2,50€',  savings: '0,35€', brand: 'ElPozo'          },
+  { name: 'Cerveza Rubia 6 x 33cl',           basePrice: '4,20€',  savings: '0,55€', brand: 'Amstel'          },
+  { name: 'Detergente Lavadora 30 dosis',      basePrice: '5,90€',  savings: '0,90€', brand: 'Ariel'           },
+  { name: 'Café Molido Natural 250g',          basePrice: '3,60€',  savings: '0,50€', brand: 'Marcilla'        },
+  { name: 'Zumo de Naranja 1L',               basePrice: '1,80€',  savings: '0,25€', brand: 'Don Simón'       },
+  { name: 'Atún Claro en Aceite 3 x 80g',     basePrice: '2,10€',  savings: '0,30€', brand: 'Calvo'           },
+  { name: 'Mantequilla con Sal 250g',          basePrice: '2,40€',  savings: '0,30€', brand: 'Kerrygold'       },
+  { name: 'Lentejas Cocidas 400g',             basePrice: '0,95€',  savings: '0,10€', brand: 'Cidacos'         },
+  { name: 'Caldo de Pollo 1L',                basePrice: '1,50€',  savings: '0,20€', brand: 'Knorr'           },
+  { name: 'Papel Higiénico 12 rollos',         basePrice: '3,50€',  savings: '0,40€', brand: 'Scottex'         },
+];
+
+const INITIAL_DEMO_ITEMS = [
+  { name: 'Aceite de Oliva Virgen Extra 1L', basePrice: '9,50€',  savings: '1,20€', brand: 'Hacendado'    },
+  { name: 'Leche Desnatada 6 pack',          basePrice: '5,40€',  savings: '0,60€', brand: 'Marca propia' },
+  { name: 'Aguacate Hass (2 u.)',            basePrice: '3,20€',  savings: '0,45€', brand: 'Bio'          },
+];
+type DemoItem = typeof DEMO_CATALOG[0];
+
+const DemoSection = memo(() => {
+  const [query, setQuery] = useState('');
+  const [items, setItems] = useState<DemoItem[]>(INITIAL_DEMO_ITEMS);
+  const [showSugg, setShowSugg] = useState(false);
+  const wrapRef = useRef<HTMLDivElement>(null);
+
+  const suggestions = query.trim().length >= 2
+    ? DEMO_CATALOG.filter(p =>
+        p.name.toLowerCase().includes(query.toLowerCase()) &&
+        !items.some(i => i.name === p.name)
+      ).slice(0, 6)
+    : [];
+
+  useEffect(() => {
+    const close = (e: MouseEvent) => {
+      if (wrapRef.current && !wrapRef.current.contains(e.target as Node)) setShowSugg(false);
+    };
+    document.addEventListener('mousedown', close);
+    return () => document.removeEventListener('mousedown', close);
+  }, []);
+
+  const addItem = useCallback((p: DemoItem) => {
+    setItems(prev => {
+      if (prev.some(i => i.name === p.name)) return prev;
+      const next = [...prev, p];
+      return next.length > 5 ? next.slice(next.length - 5) : next;
+    });
+    setQuery('');
+    setShowSugg(false);
+  }, []);
+
+  const removeItem = useCallback((name: string) => {
+    setItems(prev => prev.filter(i => i.name !== name));
+  }, []);
+
+  const totalSavings = items
+    .reduce((sum, i) => sum + parseFloat(i.savings.replace(',', '.').replace('€', '')), 0);
+  const totalSavingsStr = totalSavings.toFixed(2).replace('.', ',') + '€';
+
+  return (
+    <section id="demo" className="py-24 px-6 bg-white dark:bg-slate-950 overflow-hidden">
+      <div className="max-w-7xl mx-auto">
+        <SectionHeading centered title="Demo interactiva" subtitle="Siente el control en tus manos">
+          <p className="text-slate-500 dark:text-slate-400 text-lg max-w-2xl mx-auto">
+            Así funciona MySmartBasket: analiza tu lista y encuentra automáticamente
+            dónde comprar cada producto más barato.
+          </p>
+        </SectionHeading>
+
+        <div className="mt-12 bg-slate-50 dark:bg-slate-900 rounded-[3rem] p-8 md:p-12 border border-slate-100 dark:border-slate-800 flex flex-col lg:flex-row gap-12 items-start">
+          {/* Left panel */}
+          <div className="w-full lg:w-1/2 space-y-8">
+            <div className="space-y-4">
+              <div className="text-sm font-bold text-brand-green uppercase tracking-wider">Paso 1 · Busca un producto</div>
+              <div ref={wrapRef} className="relative">
+                <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-300 dark:text-slate-500 group-focus-within:text-brand-green transition-colors z-10" size={20} />
+                <input
+                  type="text"
+                  value={query}
+                  onChange={e => { setQuery(e.target.value); setShowSugg(true); }}
+                  onFocus={() => setShowSugg(true)}
+                  placeholder="Escribe 'Leche', 'Aceite', 'Pollo'…"
+                  className="w-full pl-16 pr-8 py-6 rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-lg dark:text-white dark:placeholder-slate-500 focus:ring-4 focus:ring-green-100 dark:focus:ring-green-900/40 focus:border-brand-green outline-none transition-all shadow-sm"
+                  aria-label="Buscar producto"
+                  aria-autocomplete="list"
+                  aria-expanded={showSugg && suggestions.length > 0}
+                />
+                <AnimatePresence>
+                  {showSugg && suggestions.length > 0 && (
+                    <motion.ul
+                      initial={{ opacity: 0, y: -6 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -6 }}
+                      transition={{ duration: 0.15 }}
+                      className="absolute left-0 right-0 top-full mt-2 bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl shadow-xl overflow-hidden z-20"
+                      role="listbox"
+                    >
+                      {suggestions.map((p, i) => (
+                        <li key={i} role="option" aria-selected={false}>
+                          <button
+                            onMouseDown={e => { e.preventDefault(); addItem(p); }}
+                            className="w-full flex items-center justify-between px-5 py-3.5 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors text-left gap-4"
+                          >
+                            <div>
+                              <div className="text-sm font-semibold text-slate-800 dark:text-white">{p.name}</div>
+                              <div className="text-[11px] text-slate-400 font-medium uppercase tracking-tight">{p.brand}</div>
+                            </div>
+                            <div className="text-right flex-shrink-0">
+                              <div className="text-sm font-bold text-slate-700 dark:text-slate-200">{p.basePrice}</div>
+                              <div className="text-[11px] font-bold text-brand-green">Ahorras {p.savings}</div>
+                            </div>
+                          </button>
+                        </li>
+                      ))}
+                    </motion.ul>
+                  )}
+                </AnimatePresence>
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              <div className="text-sm font-bold text-brand-green uppercase tracking-wider">Paso 2 · Productos optimizados</div>
+              <div className="grid gap-3">
+                {items.map((item, idx) => (
+                  <motion.div
+                    key={item.name}
+                    initial={{ opacity: 0, x: -12 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: 12 }}
+                    layout
+                    className="p-5 bg-white dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-700 flex justify-between items-center shadow-sm hover:border-green-100 dark:hover:border-brand-green/40 transition-colors duration-150 group"
+                  >
+                    <div className="flex items-center gap-4 min-w-0">
+                      <div className="w-10 h-10 bg-green-50 dark:bg-green-900/30 rounded-xl flex items-center justify-center text-brand-green font-bold text-xs flex-shrink-0">
+                        {idx + 1}
+                      </div>
+                      <div className="min-w-0">
+                        <div className="font-bold text-brand-black dark:text-white text-sm truncate max-w-[180px]">{item.name}</div>
+                        <div className="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">{item.brand}</div>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-3 flex-shrink-0">
+                      <div className="text-right">
+                        <div className="text-sm font-bold dark:text-white">{item.basePrice}</div>
+                        <div className="text-[10px] font-bold text-brand-green">Ahorras {item.savings}</div>
+                      </div>
+                      <button
+                        onClick={() => removeItem(item.name)}
+                        className="opacity-0 group-hover:opacity-100 transition-opacity text-slate-300 hover:text-red-400 p-1 rounded-lg"
+                        aria-label={`Eliminar ${item.name}`}
+                      >
+                        <X size={14} />
+                      </button>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+
+            <div className="p-6 bg-brand-black rounded-3xl text-white">
+              <div className="flex justify-between items-center mb-4">
+                <span className="text-sm text-slate-400">AHORRO EN ESTA COMPRA</span>
+                <div className="bg-brand-green/20 text-brand-green px-3 py-1 rounded-full text-xs font-bold">OPTIMIZADO</div>
+              </div>
+              <motion.div
+                key={totalSavingsStr}
+                initial={{ opacity: 0, y: -6 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="text-4xl font-bold"
+              >
+                {totalSavingsStr} <span className="text-sm text-slate-400 font-normal">menos</span>
+              </motion.div>
+              <div className="mt-4 pt-4 border-t border-white/10 flex items-center gap-2 text-xs text-slate-400">
+                <CheckCircle2 size={12} className="text-brand-green" /> Basado en precios actuales de 4 supermercados
+              </div>
+            </div>
+          </div>
+
+          {/* Right panel */}
+          <div className="w-full lg:w-1/2">
+            <div className="bg-white dark:bg-slate-800 rounded-[2.5rem] border border-slate-100 dark:border-slate-700 shadow-2xl p-8 relative overflow-hidden h-full min-h-[500px] flex flex-col">
+              <h4 className="text-2xl font-bold dark:text-white mb-8">
+                Mejor opción detectada: <span className="text-brand-green">FreshMart</span>
+              </h4>
+
+              <div className="flex-1 space-y-6">
+                {STORES.map((m, i) => (
+                  <div key={i} className="space-y-2">
+                    <div className="flex justify-between text-sm font-bold">
+                      <span className="dark:text-white">{m.label}</span>
+                      <span className={m.active ? 'text-brand-green' : 'text-slate-400'}>{m.price}</span>
+                    </div>
+                    <div className="h-3 w-full bg-slate-50 dark:bg-slate-700 rounded-full overflow-hidden">
+                      <motion.div
+                        initial={{ width: 0 }}
+                        whileInView={{ width: m.width }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.8, delay: 0.3 + i * 0.15 }}
+                        className={`h-full ${m.color}`}
+                      />
+                    </div>
+                    <div className="text-[10px] font-bold text-slate-400 uppercase">{m.status}</div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="mt-auto p-6 rounded-3xl border border-dashed border-slate-200 dark:border-slate-600 flex items-start gap-4">
+                <Zap size={22} className="text-brand-green mt-0.5 flex-shrink-0" />
+                <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+                  Nuestro sistema ha detectado que comprando el aceite en <strong className="text-slate-700 dark:text-slate-200">FreshMart</strong> y
+                  los aguacates en <strong className="text-slate-700 dark:text-slate-200">EcoSuper</strong>, podrías ahorrar <strong className="text-slate-700 dark:text-slate-200">0,80€ adicionales</strong> esta semana.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+});
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -302,6 +538,7 @@ const Navbar = () => {
           <a href="#solution"     className="hover:text-brand-green transition-colors">Solución</a>
           <a href="#features"     className="hover:text-brand-green transition-colors">Funcionalidades</a>
           <a href="#how-it-works" className="hover:text-brand-green transition-colors">Cómo funciona</a>
+          <a href="#faq"         className="hover:text-brand-green transition-colors">FAQ</a>
           <button
             onClick={toggleDark}
             className="w-9 h-9 rounded-full flex items-center justify-center text-slate-500 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all"
@@ -346,6 +583,7 @@ const Navbar = () => {
             <a href="#solution"     onClick={close} className="text-base font-medium text-slate-700 dark:text-slate-200 hover:text-brand-green transition-colors">Solución</a>
             <a href="#features"     onClick={close} className="text-base font-medium text-slate-700 dark:text-slate-200 hover:text-brand-green transition-colors">Funcionalidades</a>
             <a href="#how-it-works" onClick={close} className="text-base font-medium text-slate-700 dark:text-slate-200 hover:text-brand-green transition-colors">Cómo funciona</a>
+            <a href="#faq"          onClick={close} className="text-base font-medium text-slate-700 dark:text-slate-200 hover:text-brand-green transition-colors">FAQ</a>
             <a
               href="#waitlist"
               onClick={close}
@@ -940,117 +1178,7 @@ export default function App() {
       </section>
 
       {/* INTERACTIVE DEMO */}
-      <section id="demo" className="py-24 px-6 bg-white overflow-hidden">
-        <div className="max-w-7xl mx-auto">
-          <SectionHeading centered title="Demo interactiva" subtitle="Siente el control en tus manos">
-            <p className="text-slate-500 text-lg max-w-2xl mx-auto">
-              Así funciona MySmartBasket: analiza tu lista y encuentra automáticamente
-              dónde comprar cada producto más barato.
-            </p>
-          </SectionHeading>
-
-          <div className="mt-12 bg-slate-50 rounded-[3rem] p-8 md:p-12 border border-slate-100 flex flex-col lg:flex-row gap-12 items-center">
-            {/* Left panel */}
-            <div className="w-full lg:w-1/2 space-y-8">
-              <div className="space-y-4">
-                <div className="text-sm font-bold text-brand-green uppercase tracking-wider">Paso 1 · Tu lista</div>
-                <div className="relative group">
-                  <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-brand-green transition-colors" size={20} />
-                  <input
-                    type="text"
-                    placeholder="Escribe 'Aceite', 'Leche', 'Aguacates'…"
-                    className="w-full pl-16 pr-8 py-6 rounded-2xl bg-white border border-slate-200 text-lg focus:ring-4 focus:ring-green-100 focus:border-brand-green outline-none transition-all shadow-sm"
-                    aria-label="Buscar producto"
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-4">
-                <div className="text-sm font-bold text-brand-green uppercase tracking-wider">Paso 2 · Productos optimizados</div>
-                <div className="grid gap-3">
-                  {[
-                    { name: 'Aceite de Oliva V.E. 1L', basePrice: '9,50€', savings: '1,20€', brand: 'Selección' },
-                    { name: 'Leche Desnatada 6 pack',  basePrice: '5,40€', savings: '0,60€', brand: 'Marca propia' },
-                    { name: 'Aguacate Hass (2 u.)',     basePrice: '3,20€', savings: '0,45€', brand: 'Bio' },
-                  ].map((item, idx) => (
-                    <div
-                      key={idx}
-                      className="p-5 bg-white rounded-2xl border border-slate-100 flex justify-between items-center shadow-sm hover:border-green-100 transition-colors duration-150"
-                    >
-                      <div className="flex items-center gap-4">
-                        <div className="w-10 h-10 bg-green-50 rounded-xl flex items-center justify-center text-brand-green font-bold text-xs">
-                          {idx + 1}
-                        </div>
-                        <div>
-                          <div className="font-bold text-brand-black">{item.name}</div>
-                          <div className="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">{item.brand}</div>
-                        </div>
-                      </div>
-                      <div className="text-right">
-                        <div className="text-sm font-bold">{item.basePrice}</div>
-                        <div className="text-[10px] font-bold text-brand-green">Ahorras {item.savings}</div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div className="p-6 bg-brand-black rounded-3xl text-white">
-                <div className="flex justify-between items-center mb-4">
-                  <span className="text-sm text-slate-400">AHORRO EN ESTA COMPRA</span>
-                  <div className="bg-brand-green/20 text-brand-green px-3 py-1 rounded-full text-xs font-bold">OPTIMIZADO</div>
-                </div>
-                <div className="text-4xl font-bold">2,25€ <span className="text-sm text-slate-400 font-normal">menos</span></div>
-                <div className="mt-4 pt-4 border-t border-white/10 flex items-center gap-2 text-xs text-slate-400">
-                  <CheckCircle2 size={12} className="text-brand-green" /> Basado en precios actuales de 4 supermercados
-                </div>
-              </div>
-            </div>
-
-            {/* Right panel */}
-            <div className="w-full lg:w-1/2">
-              <div className="bg-white rounded-[2.5rem] border border-slate-100 shadow-2xl p-8 relative overflow-hidden h-full min-h-[500px] flex flex-col">
-                <div className="absolute top-0 right-0 p-8">
-                  <div className="p-2 px-4 rounded-full bg-slate-50 border border-slate-200 text-[10px] font-bold text-slate-400">COMPARATIVA EN TIEMPO REAL</div>
-                </div>
-
-                <h4 className="text-2xl font-bold mb-8 pr-12">
-                  Mejor opción detectada: <span className="text-brand-green">FreshMart</span>
-                </h4>
-
-                <div className="flex-1 space-y-6">
-                  {STORES.map((m, i) => (
-                    <div key={i} className="space-y-2">
-                      <div className="flex justify-between text-sm font-bold">
-                        <span>{m.label}</span>
-                        <span className={m.active ? 'text-brand-green' : 'text-slate-400'}>{m.price}</span>
-                      </div>
-                      <div className="h-3 w-full bg-slate-50 rounded-full overflow-hidden">
-                        <motion.div
-                          initial={{ width: 0 }}
-                          whileInView={{ width: m.width }}
-                          viewport={{ once: true }}
-                          transition={{ duration: 0.8, delay: 0.3 + i * 0.15 }}
-                          className={`h-full ${m.color}`}
-                        />
-                      </div>
-                      <div className="text-[10px] font-bold text-slate-400 uppercase">{m.status}</div>
-                    </div>
-                  ))}
-                </div>
-
-                <div className="mt-auto p-6 rounded-3xl border border-dashed border-slate-200 flex items-start gap-4">
-                  <Zap size={22} className="text-brand-green mt-0.5 flex-shrink-0" />
-                  <p className="text-xs text-slate-500 leading-relaxed">
-                    Nuestro sistema ha detectado que comprando el aceite en <strong>FreshMart</strong> y
-                    los aguacates en <strong>EcoSuper</strong>, podrías ahorrar <strong>0,80€ adicionales</strong> esta semana.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      <DemoSection />
 
       {/* HOW IT WORKS */}
       <section id="how-it-works" className="py-24 px-6">
