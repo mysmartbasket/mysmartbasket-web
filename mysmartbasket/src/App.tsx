@@ -723,7 +723,7 @@ export default function App() {
             <h4 className="font-bold mb-6">Compañía</h4>
             <ul className="space-y-4 text-slate-500 text-sm">
               <li><a href="#solution"                          className="hover:text-brand-green transition-colors">Sobre nosotros</a></li>
-              <li><a href="mailto:hola@mysmartbasket.app"      className="hover:text-brand-green transition-colors">Contacto</a></li>
+              <li><a href="mailto:contacto@mysmartbasket.app"      className="hover:text-brand-green transition-colors">Contacto</a></li>
               <li><a href="/privacidad.html"                   className="hover:text-brand-green transition-colors">Privacidad</a></li>
             </ul>
           </div>
@@ -733,7 +733,7 @@ export default function App() {
           <p>© {year} MySmartBasket. Todos los derechos reservados.</p>
           <div className="flex gap-8">
             <a href="/privacidad.html"              className="hover:text-slate-600 transition-colors">Privacidad</a>
-            <a href="mailto:hola@mysmartbasket.app" className="hover:text-slate-600 transition-colors">Contacto</a>
+            <a href="mailto:contacto@mysmartbasket.app" className="hover:text-slate-600 transition-colors">Contacto</a>
           </div>
         </div>
       </footer>
