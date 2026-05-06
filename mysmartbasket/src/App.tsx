@@ -137,40 +137,40 @@ const SCREENS = [
     tab: 'Listas',
     tabIcon: <ShoppingBasket size={14} />,
     content: (
-      <div className="flex-1 px-3 pt-2 pb-1 space-y-2 overflow-hidden">
+      <div className="flex-1 px-4 pt-3 pb-2 space-y-2.5 overflow-hidden">
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-[11px] font-bold text-slate-900">Mis listas 🛒</p>
-            <p className="text-[9px] text-slate-400">2 listas activas</p>
+            <p className="text-[12px] font-bold text-slate-900">Mis listas 🛒</p>
+            <p className="text-[10px] text-slate-400">2 listas activas</p>
           </div>
-          <div className="w-6 h-6 rounded-full bg-brand-green flex items-center justify-center text-white">
-            <ShoppingBasket size={11} />
+          <div className="w-7 h-7 rounded-full bg-brand-green flex items-center justify-center text-white">
+            <ShoppingBasket size={13} />
           </div>
         </div>
         {[
           { name: 'Compra Semanal', items: 12, price: '42,50€', saving: '8,00€' },
           { name: 'Mercadona Hoy', items: 7, price: '18,90€', saving: '3,40€' },
         ].map((l, i) => (
-          <div key={i} className="p-2.5 bg-slate-50 rounded-xl flex items-center gap-2">
-            <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center shadow-sm flex-shrink-0">
-              <ShoppingBasket size={12} className="text-brand-green" />
+          <div key={i} className="p-3 bg-slate-50 rounded-2xl flex items-center gap-3">
+            <div className="w-9 h-9 bg-white rounded-xl flex items-center justify-center shadow-sm flex-shrink-0">
+              <ShoppingBasket size={14} className="text-brand-green" />
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-[10px] font-bold truncate">{l.name}</p>
+              <p className="text-[11px] font-bold truncate">{l.name}</p>
               <p className="text-[9px] text-slate-400">{l.items} productos</p>
             </div>
             <div className="text-right flex-shrink-0">
-              <p className="text-[10px] font-bold text-brand-green">{l.price}</p>
-              <p className="text-[8px] text-slate-400">–{l.saving}</p>
+              <p className="text-[11px] font-bold text-brand-green">{l.price}</p>
+              <p className="text-[9px] text-slate-400">–{l.saving}</p>
             </div>
           </div>
         ))}
-        <div className="p-2.5 bg-white rounded-xl border border-slate-100 space-y-1.5">
-          <p className="text-[9px] font-bold text-slate-400">PENDIENTES</p>
+        <div className="p-3 bg-white rounded-2xl border border-slate-100 space-y-2">
+          <p className="text-[10px] font-bold text-slate-400">PENDIENTES</p>
           {['🥦 Brócoli', '🥛 Leche entera', '🍳 Huevos L'].map((item, i) => (
             <div key={i} className="flex items-center gap-2">
-              <div className="w-3.5 h-3.5 rounded-full border-2 border-slate-200 flex-shrink-0" />
-              <span className="text-[10px] text-slate-700">{item}</span>
+              <div className="w-4 h-4 rounded-full border-2 border-slate-200 flex-shrink-0" />
+              <span className="text-[11px] text-slate-700">{item}</span>
             </div>
           ))}
         </div>
@@ -181,32 +181,32 @@ const SCREENS = [
     tab: 'Comparar',
     tabIcon: <TrendingDown size={14} />,
     content: (
-      <div className="flex-1 px-3 pt-2 pb-1 space-y-2 overflow-hidden">
-        <p className="text-[11px] font-bold text-slate-900">Comparador de precios</p>
-        <div className="p-2 bg-green-50 border border-brand-green/30 rounded-xl">
-          <p className="text-[8px] text-slate-400 font-bold uppercase">Lista activa</p>
-          <p className="text-[10px] font-bold text-slate-900">Compra Semanal · 12 productos</p>
+      <div className="flex-1 px-4 pt-3 pb-2 space-y-2.5 overflow-hidden">
+        <p className="text-[12px] font-bold text-slate-900">Comparador de precios</p>
+        <div className="p-2.5 bg-green-50 border border-brand-green/30 rounded-xl">
+          <p className="text-[9px] text-slate-400 font-bold uppercase">Lista activa</p>
+          <p className="text-[11px] font-bold text-slate-900">Compra Semanal · 12 productos</p>
         </div>
-        <div className="space-y-1.5">
+        <div className="space-y-2">
           {[
             { name: 'FreshMart',  price: '41,20€', width: '70%',  best: true },
             { name: 'MaxiMarket', price: '43,80€', width: '85%',  best: false },
             { name: 'EcoSuper',   price: '44,30€', width: '100%', best: false },
           ].map((s, i) => (
-            <div key={i} className={`p-2.5 rounded-xl border ${s.best ? 'border-brand-green bg-green-50/50' : 'border-slate-100 bg-white'}`}>
-              <div className="flex justify-between items-center mb-1">
-                <span className="text-[10px] font-medium">{s.name}</span>
-                <span className={`text-[10px] font-bold ${s.best ? 'text-brand-green' : 'text-slate-700'}`}>{s.price}</span>
+            <div key={i} className={`p-3 rounded-xl border ${s.best ? 'border-brand-green bg-green-50/50' : 'border-slate-100 bg-white'}`}>
+              <div className="flex justify-between items-center mb-1.5">
+                <span className="text-[11px] font-medium">{s.name}</span>
+                <span className={`text-[11px] font-bold ${s.best ? 'text-brand-green' : 'text-slate-700'}`}>{s.price}</span>
               </div>
-              <div className="h-1 bg-slate-100 rounded-full overflow-hidden">
+              <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
                 <div className={`h-full rounded-full ${s.best ? 'bg-brand-green' : 'bg-slate-300'}`} style={{ width: s.width }} />
               </div>
-              {s.best && <p className="text-[8px] text-brand-green font-bold mt-0.5">✓ Mejor precio</p>}
+              {s.best && <p className="text-[9px] text-brand-green font-bold mt-1">✓ Mejor precio</p>}
             </div>
           ))}
         </div>
-        <div className="p-2.5 bg-slate-900 rounded-xl text-center">
-          <p className="text-[8px] text-slate-400">Ahorro estimado</p>
+        <div className="p-3 bg-slate-900 rounded-xl text-center">
+          <p className="text-[9px] text-slate-400">Ahorro estimado</p>
           <p className="text-sm font-bold text-brand-green">8,00€</p>
         </div>
       </div>
@@ -216,24 +216,24 @@ const SCREENS = [
     tab: 'Recetas',
     tabIcon: <Search size={14} />,
     content: (
-      <div className="flex-1 px-3 pt-2 pb-1 space-y-2 overflow-hidden">
-        <p className="text-[11px] font-bold text-slate-900">Recetas de la semana</p>
-        <div className="flex items-center gap-2 bg-slate-100 rounded-lg px-2.5 py-1.5">
-          <Search size={9} className="text-slate-400" />
-          <span className="text-[9px] text-slate-400">Buscar receta…</span>
+      <div className="flex-1 px-4 pt-3 pb-2 space-y-2.5 overflow-hidden">
+        <p className="text-[12px] font-bold text-slate-900">Recetas de la semana</p>
+        <div className="flex items-center gap-2 bg-slate-100 rounded-xl px-3 py-2">
+          <Search size={10} className="text-slate-400" />
+          <span className="text-[10px] text-slate-400">Buscar receta…</span>
         </div>
         {[
           { emoji: '🥗', name: 'Ensalada mediterránea', time: '10 min', items: 6 },
           { emoji: '🍝', name: 'Pasta carbonara',       time: '20 min', items: 5 },
           { emoji: '🥘', name: 'Pollo al curry',         time: '35 min', items: 8 },
         ].map((r, i) => (
-          <div key={i} className="flex items-center gap-2 p-2.5 bg-white rounded-xl border border-slate-100">
-            <div className="w-8 h-8 bg-slate-50 rounded-lg flex items-center justify-center text-xl flex-shrink-0">{r.emoji}</div>
+          <div key={i} className="flex items-center gap-3 p-3 bg-white rounded-2xl border border-slate-100">
+            <div className="w-9 h-9 bg-slate-50 rounded-xl flex items-center justify-center text-2xl flex-shrink-0">{r.emoji}</div>
             <div className="flex-1 min-w-0">
-              <p className="text-[10px] font-bold truncate">{r.name}</p>
-              <p className="text-[8px] text-slate-400">⏱ {r.time} · {r.items} ing.</p>
+              <p className="text-[11px] font-bold truncate">{r.name}</p>
+              <p className="text-[9px] text-slate-400">⏱ {r.time} · {r.items} ing.</p>
             </div>
-            <ChevronRight size={10} className="text-slate-300 flex-shrink-0" />
+            <ChevronRight size={11} className="text-slate-300 flex-shrink-0" />
           </div>
         ))}
       </div>
@@ -243,34 +243,34 @@ const SCREENS = [
     tab: 'Asistente',
     tabIcon: <Zap size={14} />,
     content: (
-      <div className="flex-1 flex flex-col px-3 pt-2 pb-1 overflow-hidden">
-        <p className="text-[11px] font-bold text-slate-900 mb-2">Asistente IA</p>
-        <div className="flex-1 space-y-2 overflow-hidden">
-          <div className="flex gap-1.5">
-            <div className="w-5 h-5 rounded-full bg-brand-green flex items-center justify-center flex-shrink-0 mt-0.5">
-              <Zap size={9} className="text-white" />
+      <div className="flex-1 flex flex-col px-4 pt-3 pb-2 overflow-hidden">
+        <p className="text-[12px] font-bold text-slate-900 mb-3">Asistente IA</p>
+        <div className="flex-1 space-y-3 overflow-hidden">
+          <div className="flex gap-2">
+            <div className="w-6 h-6 rounded-full bg-brand-green flex items-center justify-center flex-shrink-0 mt-0.5">
+              <Zap size={10} className="text-white" />
             </div>
-            <div className="bg-slate-100 rounded-2xl rounded-tl-none p-2 max-w-[85%]">
-              <p className="text-[9px] text-slate-700">¡Hola! Puedo ayudarte a optimizar tu compra. ¿Qué necesitas?</p>
+            <div className="bg-slate-100 rounded-2xl rounded-tl-none p-2.5 max-w-[85%]">
+              <p className="text-[10px] text-slate-700">¡Hola! Puedo ayudarte a optimizar tu compra. ¿Qué necesitas?</p>
             </div>
           </div>
           <div className="flex justify-end">
-            <div className="bg-brand-green rounded-2xl rounded-tr-none p-2 max-w-[75%]">
-              <p className="text-[9px] text-white">¿Cuánto ahorro esta semana?</p>
+            <div className="bg-brand-green rounded-2xl rounded-tr-none p-2.5 max-w-[75%]">
+              <p className="text-[10px] text-white">¿Cuánto ahorro esta semana?</p>
             </div>
           </div>
-          <div className="flex gap-1.5">
-            <div className="w-5 h-5 rounded-full bg-brand-green flex items-center justify-center flex-shrink-0 mt-0.5">
-              <Zap size={9} className="text-white" />
+          <div className="flex gap-2">
+            <div className="w-6 h-6 rounded-full bg-brand-green flex items-center justify-center flex-shrink-0 mt-0.5">
+              <Zap size={10} className="text-white" />
             </div>
-            <div className="bg-slate-100 rounded-2xl rounded-tl-none p-2 max-w-[85%]">
-              <p className="text-[9px] text-slate-700">Esta semana ahorras <span className="font-bold text-brand-green">11,40€</span> en FreshMart. 🎉</p>
+            <div className="bg-slate-100 rounded-2xl rounded-tl-none p-2.5 max-w-[85%]">
+              <p className="text-[10px] text-slate-700">Esta semana ahorras <span className="font-bold text-brand-green">11,40€</span> en FreshMart. 🎉</p>
             </div>
           </div>
         </div>
-        <div className="mt-2 flex items-center gap-2 bg-slate-100 rounded-lg px-2.5 py-1.5">
-          <span className="text-[9px] text-slate-400 flex-1">Escribe un mensaje…</span>
-          <ArrowRight size={10} className="text-brand-green" />
+        <div className="mt-3 flex items-center gap-2 bg-slate-100 rounded-xl px-3 py-2">
+          <span className="text-[10px] text-slate-400 flex-1">Escribe un mensaje…</span>
+          <ArrowRight size={11} className="text-brand-green" />
         </div>
       </div>
     ),
@@ -279,29 +279,29 @@ const SCREENS = [
     tab: 'Perfil',
     tabIcon: <Users size={14} />,
     content: (
-      <div className="flex-1 px-3 pt-2 pb-1 space-y-2 overflow-hidden">
+      <div className="flex-1 px-4 pt-3 pb-2 space-y-2.5 overflow-hidden">
         <div className="flex flex-col items-center py-2">
-          <div className="w-12 h-12 rounded-full bg-brand-green flex items-center justify-center text-white mb-1.5">
-            <ShoppingBasket size={18} />
+          <div className="w-14 h-14 rounded-full bg-brand-green flex items-center justify-center text-white mb-2">
+            <ShoppingBasket size={22} />
           </div>
-          <p className="text-[11px] font-bold text-slate-900">MySmartBasket</p>
-          <p className="text-[9px] text-slate-400">usuario@email.com</p>
+          <p className="text-[12px] font-bold text-slate-900">MySmartBasket</p>
+          <p className="text-[10px] text-slate-400">usuario@email.com</p>
         </div>
-        <div className="space-y-1.5">
+        <div className="space-y-2">
           {[
             { label: 'Mi Hogar', value: '3 miembros' },
             { label: 'Ahorro total', value: '1.240€' },
             { label: 'Listas creadas', value: '47' },
           ].map((stat, i) => (
-            <div key={i} className="flex items-center justify-between p-2.5 bg-slate-50 rounded-xl">
-              <span className="text-[10px] text-slate-600">{stat.label}</span>
-              <span className="text-[10px] font-bold text-slate-900">{stat.value}</span>
+            <div key={i} className="flex items-center justify-between p-3 bg-slate-50 rounded-xl">
+              <span className="text-[11px] text-slate-600">{stat.label}</span>
+              <span className="text-[11px] font-bold text-slate-900">{stat.value}</span>
             </div>
           ))}
         </div>
-        <div className="p-2.5 bg-green-50 border border-brand-green/20 rounded-xl text-center">
-          <p className="text-[9px] text-brand-green font-bold">Plan Premium · Activo</p>
-          <p className="text-[8px] text-slate-400 mt-0.5">Comparte con hasta 5 personas</p>
+        <div className="p-3 bg-green-50 border border-brand-green/20 rounded-xl text-center">
+          <p className="text-[10px] text-brand-green font-bold">Plan Premium · Activo</p>
+          <p className="text-[9px] text-slate-400 mt-0.5">Comparte con hasta 5 personas</p>
         </div>
       </div>
     ),
@@ -317,21 +317,21 @@ const MockupApp = () => {
   }, []);
 
   return (
-    <div className="relative w-[260px] h-[520px] bg-slate-900 rounded-[3rem] p-2.5 shadow-[0_30px_80px_rgba(0,0,0,0.25)] border-[7px] border-slate-800 overflow-hidden mx-auto lg:mx-0">
+    <div className="relative w-[300px] h-[620px] bg-slate-900 rounded-[3.5rem] p-3 shadow-[0_30px_80px_rgba(0,0,0,0.25)] border-[8px] border-slate-800 overflow-hidden mx-auto lg:mx-0">
       {/* Notch */}
-      <div className="absolute top-[10px] left-1/2 -translate-x-1/2 w-20 h-5 bg-slate-900 rounded-full z-30" />
+      <div className="absolute top-[12px] left-1/2 -translate-x-1/2 w-24 h-5 bg-slate-900 rounded-full z-30" />
 
-      <div className="w-full h-full bg-white rounded-[2.4rem] overflow-hidden flex flex-col font-sans relative">
+      <div className="w-full h-full bg-white rounded-[2.8rem] overflow-hidden flex flex-col font-sans relative">
         {/* Status bar */}
-        <div className="flex items-center justify-between px-5 pt-6 pb-0.5 flex-shrink-0">
-          <span className="text-[9px] font-bold text-slate-900">9:41</span>
-          <div className="flex items-center gap-1">
+        <div className="flex items-center justify-between px-6 pt-7 pb-1 flex-shrink-0">
+          <span className="text-[10px] font-bold text-slate-900">9:41</span>
+          <div className="flex items-center gap-1.5">
             <div className="flex gap-0.5 items-end">
               {[2, 3, 4, 4].map((h, i) => (
-                <div key={i} className="w-1 bg-slate-900 rounded-sm" style={{ height: `${h * 2}px` }} />
+                <div key={i} className="w-1 bg-slate-900 rounded-sm" style={{ height: `${h * 2.5}px` }} />
               ))}
             </div>
-            <svg viewBox="0 0 24 12" className="w-4 h-2 fill-slate-900"><rect x="0" y="0" width="21" height="12" rx="3" fillOpacity="0.3"/><rect x="1" y="1" width="15" height="10" rx="2"/><rect x="22" y="3" width="2" height="6" rx="1"/></svg>
+            <svg viewBox="0 0 24 12" className="w-5 h-2.5 fill-slate-900"><rect x="0" y="0" width="21" height="12" rx="3" fillOpacity="0.3"/><rect x="1" y="1" width="15" height="10" rx="2"/><rect x="22" y="3" width="2" height="6" rx="1"/></svg>
           </div>
         </div>
 
@@ -347,10 +347,10 @@ const MockupApp = () => {
               }}
             >
               {/* Screen header */}
-              <div className="px-4 py-2 flex justify-between items-center border-b border-slate-50 flex-shrink-0">
-                <span className="text-[11px] font-bold text-brand-green">MySmartBasket</span>
-                <div className="w-6 h-6 rounded-full bg-green-50 flex items-center justify-center text-brand-green">
-                  <ShoppingBasket size={12} />
+              <div className="px-5 py-2.5 flex justify-between items-center border-b border-slate-50 flex-shrink-0">
+                <span className="text-xs font-bold text-brand-green">MySmartBasket</span>
+                <div className="w-7 h-7 rounded-full bg-green-50 flex items-center justify-center text-brand-green">
+                  <ShoppingBasket size={14} />
                 </div>
               </div>
               {screen.content}
@@ -359,15 +359,15 @@ const MockupApp = () => {
         </div>
 
         {/* Tab bar */}
-        <div className="border-t border-slate-100 flex justify-around pb-2 pt-1.5 flex-shrink-0">
+        <div className="border-t border-slate-100 flex justify-around pb-3 pt-2 flex-shrink-0">
           {SCREENS.map((screen, i) => (
             <button
               key={i}
               onClick={() => setActive(i)}
-              className={`flex flex-col items-center gap-0.5 px-1 transition-colors ${i === active ? 'text-brand-green' : 'text-slate-300'}`}
+              className={`flex flex-col items-center gap-1 px-1 transition-colors ${i === active ? 'text-brand-green' : 'text-slate-300'}`}
             >
               {screen.tabIcon}
-              <span className="text-[7px] font-medium">{screen.tab}</span>
+              <span className="text-[8px] font-medium">{screen.tab}</span>
             </button>
           ))}
         </div>
@@ -390,7 +390,6 @@ const SECTIONS: { id: string; label: string }[] = [
 
 export default function App() {
   const [formState, handleSubmit] = useForm('mwvybvog');
-  const [isVideoOpen, setIsVideoOpen]   = useState(false);
   const [isCanvaOpen, setIsCanvaOpen]   = useState(false);
   const year = new Date().getFullYear();
 
@@ -412,7 +411,7 @@ export default function App() {
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') { setIsVideoOpen(false); setIsCanvaOpen(false); }
+      if (e.key === 'Escape') { setIsCanvaOpen(false); }
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
@@ -423,43 +422,6 @@ export default function App() {
       <Navbar />
 
       {/* VIDEO MODAL */}
-      <AnimatePresence>
-        {isVideoOpen && (
-          <motion.div
-            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-8"
-            role="dialog" aria-modal="true" aria-label="Vídeo demo"
-          >
-            <div className="absolute inset-0 bg-brand-black/95 backdrop-blur-md" onClick={() => setIsVideoOpen(false)} />
-            <motion.div
-              initial={{ scale: 0.93, opacity: 0, y: 16 }}
-              animate={{ scale: 1, opacity: 1, y: 0 }}
-              exit={{ scale: 0.93, opacity: 0, y: 16 }}
-              transition={{ duration: 0.2 }}
-              className="relative w-full max-w-5xl aspect-video bg-black rounded-[2rem] overflow-hidden shadow-[0_0_100px_rgba(34,197,94,0.2)] z-10 border border-white/10"
-            >
-              <button
-                onClick={() => setIsVideoOpen(false)}
-                className="absolute top-4 right-4 z-20 bg-white/10 hover:bg-white/20 text-white p-3 rounded-full transition-all active:scale-90"
-                aria-label="Cerrar vídeo"
-              >
-                <X size={20} />
-              </button>
-              <div className="w-full h-full bg-slate-900">
-                <iframe
-                  src="https://ai.studio/apps/514a1199-3642-43b6-b69d-0e1b2043b314"
-                  title="MySmartBasket Demo"
-                  className="w-full h-full border-none rounded-[1.5rem]"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                  referrerPolicy="no-referrer"
-                />
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
       {/* CANVA MODAL */}
       <AnimatePresence>
         {isCanvaOpen && (
@@ -526,24 +488,18 @@ export default function App() {
               compara precios en tiempo real y te ayuda a comer mejor sin esfuerzo.
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-4 items-center">
+            <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center">
               <a
                 href="#waitlist"
-                className="w-full sm:w-auto bg-brand-green text-white px-8 py-5 rounded-2xl font-bold text-lg hover:opacity-90 transition-all flex items-center justify-center gap-2 group shadow-xl shadow-green-100"
+                className="bg-brand-green text-white px-7 py-4 rounded-2xl font-bold text-base hover:opacity-90 transition-all flex items-center justify-center gap-2 group shadow-xl shadow-green-100"
               >
-                Reservar mi plaza <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
+                Reservar mi plaza <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
               </a>
               <button
                 onClick={() => setIsCanvaOpen(true)}
-                className="w-full sm:w-auto bg-brand-black text-white px-8 py-5 rounded-2xl font-bold text-lg hover:bg-slate-800 transition-all flex items-center justify-center gap-2"
+                className="bg-brand-black text-white px-7 py-4 rounded-2xl font-bold text-base hover:bg-slate-800 transition-all flex items-center justify-center gap-2"
               >
                 Conócenos mejor
-              </button>
-              <button
-                onClick={() => setIsVideoOpen(true)}
-                className="w-full sm:w-auto bg-white text-brand-black border border-slate-200 px-8 py-5 rounded-2xl font-bold text-lg hover:bg-slate-50 transition-all flex items-center justify-center gap-2"
-              >
-                Vídeo Demo <Play size={18} />
               </button>
             </div>
 
