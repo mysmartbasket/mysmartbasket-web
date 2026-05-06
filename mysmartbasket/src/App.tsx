@@ -192,11 +192,38 @@ const MockupApp = () => (
   </div>
 );
 
+const SECTIONS: { id: string; label: string }[] = [
+  { id: 'top',          label: 'MySmartBasket'                        },
+  { id: 'problem',      label: 'MySmartBasket - El Problema'          },
+  { id: 'solution',     label: 'MySmartBasket - La Solución'          },
+  { id: 'features',     label: 'MySmartBasket - Funcionalidades'      },
+  { id: 'demo',         label: 'MySmartBasket - Demo interactiva'     },
+  { id: 'how-it-works', label: 'MySmartBasket - Cómo funciona'        },
+  { id: 'social-proof', label: 'MySmartBasket - Métricas'             },
+  { id: 'waitlist',     label: 'MySmartBasket - Únete'                },
+];
+
 export default function App() {
   const [formState, handleSubmit] = useForm('mwvybvog');
   const [isVideoOpen, setIsVideoOpen]   = useState(false);
   const [isCanvaOpen, setIsCanvaOpen]   = useState(false);
   const year = new Date().getFullYear();
+
+  // Dynamic page title based on visible section
+  useEffect(() => {
+    const observers: IntersectionObserver[] = [];
+    SECTIONS.forEach(({ id, label }) => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      const obs = new IntersectionObserver(
+        ([entry]) => { if (entry.isIntersecting) document.title = label; },
+        { threshold: 0.3 }
+      );
+      obs.observe(el);
+      observers.push(obs);
+    });
+    return () => observers.forEach(o => o.disconnect());
+  }, []);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -597,7 +624,7 @@ export default function App() {
       </section>
 
       {/* SOCIAL PROOF */}
-      <section className="py-24 px-6 bg-brand-black text-white rounded-[4rem] mx-4 overflow-hidden relative">
+      <section id="social-proof" className="py-24 px-6 bg-brand-black text-white rounded-[4rem] mx-4 overflow-hidden relative">
         <div className="absolute top-0 right-0 w-[50%] h-full bg-gradient-to-l from-green-500/10 to-transparent pointer-events-none"></div>
         <div className="max-w-7xl mx-auto relative z-10">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
