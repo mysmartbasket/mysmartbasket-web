@@ -8,6 +8,9 @@
 }
 
 @layer base {
+  html {
+    scroll-behavior: smooth;
+  }
   body {
     @apply bg-white text-slate-900 font-sans antialiased;
   }
