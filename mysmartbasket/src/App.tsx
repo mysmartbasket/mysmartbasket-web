@@ -55,9 +55,9 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
         <a href="#top" className="flex items-center gap-2.5 group">
           <img
-            src="/logo.svg"
+            src="/android-chrome-192x192.png"
             alt="MySmartBasket logo"
-            className="w-10 h-10 rounded-xl group-hover:scale-105 transition-transform"
+            className="w-14 h-14 rounded-2xl group-hover:scale-105 transition-transform"
           />
           <span className="text-xl font-bold tracking-tight text-brand-black">MySmartBasket</span>
         </a>
@@ -724,7 +724,7 @@ export default function App() {
         <div className="max-w-7xl mx-auto grid md:grid-cols-4 gap-12">
           <div className="col-span-2">
             <div className="flex items-center gap-2.5 mb-6">
-              <img src="/logo.svg" alt="MySmartBasket logo" className="w-8 h-8 rounded-lg" />
+              <img src="/android-chrome-192x192.png" alt="MySmartBasket logo" className="w-8 h-8 rounded-lg" />
               <span className="text-xl font-bold">MySmartBasket</span>
             </div>
             <p className="text-slate-500 max-w-sm mb-6">
