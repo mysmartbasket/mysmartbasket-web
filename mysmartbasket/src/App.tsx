@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useForm, ValidationError } from '@formspree/react';
-import { motion, AnimatePresence, useScroll, useSpring, useInView } from 'motion/react';
+import { motion, AnimatePresence, useScroll, useSpring, useInView, useMotionValue } from 'motion/react';
 import {
   ShoppingBasket,
   Search,
@@ -61,11 +61,20 @@ const AnimatedStat = ({ value, label }: { value: string; label: string }) => {
 
 /* ── Custom cursor ── */
 const CustomCursor = () => {
-  const [pos, setPos] = useState({ x: -100, y: -100 });
+  const mx = useMotionValue(-100);
+  const my = useMotionValue(-100);
   const [hov, setHov] = useState(false);
+
+  // Dot: near-instant (high stiffness, low mass)
+  const dotX = useSpring(mx, { stiffness: 5000, damping: 60, mass: 0.05 });
+  const dotY = useSpring(my, { stiffness: 5000, damping: 60, mass: 0.05 });
+  // Ring: subtle lag
+  const ringX = useSpring(mx, { stiffness: 600, damping: 40, mass: 0.1 });
+  const ringY = useSpring(my, { stiffness: 600, damping: 40, mass: 0.1 });
+
   useEffect(() => {
     document.documentElement.classList.add('custom-cursor-active');
-    const mv = (e: MouseEvent) => setPos({ x: e.clientX, y: e.clientY });
+    const mv = (e: MouseEvent) => { mx.set(e.clientX); my.set(e.clientY); };
     const ov = (e: MouseEvent) => setHov(!!(e.target as HTMLElement).closest('a,button'));
     window.addEventListener('mousemove', mv);
     window.addEventListener('mouseover', ov);
@@ -74,22 +83,25 @@ const CustomCursor = () => {
       window.removeEventListener('mousemove', mv);
       window.removeEventListener('mouseover', ov);
     };
-  }, []);
+  }, [mx, my]);
+
   return (
-    <>
+    <div className="hidden lg:block">
+      {/* Dot — instant */}
       <motion.div
-        className="fixed rounded-full bg-brand-green pointer-events-none z-[999] hidden lg:block"
-        style={{ width: 10, height: 10 }}
-        animate={{ x: pos.x - 5, y: pos.y - 5, scale: hov ? 0.5 : 1 }}
-        transition={{ type: 'spring', stiffness: 800, damping: 40 }}
+        className="fixed rounded-full bg-brand-green pointer-events-none z-[999]"
+        style={{ width: 8, height: 8, x: dotX, y: dotY, translateX: '-50%', translateY: '-50%' }}
+        animate={{ scale: hov ? 0 : 1 }}
+        transition={{ duration: 0.15 }}
       />
+      {/* Ring — slight trail */}
       <motion.div
-        className="fixed rounded-full border border-brand-green/40 pointer-events-none z-[998] hidden lg:block"
-        style={{ width: 36, height: 36 }}
-        animate={{ x: pos.x - 18, y: pos.y - 18, scale: hov ? 1.6 : 1, opacity: hov ? 0.6 : 0.3 }}
-        transition={{ type: 'spring', stiffness: 200, damping: 30 }}
+        className="fixed rounded-full border-2 border-brand-green pointer-events-none z-[998]"
+        style={{ width: 32, height: 32, x: ringX, y: ringY, translateX: '-50%', translateY: '-50%' }}
+        animate={{ scale: hov ? 1.5 : 1, opacity: hov ? 0.8 : 0.35 }}
+        transition={{ duration: 0.2 }}
       />
-    </>
+    </div>
   );
 };
 
@@ -611,6 +623,18 @@ export default function App() {
   const [isCanvaOpen, setIsCanvaOpen] = useState(false);
   const [formStep, setFormStep] = useState<'email' | 'spending' | 'done'>('email');
   const [emailValue, setEmailValue] = useState('');
+  const [waitlistCount, setWaitlistCount] = useState(() => {
+    const saved = typeof window !== 'undefined' ? localStorage.getItem('msb_wl_count') : null;
+    return saved ? parseInt(saved, 10) : 5247;
+  });
+
+  const incrementCount = () => {
+    setWaitlistCount(n => {
+      const next = n + 1;
+      localStorage.setItem('msb_wl_count', String(next));
+      return next;
+    });
+  };
   const year = new Date().getFullYear();
 
   // Init dark mode from localStorage
@@ -1146,7 +1170,14 @@ export default function App() {
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-brand-green" />
               </span>
-              <span className="text-sm font-bold text-brand-green">5.247</span>
+              <motion.span
+                key={waitlistCount}
+                initial={{ y: -10, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                className="text-sm font-bold text-brand-green tabular-nums"
+              >
+                {waitlistCount.toLocaleString('es-ES')}
+              </motion.span>
               <span className="text-sm font-medium text-brand-green">personas ya apuntadas</span>
             </div>
             <SectionHeading centered title="Únete a la Revolución" subtitle="Sé de los primeros en comprar mejor." />
@@ -1208,7 +1239,7 @@ export default function App() {
                 exit={{ opacity: 0, x: -40 }}
                 onSubmit={(e) => {
                   e.preventDefault();
-                  if (emailValue) setFormStep('spending');
+                  if (emailValue) { incrementCount(); setFormStep('spending'); }
                 }}
                 className="relative max-w-lg mx-auto"
                 noValidate

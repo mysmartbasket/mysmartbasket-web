@@ -35,204 +35,92 @@
     a { color: var(--green); text-decoration: none; }
     a:hover { text-decoration: underline; }
 
-    /* NAV */
     nav {
-      position: sticky;
-      top: 0;
-      z-index: 50;
-      background: rgba(255,255,255,.85);
-      backdrop-filter: blur(8px);
+      position: sticky; top: 0; z-index: 50;
+      background: rgba(255,255,255,.85); backdrop-filter: blur(8px);
       border-bottom: 1px solid var(--slate-100);
       padding: 16px 24px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+      display: flex; align-items: center; justify-content: space-between;
     }
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      text-decoration: none;
-      color: inherit;
-    }
+    .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: inherit; }
     .brand-icon {
-      width: 36px;
-      height: 36px;
-      background: var(--green);
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #fff;
-      font-weight: 700;
-      font-size: 14px;
-      letter-spacing: .06em;
+      width: 36px; height: 36px; background: var(--green); border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; font-weight: 700; font-size: 14px; letter-spacing: .06em;
     }
-    .brand-name {
-      font-weight: 700;
-      font-size: 17px;
-      letter-spacing: -.01em;
-      color: var(--black);
-    }
+    .brand-name { font-weight: 700; font-size: 17px; letter-spacing: -.01em; color: var(--black); }
     .nav-back {
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--slate-500);
-      display: flex;
-      align-items: center;
-      gap: 6px;
+      font-size: 13px; font-weight: 500; color: var(--slate-500);
+      display: flex; align-items: center; gap: 6px;
     }
     .nav-back:hover { color: var(--black); text-decoration: none; }
 
-    /* LAYOUT */
-    main {
-      max-width: 740px;
-      margin: 0 auto;
-      padding: 56px 24px 100px;
-    }
+    main { max-width: 740px; margin: 0 auto; padding: 56px 24px 100px; }
 
-    /* HEADER */
     .page-tag {
-      display: inline-block;
-      background: #f0fdf4;
-      color: var(--green);
-      border: 1px solid #bbf7d0;
-      border-radius: 999px;
-      font-size: 12px;
-      font-weight: 700;
-      letter-spacing: .08em;
-      text-transform: uppercase;
-      padding: 4px 14px;
-      margin-bottom: 20px;
+      display: inline-block; background: #f0fdf4; color: var(--green);
+      border: 1px solid #bbf7d0; border-radius: 999px;
+      font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+      padding: 4px 14px; margin-bottom: 20px;
     }
     h1 {
-      font-size: clamp(28px, 4vw, 40px);
-      font-weight: 700;
-      letter-spacing: -.025em;
-      line-height: 1.15;
-      color: var(--black);
-      margin-bottom: 10px;
+      font-size: clamp(28px, 4vw, 40px); font-weight: 700;
+      letter-spacing: -.025em; line-height: 1.15; color: var(--black); margin-bottom: 10px;
     }
     .updated {
-      font-size: 13px;
-      color: var(--slate-400);
-      margin-bottom: 48px;
-      padding-bottom: 32px;
-      border-bottom: 1px solid var(--slate-100);
+      font-size: 13px; color: var(--slate-400); margin-bottom: 48px;
+      padding-bottom: 32px; border-bottom: 1px solid var(--slate-100);
     }
 
-    /* SECTIONS */
     section { margin-bottom: 40px; }
 
     h2 {
-      font-size: 17px;
-      font-weight: 700;
-      color: var(--black);
-      margin-bottom: 12px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
+      font-size: 17px; font-weight: 700; color: var(--black); margin-bottom: 12px;
+      display: flex; align-items: center; gap: 10px;
     }
     .h2-num {
-      width: 28px;
-      height: 28px;
-      background: #f0fdf4;
-      border: 1px solid #bbf7d0;
-      border-radius: 8px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 12px;
-      font-weight: 700;
-      color: var(--green);
-      flex-shrink: 0;
+      width: 28px; height: 28px; background: #f0fdf4; border: 1px solid #bbf7d0;
+      border-radius: 8px; display: inline-flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 700; color: var(--green); flex-shrink: 0;
     }
 
     p { color: var(--slate-500); font-size: 15px; line-height: 1.8; margin-bottom: 12px; }
     p:last-child { margin-bottom: 0; }
 
-    ul {
-      list-style: none;
-      margin: 12px 0;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-    li {
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
-      color: var(--slate-500);
-      font-size: 15px;
-      line-height: 1.7;
-    }
+    ul { list-style: none; margin: 12px 0; display: flex; flex-direction: column; gap: 8px; }
+    li { display: flex; align-items: flex-start; gap: 10px; color: var(--slate-500); font-size: 15px; line-height: 1.7; }
     li::before {
-      content: '';
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: var(--green);
-      flex-shrink: 0;
-      margin-top: 9px;
+      content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--green);
+      flex-shrink: 0; margin-top: 9px;
     }
 
     strong { color: var(--slate-700); font-weight: 600; }
 
-    /* INFO BOX */
     .info-box {
-      background: var(--slate-50);
-      border: 1px solid var(--slate-100);
-      border-left: 3px solid var(--green);
-      border-radius: 12px;
-      padding: 16px 20px;
-      margin-top: 16px;
+      background: var(--slate-50); border: 1px solid var(--slate-100);
+      border-left: 3px solid var(--green); border-radius: 12px; padding: 16px 20px; margin-top: 16px;
     }
     .info-box p { margin: 0; font-size: 14px; }
 
-    /* CONTACT CARD */
     .contact-card {
-      background: var(--black);
-      color: #fff;
-      border-radius: 20px;
-      padding: 28px 32px;
-      margin-top: 16px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 20px;
-      flex-wrap: wrap;
+      background: var(--black); color: #fff; border-radius: 20px; padding: 28px 32px;
+      margin-top: 16px; display: flex; align-items: center; justify-content: space-between;
+      gap: 20px; flex-wrap: wrap;
     }
     .contact-card p { color: #94a3b8; margin: 0; font-size: 14px; }
     .contact-card strong { color: #fff; display: block; font-size: 16px; margin-bottom: 4px; }
     .contact-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: var(--green);
-      color: #fff;
-      font-weight: 600;
-      font-size: 14px;
-      padding: 10px 20px;
-      border-radius: 999px;
-      text-decoration: none;
-      white-space: nowrap;
-      flex-shrink: 0;
+      display: inline-flex; align-items: center; gap: 8px; background: var(--green);
+      color: #fff; font-weight: 600; font-size: 14px; padding: 10px 20px;
+      border-radius: 999px; text-decoration: none; white-space: nowrap; flex-shrink: 0;
     }
     .contact-btn:hover { opacity: .9; text-decoration: none; }
 
-    /* FOOTER */
     footer {
-      border-top: 1px solid var(--slate-100);
-      padding: 24px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 12px;
-      color: var(--slate-400);
-      font-size: 13px;
-      max-width: 740px;
-      margin: 0 auto;
+      border-top: 1px solid var(--slate-100); padding: 24px;
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 12px; color: var(--slate-400); font-size: 13px;
+      max-width: 740px; margin: 0 auto;
     }
     footer a { color: var(--slate-400); }
     footer a:hover { color: var(--black); text-decoration: none; }
@@ -267,14 +155,14 @@
 
     <section>
       <h2><span class="h2-num">2</span> Datos que recogemos</h2>
-      <p>Únicamente recogemos los datos que nos proporcionas voluntariamente a través del formulario de lista de espera:</p>
+      <p>Recogemos los datos que nos proporcionas voluntariamente a través del formulario de lista de espera (dos pasos):</p>
       <ul>
-        <li><strong>Email</strong> — necesario para enviarte la invitación de acceso anticipado.</li>
-        <li><strong>Rol</strong> (usuario, inversor, partner, prensa) — opcional, para adaptar la comunicación.</li>
-        <li><strong>Mensaje libre</strong> — opcional, para conocer mejor tus intereses.</li>
+        <li><strong>Dirección de correo electrónico</strong> — necesaria para enviarte la invitación de acceso anticipado.</li>
+        <li><strong>Gasto mensual aproximado en la compra</strong> — opcional, seleccionas uno de cuatro rangos predefinidos (&lt;200€, 200–400€, 400–600€, &gt;600€). Se usa para entender mejor el perfil de nuestros usuarios y mejorar el producto.</li>
       </ul>
+      <p>Ambos datos se envían a través de <strong>Formspree</strong> y se almacenan en sus servidores.</p>
       <div class="info-box">
-        <p>No recogemos datos de pago, datos de localización ni ningún tipo de información sensible. No utilizamos herramientas de analítica de terceros que rastreen tu comportamiento.</p>
+        <p>No recogemos datos de pago, localización ni información sensible. No utilizamos herramientas de analítica de terceros que rastreen tu comportamiento en el sitio.</p>
       </div>
     </section>
 
@@ -284,7 +172,7 @@
       <ul>
         <li>Avisarte cuando abramos el acceso anticipado a la aplicación.</li>
         <li>Enviarte actualizaciones relevantes del proyecto (máximo una vez al mes).</li>
-        <li>Contactar contigo si seleccionaste el perfil de inversor o partner.</li>
+        <li>Mejorar el producto y priorizar funcionalidades según el perfil de los usuarios interesados.</li>
       </ul>
       <p>
         La base legal del tratamiento es tu <strong>consentimiento expreso</strong> al enviar el formulario
@@ -293,7 +181,24 @@
     </section>
 
     <section>
-      <h2><span class="h2-num">4</span> Conservación de los datos</h2>
+      <h2><span class="h2-num">4</span> Almacenamiento local (localStorage)</h2>
+      <p>
+        Este sitio web utiliza el almacenamiento local del navegador (<strong>localStorage</strong>) para guardar
+        preferencias de usuario. Estos datos <strong>nunca se envían a ningún servidor</strong> y permanecen
+        únicamente en tu dispositivo:
+      </p>
+      <ul>
+        <li><strong>Preferencia de tema</strong> (<code>theme</code>) — guarda si has elegido el modo claro u oscuro.</li>
+        <li><strong>Contador de lista de espera</strong> (<code>msb_wl_count</code>) — almacena el número de personas apuntadas que ves en pantalla, para que se actualice correctamente entre visitas. No contiene datos personales.</li>
+      </ul>
+      <p>
+        Puedes borrar estos datos en cualquier momento desde los ajustes de tu navegador
+        (Configuración → Privacidad → Borrar datos del sitio).
+      </p>
+    </section>
+
+    <section>
+      <h2><span class="h2-num">5</span> Conservación de los datos</h2>
       <p>
         Conservamos tus datos mientras tengas interés en recibir información sobre MySmartBasket.
         Si solicitas la baja o ejerces tu derecho de supresión, los eliminamos en un plazo máximo de
@@ -306,19 +211,20 @@
     </section>
 
     <section>
-      <h2><span class="h2-num">5</span> Destinatarios y transferencias</h2>
+      <h2><span class="h2-num">6</span> Destinatarios y transferencias</h2>
       <p>
         No vendemos ni cedemos tus datos a terceros. Únicamente los compartimos con proveedores
         de servicios que actúan como <strong>encargados del tratamiento</strong>:
       </p>
       <ul>
-        <li><strong>Formspree</strong> — gestión del formulario de contacto. Sus servidores pueden estar ubicados en EE. UU., con garantías bajo el marco de transferencias EU-EE.UU.</li>
+        <li><strong>Formspree</strong> — gestión del formulario de lista de espera. Sus servidores pueden estar ubicados en EE. UU., con garantías bajo el marco de transferencias EU-EE.UU.</li>
+        <li><strong>Google Fonts</strong> — fuente tipográfica Inter cargada desde los CDN de Google. Google puede registrar la IP de la solicitud. Consulta la <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">política de privacidad de Google</a>.</li>
       </ul>
       <p>No realizamos ninguna otra transferencia internacional de datos.</p>
     </section>
 
     <section>
-      <h2><span class="h2-num">6</span> Tus derechos</h2>
+      <h2><span class="h2-num">7</span> Tus derechos</h2>
       <p>De acuerdo con el RGPD y la LOPDGDD, puedes ejercer en cualquier momento los siguientes derechos:</p>
       <ul>
         <li><strong>Acceso</strong> — saber qué datos tenemos sobre ti.</li>
@@ -344,16 +250,20 @@
     </section>
 
     <section>
-      <h2><span class="h2-num">7</span> Cookies</h2>
+      <h2><span class="h2-num">8</span> Cookies y tecnologías de seguimiento</h2>
       <p>
         Este sitio web <strong>no utiliza cookies</strong> propias ni de terceros con fines analíticos,
-        publicitarios o de seguimiento. Solo se cargan los recursos técnicamente necesarios
-        para mostrar la página (fuentes de Google Fonts y el formulario de Formspree).
+        publicitarios o de seguimiento. Las únicas tecnologías de almacenamiento utilizadas son:
       </p>
+      <ul>
+        <li><strong>localStorage</strong> — para preferencias de tema y contador de lista de espera (ver sección 4). No es una cookie y no se comparte con terceros.</li>
+        <li><strong>Google Fonts</strong> — carga de fuentes tipográficas; puede implicar una petición HTTP a servidores de Google.</li>
+        <li><strong>Formspree</strong> — procesamiento del formulario; puede establecer cookies técnicas propias.</li>
+      </ul>
     </section>
 
     <section>
-      <h2><span class="h2-num">8</span> Seguridad</h2>
+      <h2><span class="h2-num">9</span> Seguridad</h2>
       <p>
         Aplicamos medidas técnicas y organizativas razonables para proteger tus datos contra accesos no
         autorizados, pérdida o alteración. Toda la comunicación con este sitio se realiza mediante
@@ -362,7 +272,7 @@
     </section>
 
     <section>
-      <h2><span class="h2-num">9</span> Cambios en esta política</h2>
+      <h2><span class="h2-num">10</span> Cambios en esta política</h2>
       <p>
         Podemos actualizar esta política para reflejar cambios en nuestras prácticas o en la normativa aplicable.
         Publicaremos la nueva versión en esta misma página con la fecha de actualización.
