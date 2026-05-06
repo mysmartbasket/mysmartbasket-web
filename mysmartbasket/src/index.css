@@ -7,11 +7,38 @@
   --color-brand-black: #0F172A;
 }
 
+/* Class-based dark mode */
+@variant dark (&:is(.dark *));
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+.animate-marquee { animation: marquee 30s linear infinite; }
+.animate-marquee-slow { animation: marquee 50s linear infinite; }
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateX(-50%) translateY(8px); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+.animate-fade-in { animation: fade-in 0.2s ease-out; }
+
+@keyframes hero-glow {
+  0%, 100% { opacity: 0.6; transform: scale(1) translateX(0); }
+  50%       { opacity: 1;   transform: scale(1.15) translateX(30px); }
+}
+.animate-hero-glow { animation: hero-glow 8s ease-in-out infinite; }
+
+/* Hide default cursor on desktop when custom cursor active */
+.custom-cursor-active * { cursor: none !important; }
+
 @layer base {
   html {
     scroll-behavior: smooth;
+    -webkit-tap-highlight-color: transparent;
   }
   body {
     @apply bg-white text-slate-900 font-sans antialiased;
+    @apply dark:bg-slate-950 dark:text-slate-100;
   }
 }

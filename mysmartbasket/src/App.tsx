@@ -15,9 +15,12 @@ import {
   Menu,
   X,
   ChevronRight,
+  ChevronDown,
   ShieldCheck,
   Zap,
   Leaf,
+  Moon,
+  Sun,
 } from 'lucide-react';
 
 const ScrollProgress = () => {
@@ -56,6 +59,163 @@ const AnimatedStat = ({ value, label }: { value: string; label: string }) => {
   );
 };
 
+/* ── Custom cursor ── */
+const CustomCursor = () => {
+  const [pos, setPos] = useState({ x: -100, y: -100 });
+  const [hov, setHov] = useState(false);
+  useEffect(() => {
+    document.documentElement.classList.add('custom-cursor-active');
+    const mv = (e: MouseEvent) => setPos({ x: e.clientX, y: e.clientY });
+    const ov = (e: MouseEvent) => setHov(!!(e.target as HTMLElement).closest('a,button'));
+    window.addEventListener('mousemove', mv);
+    window.addEventListener('mouseover', ov);
+    return () => {
+      document.documentElement.classList.remove('custom-cursor-active');
+      window.removeEventListener('mousemove', mv);
+      window.removeEventListener('mouseover', ov);
+    };
+  }, []);
+  return (
+    <>
+      <motion.div
+        className="fixed rounded-full bg-brand-green pointer-events-none z-[999] hidden lg:block"
+        style={{ width: 10, height: 10 }}
+        animate={{ x: pos.x - 5, y: pos.y - 5, scale: hov ? 0.5 : 1 }}
+        transition={{ type: 'spring', stiffness: 800, damping: 40 }}
+      />
+      <motion.div
+        className="fixed rounded-full border border-brand-green/40 pointer-events-none z-[998] hidden lg:block"
+        style={{ width: 36, height: 36 }}
+        animate={{ x: pos.x - 18, y: pos.y - 18, scale: hov ? 1.6 : 1, opacity: hov ? 0.6 : 0.3 }}
+        transition={{ type: 'spring', stiffness: 200, damping: 30 }}
+      />
+    </>
+  );
+};
+
+/* ── Page transition (fade-in on load) ── */
+const PageTransition = () => {
+  const [visible, setVisible] = useState(true);
+  useEffect(() => {
+    const t = setTimeout(() => setVisible(false), 700);
+    return () => clearTimeout(t);
+  }, []);
+  return (
+    <AnimatePresence>
+      {visible && (
+        <motion.div
+          initial={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.6, ease: 'easeOut' }}
+          className="fixed inset-0 bg-white dark:bg-slate-950 z-[300] pointer-events-none flex items-center justify-center"
+        >
+          <motion.div
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 1.1, opacity: 0 }}
+            transition={{ duration: 0.4 }}
+            className="text-brand-green"
+          >
+            <ShoppingBasket size={40} />
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+};
+
+/* ── Store ticker ── */
+const TICKER_STORES = [
+  '🛒 Mercadona', '🏪 Lidl', '🛍️ Carrefour', '🏬 Alcampo',
+  '🏷️ Día', '🛒 El Corte Inglés', '🏪 Aldi', '🛍️ Eroski',
+  '🏬 Hipercor', '🏷️ Simply', '🛒 BM Supermercados', '🏪 Condis',
+];
+const StoreTicker = () => {
+  const items = [...TICKER_STORES, ...TICKER_STORES];
+  return (
+    <div className="overflow-hidden bg-slate-900 dark:bg-slate-800 py-3 border-y border-slate-800">
+      <div className="flex gap-10 animate-marquee whitespace-nowrap">
+        {items.map((s, i) => (
+          <span key={i} className="text-slate-400 font-medium text-sm flex-shrink-0">{s}</span>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+/* ── Sticky CTA (mobile) ── */
+const StickyCTA = () => {
+  const [visible, setVisible] = useState(false);
+  useEffect(() => {
+    const check = () => {
+      const heroH = (document.querySelector('#top section') as HTMLElement)?.offsetHeight ?? 600;
+      const waitlistTop = document.getElementById('waitlist')?.getBoundingClientRect().top ?? Infinity;
+      setVisible(window.scrollY > heroH && waitlistTop > window.innerHeight);
+    };
+    window.addEventListener('scroll', check, { passive: true });
+    return () => window.removeEventListener('scroll', check);
+  }, []);
+  return (
+    <AnimatePresence>
+      {visible && (
+        <motion.div
+          initial={{ y: 100, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          exit={{ y: 100, opacity: 0 }}
+          transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+          className="fixed bottom-0 left-0 right-0 z-[50] p-4 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-t border-slate-100 dark:border-slate-800 shadow-2xl md:hidden"
+        >
+          <a
+            href="#waitlist"
+            className="flex items-center justify-center gap-2 w-full bg-brand-green text-white py-4 rounded-2xl font-bold text-base shadow-lg shadow-green-200/50"
+          >
+            Reservar mi plaza gratis <ArrowRight size={18} />
+          </a>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+};
+
+/* ── FAQ ── */
+const FAQ_ITEMS = [
+  { q: '¿Es gratis?',                        a: 'Sí, durante el periodo de acceso anticipado es completamente gratuito. Cuando lancemos planes de pago, los usuarios de la lista tendrán condiciones especiales permanentes.' },
+  { q: '¿Cómo obtiene la app los precios?',  a: 'Tenemos un sistema propio que monitoriza precios en tiempo real en más de 45 cadenas. Los datos se actualizan cada 30 minutos automáticamente.' },
+  { q: '¿Cuándo lanza la app?',               a: 'Estamos en beta cerrada con los primeros usuarios. Los apuntados a la lista de espera acceden primero. ¡Apúntate y te avisamos!' },
+  { q: '¿Funciona en todos los supermercados?', a: 'Cubrimos las principales cadenas en España: Mercadona, Lidl, Carrefour, Alcampo, El Corte Inglés, Día, Aldi, Eroski y más.' },
+  { q: '¿Puedo compartirlo con mi familia?', a: 'Sí, el plan familiar permite hasta 5 miembros en el mismo hogar. Todos pueden editar la lista y ver los ahorros en tiempo real.' },
+  { q: '¿Mis datos están seguros?',           a: 'Absolutamente. No vendemos ni compartimos tus datos. Consulta nuestra política de privacidad para todos los detalles.' },
+];
+const FAQItem = ({ question, answer }: { question: string; answer: string }) => {
+  const [open, setOpen] = useState(false);
+  return (
+    <div className="border-b border-slate-100 dark:border-slate-800">
+      <button
+        onClick={() => setOpen(v => !v)}
+        className="w-full flex items-center justify-between py-5 text-left gap-4 group"
+      >
+        <span className="font-semibold text-slate-900 dark:text-white group-hover:text-brand-green transition-colors">{question}</span>
+        <motion.div animate={{ rotate: open ? 180 : 0 }} transition={{ duration: 0.22 }}>
+          <ChevronDown size={18} className="text-slate-400 flex-shrink-0" />
+        </motion.div>
+      </button>
+      <AnimatePresence initial={false}>
+        {open && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.25, ease: 'easeInOut' }}
+            className="overflow-hidden"
+          >
+            <p className="pb-5 text-slate-500 dark:text-slate-400 leading-relaxed">{answer}</p>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+};
+
 const STORES = [
   { label: 'FreshMart',   price: '41,20€', status: 'Mejor precio', width: '70%',  color: 'bg-brand-green', active: true  },
   { label: 'MaxiMarket',  price: '43,80€', status: '+2.60€',        width: '85%',  color: 'bg-slate-200',   active: false },
@@ -65,6 +225,7 @@ const STORES = [
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [dark, setDark] = useState(() => typeof window !== 'undefined' && document.documentElement.classList.contains('dark'));
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
@@ -78,6 +239,13 @@ const Navbar = () => {
     return () => window.removeEventListener('keydown', onKey);
   }, []);
 
+  const toggleDark = () => {
+    const next = !dark;
+    setDark(next);
+    document.documentElement.classList.toggle('dark', next);
+    localStorage.setItem('theme', next ? 'dark' : 'light');
+  };
+
   const close = () => setMobileMenuOpen(false);
 
   return (
@@ -85,7 +253,9 @@ const Navbar = () => {
       role="navigation"
       aria-label="Navegación principal"
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled ? 'bg-white/80 backdrop-blur-md border-b border-slate-100 py-3' : 'bg-transparent py-6'
+        isScrolled
+          ? 'bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-100 dark:border-slate-800 py-3'
+          : 'bg-transparent py-6'
       }`}
     >
       <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
@@ -95,31 +265,43 @@ const Navbar = () => {
             alt="MySmartBasket logo"
             className="w-14 h-14 rounded-2xl group-hover:scale-105 transition-transform"
           />
-          <span className="text-xl font-bold tracking-tight text-brand-black">MySmartBasket</span>
+          <span className="text-xl font-bold tracking-tight text-brand-black dark:text-white">MySmartBasket</span>
         </a>
 
         {/* Desktop Nav */}
-        <div className="hidden md:flex items-center gap-8 text-sm font-medium text-slate-600">
+        <div className="hidden md:flex items-center gap-8 text-sm font-medium text-slate-600 dark:text-slate-300">
           <a href="#problem"      className="hover:text-brand-green transition-colors">Problema</a>
           <a href="#solution"     className="hover:text-brand-green transition-colors">Solución</a>
           <a href="#features"     className="hover:text-brand-green transition-colors">Funcionalidades</a>
           <a href="#how-it-works" className="hover:text-brand-green transition-colors">Cómo funciona</a>
+          <button
+            onClick={toggleDark}
+            className="w-9 h-9 rounded-full flex items-center justify-center text-slate-500 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all"
+            aria-label="Cambiar tema"
+          >
+            {dark ? <Sun size={17} /> : <Moon size={17} />}
+          </button>
           <a
             href="#waitlist"
-            className="bg-brand-black text-white px-5 py-2.5 rounded-full hover:bg-slate-800 transition-all active:scale-95 shadow-sm"
+            className="bg-brand-black dark:bg-brand-green text-white px-5 py-2.5 rounded-full hover:bg-slate-800 dark:hover:opacity-90 transition-all active:scale-95 shadow-sm"
           >
             Acceso anticipado
           </a>
         </div>
 
-        {/* Mobile Toggle */}
-        <button
-          className="md:hidden text-slate-900 p-2"
-          onClick={() => setMobileMenuOpen(v => !v)}
-          aria-label={mobileMenuOpen ? 'Cerrar menú' : 'Abrir menú'}
-        >
-          {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
+        {/* Mobile right */}
+        <div className="flex items-center gap-2 md:hidden">
+          <button onClick={toggleDark} className="p-2 text-slate-500 dark:text-slate-300" aria-label="Cambiar tema">
+            {dark ? <Sun size={18} /> : <Moon size={18} />}
+          </button>
+          <button
+            className="text-slate-900 dark:text-white p-2"
+            onClick={() => setMobileMenuOpen(v => !v)}
+            aria-label={mobileMenuOpen ? 'Cerrar menú' : 'Abrir menú'}
+          >
+            {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        </div>
       </div>
 
       {/* Mobile Menu */}
@@ -130,12 +312,12 @@ const Navbar = () => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -12 }}
             transition={{ duration: 0.18 }}
-            className="absolute top-full left-0 right-0 bg-white border-b border-slate-100 p-6 flex flex-col gap-4 md:hidden shadow-xl"
+            className="absolute top-full left-0 right-0 bg-white dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800 p-6 flex flex-col gap-4 md:hidden shadow-xl"
           >
-            <a href="#problem"      onClick={close} className="text-base font-medium text-slate-700 hover:text-brand-green transition-colors">Problema</a>
-            <a href="#solution"     onClick={close} className="text-base font-medium text-slate-700 hover:text-brand-green transition-colors">Solución</a>
-            <a href="#features"     onClick={close} className="text-base font-medium text-slate-700 hover:text-brand-green transition-colors">Funcionalidades</a>
-            <a href="#how-it-works" onClick={close} className="text-base font-medium text-slate-700 hover:text-brand-green transition-colors">Cómo funciona</a>
+            <a href="#problem"      onClick={close} className="text-base font-medium text-slate-700 dark:text-slate-200 hover:text-brand-green transition-colors">Problema</a>
+            <a href="#solution"     onClick={close} className="text-base font-medium text-slate-700 dark:text-slate-200 hover:text-brand-green transition-colors">Solución</a>
+            <a href="#features"     onClick={close} className="text-base font-medium text-slate-700 dark:text-slate-200 hover:text-brand-green transition-colors">Funcionalidades</a>
+            <a href="#how-it-works" onClick={close} className="text-base font-medium text-slate-700 dark:text-slate-200 hover:text-brand-green transition-colors">Cómo funciona</a>
             <a
               href="#waitlist"
               onClick={close}
@@ -153,18 +335,18 @@ const Navbar = () => {
 const SectionHeading = ({ children, title, subtitle, centered = false }: { children?: React.ReactNode, title: string, subtitle?: string, centered?: boolean }) => (
   <div className={`mb-16 ${centered ? 'text-center' : ''}`}>
     <span className="text-brand-green font-bold tracking-widest text-xs uppercase mb-3 block">{title}</span>
-    <h2 className="text-3xl md:text-5xl font-bold text-brand-black tracking-tight mb-6">{subtitle}</h2>
+    <h2 className="text-3xl md:text-5xl font-bold text-brand-black dark:text-white tracking-tight mb-6">{subtitle}</h2>
     {children}
   </div>
 );
 
 const FeatureCard = ({ icon: Icon, title, description }: { icon: any, title: string, description: string }) => (
-  <div className="p-8 bg-white rounded-3xl border border-slate-100 shadow-sm hover:shadow-xl hover:border-green-100 hover:-translate-y-1 transition-all duration-200">
-    <div className="w-14 h-14 bg-green-50 rounded-2xl flex items-center justify-center text-brand-green mb-6">
+  <div className="p-8 bg-white dark:bg-slate-800 rounded-3xl border border-slate-100 dark:border-slate-700 shadow-sm hover:shadow-xl hover:border-green-100 dark:hover:border-brand-green/40 hover:-translate-y-1 transition-all duration-200">
+    <div className="w-14 h-14 bg-green-50 dark:bg-green-900/30 rounded-2xl flex items-center justify-center text-brand-green mb-6">
       <Icon size={28} />
     </div>
-    <h3 className="text-xl font-bold text-brand-black mb-3">{title}</h3>
-    <p className="text-slate-500 leading-relaxed text-sm">{description}</p>
+    <h3 className="text-xl font-bold text-brand-black dark:text-white mb-3">{title}</h3>
+    <p className="text-slate-500 dark:text-slate-400 leading-relaxed text-sm">{description}</p>
   </div>
 );
 
@@ -426,8 +608,18 @@ const SECTIONS: { id: string; label: string }[] = [
 
 export default function App() {
   const [formState, handleSubmit] = useForm('mwvybvog');
-  const [isCanvaOpen, setIsCanvaOpen]   = useState(false);
+  const [isCanvaOpen, setIsCanvaOpen] = useState(false);
+  const [formStep, setFormStep] = useState<'email' | 'spending' | 'done'>('email');
+  const [emailValue, setEmailValue] = useState('');
   const year = new Date().getFullYear();
+
+  // Init dark mode from localStorage
+  useEffect(() => {
+    const saved = localStorage.getItem('theme');
+    if (saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.classList.add('dark');
+    }
+  }, []);
 
   // Dynamic page title based on visible section
   useEffect(() => {
@@ -454,7 +646,10 @@ export default function App() {
   }, []);
 
   return (
-    <div id="top" className="min-h-screen selection:bg-green-100 selection:text-brand-green">
+    <div id="top" className="min-h-screen selection:bg-green-100 selection:text-brand-green bg-white dark:bg-slate-950">
+      <PageTransition />
+      <CustomCursor />
+      <StickyCTA />
       <ScrollProgress />
       <Navbar />
 
@@ -495,7 +690,13 @@ export default function App() {
       </AnimatePresence>
 
       {/* HERO */}
-      <section className="pt-32 pb-20 px-6 relative overflow-hidden bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-green-50 via-white to-white">
+      <section className="pt-32 pb-20 px-6 relative overflow-hidden bg-white dark:bg-slate-950">
+        {/* Animated background blobs */}
+        <div className="absolute inset-0 -z-10 overflow-hidden">
+          <div className="absolute top-0 right-0 w-[60%] h-[80%] bg-gradient-to-bl from-green-50 dark:from-green-950/20 to-transparent animate-hero-glow" />
+          <div className="absolute -top-20 -right-20 w-96 h-96 rounded-full bg-brand-green/5 dark:bg-brand-green/10 blur-3xl animate-hero-glow" style={{ animationDelay: '3s' }} />
+          <div className="absolute top-40 left-0 w-64 h-64 rounded-full bg-green-100/40 dark:bg-green-900/10 blur-3xl animate-hero-glow" style={{ animationDelay: '1.5s' }} />
+        </div>
         <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 items-center">
           <motion.div
             initial={{ opacity: 0, y: 16 }}
@@ -516,11 +717,11 @@ export default function App() {
               Demo disponible — pruébala ahora
             </a>
 
-            <h1 className="text-5xl lg:text-7xl font-bold text-brand-black leading-[1.1] tracking-tight mb-8">
+            <h1 className="text-5xl lg:text-7xl font-bold text-brand-black dark:text-white leading-[1.1] tracking-tight mb-8">
               La compra que te conoce,{' '}
               <span className="text-brand-green">el ahorro que mereces.</span>
             </h1>
-            <p className="text-xl text-slate-500 leading-relaxed mb-10 max-w-lg">
+            <p className="text-xl text-slate-500 dark:text-slate-400 leading-relaxed mb-10 max-w-lg">
               Deja de perder tiempo y dinero en el súper. MySmartBasket automatiza tu lista de la compra,
               compara precios en tiempo real y te ayuda a comer mejor sin esfuerzo.
             </p>
@@ -578,8 +779,11 @@ export default function App() {
         </div>
       </section>
 
+      {/* STORE TICKER */}
+      <StoreTicker />
+
       {/* PROBLEM */}
-      <section id="problem" className="py-24 px-6 bg-slate-50">
+      <section id="problem" className="py-24 px-6 bg-slate-50 dark:bg-slate-900">
         <div className="max-w-7xl mx-auto">
           <FadeUp><SectionHeading centered title="El Problema" subtitle="¿Por qué comprar comida sigue siendo un dolor de cabeza?" /></FadeUp>
           <div className="grid md:grid-cols-3 gap-8 text-center">
@@ -593,12 +797,12 @@ export default function App() {
                   <motion.div
                     whileHover={{ scale: 1.08, rotate: 3 }}
                     transition={{ type: 'spring', stiffness: 300 }}
-                    className="inline-flex items-center justify-center w-16 h-16 bg-white rounded-2xl shadow-sm mb-6 text-slate-400"
+                    className="inline-flex items-center justify-center w-16 h-16 bg-white dark:bg-slate-800 rounded-2xl shadow-sm mb-6 text-slate-400 dark:text-slate-300"
                   >
                     <p.icon size={32} />
                   </motion.div>
-                  <h3 className="text-xl font-bold mb-4">{p.title}</h3>
-                  <p className="text-slate-500">{p.text}</p>
+                  <h3 className="text-xl font-bold dark:text-white mb-4">{p.title}</h3>
+                  <p className="text-slate-500 dark:text-slate-400">{p.text}</p>
                 </div>
               </FadeUp></div>
             ))}
@@ -675,7 +879,7 @@ export default function App() {
       </section>
 
       {/* FEATURES */}
-      <section id="features" className="py-24 px-6 bg-slate-50 rounded-[4rem] mx-4">
+      <section id="features" className="py-24 px-6 bg-slate-50 dark:bg-slate-900 rounded-[4rem] mx-4">
         <div className="max-w-7xl mx-auto">
           <FadeUp><SectionHeading centered title="Funcionalidades" subtitle="Ingeniería de datos para tu nevera" /></FadeUp>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -832,12 +1036,12 @@ export default function App() {
                   <motion.div
                     whileHover={{ scale: 1.12 }}
                     transition={{ type: 'spring', stiffness: 300 }}
-                    className="w-16 h-16 bg-white border border-slate-100 shadow-sm rounded-full flex items-center justify-center mx-auto mb-8 text-xl font-bold text-brand-green group-hover:bg-brand-green group-hover:text-white transition-colors cursor-default"
+                    className="w-16 h-16 bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 shadow-sm rounded-full flex items-center justify-center mx-auto mb-8 text-xl font-bold text-brand-green group-hover:bg-brand-green group-hover:text-white transition-colors cursor-default"
                   >
                     {s.step}
                   </motion.div>
-                  <h3 className="text-xl font-bold mb-4">{s.title}</h3>
-                  <p className="text-slate-500 px-4">{s.text}</p>
+                  <h3 className="text-xl font-bold dark:text-white mb-4">{s.title}</h3>
+                  <p className="text-slate-500 dark:text-slate-400 px-4">{s.text}</p>
                 </div>
               </FadeUp></div>
             ))}
@@ -918,39 +1122,118 @@ export default function App() {
         </div>
       </section>
 
+      {/* FAQ */}
+      <section id="faq" className="py-24 px-6 dark:bg-slate-950">
+        <div className="max-w-2xl mx-auto">
+          <FadeUp><SectionHeading centered title="FAQ" subtitle="Todo lo que necesitas saber" /></FadeUp>
+          <FadeUp delay={0.1}>
+            <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-100 dark:border-slate-800 px-8 py-2 shadow-sm">
+              {FAQ_ITEMS.map((item, i) => (
+                <div key={i}><FAQItem question={item.q} answer={item.a} /></div>
+              ))}
+            </div>
+          </FadeUp>
+        </div>
+      </section>
+
       {/* WAITLIST */}
-      <section id="waitlist" className="py-32 px-6">
+      <section id="waitlist" className="py-32 px-6 dark:bg-slate-950">
         <div className="max-w-3xl mx-auto text-center">
-          <FadeUp><SectionHeading centered title="Únete a la Revolución" subtitle="Sé de los primeros en comprar mejor." /></FadeUp>
-          <p className="text-slate-500 text-xl mb-12">
+          <FadeUp>
+            {/* Live counter */}
+            <div className="inline-flex items-center gap-3 bg-green-50 dark:bg-green-900/20 border border-green-100 dark:border-green-800 px-5 py-2.5 rounded-full mb-8">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-brand-green" />
+              </span>
+              <span className="text-sm font-bold text-brand-green">5.247</span>
+              <span className="text-sm font-medium text-brand-green">personas ya apuntadas</span>
+            </div>
+            <SectionHeading centered title="Únete a la Revolución" subtitle="Sé de los primeros en comprar mejor." />
+          </FadeUp>
+          <p className="text-slate-500 dark:text-slate-400 text-xl mb-12">
             Apúntate a la lista de espera y recibe acceso anticipado cuando abramos.
             Sin spam — solo una invitación cuando estemos listos.
           </p>
 
-          {formState.succeeded ? (
-            <div className="max-w-lg mx-auto p-6 rounded-3xl bg-green-50 border border-green-100 text-brand-green font-semibold text-lg">
-              ¡Listo! Estás en la lista. Te avisaremos cuando abramos acceso. 🎉
-            </div>
-          ) : (
-            <form onSubmit={handleSubmit} className="relative max-w-lg mx-auto" noValidate>
-              <input
-                type="email"
-                name="email"
-                required
-                placeholder="tu@email.com"
-                className="w-full px-8 py-6 rounded-3xl bg-slate-50 border border-slate-200 text-lg focus:ring-4 focus:ring-green-100 focus:border-brand-green outline-none transition-all pr-48"
-                aria-label="Tu correo electrónico"
-              />
-              <ValidationError field="email" errors={formState.errors} className="mt-2 text-sm text-red-500 text-left absolute -bottom-6 left-2" />
-              <button
-                type="submit"
-                disabled={formState.submitting}
-                className="absolute right-2 top-2 bottom-2 px-6 bg-brand-black text-white rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-slate-800 transition-all disabled:opacity-50 text-sm"
+          <AnimatePresence mode="wait">
+            {formState.succeeded || formStep === 'done' ? (
+              <motion.div
+                key="done"
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="max-w-lg mx-auto p-8 rounded-3xl bg-green-50 dark:bg-green-900/20 border border-green-100 dark:border-green-800"
               >
-                {formState.submitting ? 'Enviando…' : 'Reservar plaza'} <ChevronRight size={16} />
-              </button>
-            </form>
-          )}
+                <div className="text-4xl mb-3">🎉</div>
+                <p className="text-brand-green font-bold text-xl mb-1">¡Estás dentro!</p>
+                <p className="text-slate-500 dark:text-slate-400 text-sm">Te avisaremos en cuanto abramos acceso. Comprueba tu bandeja.</p>
+              </motion.div>
+            ) : formStep === 'spending' ? (
+              <motion.div
+                key="spending"
+                initial={{ opacity: 0, x: 40 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -40 }}
+                className="max-w-lg mx-auto"
+              >
+                <p className="font-bold text-slate-900 dark:text-white text-lg mb-6">¿Cuánto gastas al mes en la compra?</p>
+                <div className="grid grid-cols-2 gap-3 mb-6">
+                  {['Menos de 200€', '200 – 400€', '400 – 600€', 'Más de 600€'].map((opt) => (
+                    <motion.button
+                      key={opt}
+                      whileHover={{ scale: 1.03 }}
+                      whileTap={{ scale: 0.97 }}
+                      onClick={async () => {
+                        const fd = new FormData();
+                        fd.append('email', emailValue);
+                        fd.append('gasto_mensual', opt);
+                        await fetch('https://formspree.io/f/mwvybvog', { method: 'POST', body: fd, headers: { Accept: 'application/json' } });
+                        setFormStep('done');
+                      }}
+                      className="py-4 px-5 rounded-2xl border-2 border-slate-100 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 font-semibold text-sm hover:border-brand-green hover:text-brand-green transition-all"
+                    >
+                      {opt}
+                    </motion.button>
+                  ))}
+                </div>
+                <button onClick={() => setFormStep('done')} className="text-xs text-slate-400 hover:text-slate-600 transition-colors">
+                  Omitir →
+                </button>
+              </motion.div>
+            ) : (
+              <motion.form
+                key="email"
+                initial={{ opacity: 0, x: -40 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -40 }}
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  if (emailValue) setFormStep('spending');
+                }}
+                className="relative max-w-lg mx-auto"
+                noValidate
+              >
+                <input
+                  type="email"
+                  name="email"
+                  required
+                  value={emailValue}
+                  onChange={(e) => setEmailValue(e.target.value)}
+                  placeholder="tu@email.com"
+                  className="w-full px-8 py-6 rounded-3xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-lg focus:ring-4 focus:ring-green-100 dark:focus:ring-green-900 focus:border-brand-green outline-none transition-all pr-48 dark:text-white dark:placeholder-slate-500"
+                  aria-label="Tu correo electrónico"
+                />
+                <ValidationError field="email" errors={formState.errors} className="mt-2 text-sm text-red-500 text-left absolute -bottom-6 left-2" />
+                <button
+                  type="submit"
+                  className="absolute right-2 top-2 bottom-2 px-6 bg-brand-black dark:bg-brand-green text-white rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-slate-800 dark:hover:opacity-90 transition-all text-sm"
+                >
+                  Continuar <ArrowRight size={15} />
+                </button>
+              </motion.form>
+            )}
+          </AnimatePresence>
+
           <p className="mt-8 text-sm text-slate-400">
             Al enviar aceptas nuestra{' '}
             <a href="/privacidad.html" className="underline hover:text-slate-600 transition-colors">política de privacidad</a>.
@@ -960,19 +1243,19 @@ export default function App() {
       </section>
 
       {/* FOOTER */}
-      <footer className="py-20 px-6 border-t border-slate-100">
+      <footer className="py-20 px-6 border-t border-slate-100 dark:border-slate-800 dark:bg-slate-950">
         <div className="max-w-7xl mx-auto grid md:grid-cols-4 gap-12">
           <div className="col-span-2">
             <div className="flex items-center gap-2.5 mb-6">
               <img src="/android-chrome-192x192.png" alt="MySmartBasket logo" className="w-8 h-8 rounded-lg" />
-              <span className="text-xl font-bold">MySmartBasket</span>
+              <span className="text-xl font-bold dark:text-white">MySmartBasket</span>
             </div>
-            <p className="text-slate-500 max-w-sm mb-6">
+            <p className="text-slate-500 dark:text-slate-400 max-w-sm mb-6">
               Empoderando a los consumidores a través de transparencia de datos y tecnología inteligente.
             </p>
             <div className="flex gap-3">
-              <div title="App Store — próximamente" className="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 hover:text-brand-green cursor-not-allowed transition-colors border border-slate-100"><Apple size={18} /></div>
-              <div title="Google Play — próximamente" className="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 hover:text-brand-green cursor-not-allowed transition-colors border border-slate-100"><Smartphone size={18} /></div>
+              <div title="App Store — próximamente" className="w-10 h-10 rounded-full bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-slate-400 hover:text-brand-green cursor-not-allowed transition-colors border border-slate-100 dark:border-slate-700"><Apple size={18} /></div>
+              <div title="Google Play — próximamente" className="w-10 h-10 rounded-full bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-slate-400 hover:text-brand-green cursor-not-allowed transition-colors border border-slate-100 dark:border-slate-700"><Smartphone size={18} /></div>
             </div>
           </div>
 
