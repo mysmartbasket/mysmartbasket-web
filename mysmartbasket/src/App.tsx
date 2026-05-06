@@ -53,10 +53,12 @@ const Navbar = () => {
       }`}
     >
       <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
-        <a href="#top" className="flex items-center gap-2 group">
-          <div className="w-10 h-10 bg-brand-green rounded-xl flex items-center justify-center text-white shadow-lg shadow-green-200 group-hover:scale-105 transition-transform">
-            <ShoppingBasket size={24} />
-          </div>
+        <a href="#top" className="flex items-center gap-2.5 group">
+          <img
+            src="/logo.svg"
+            alt="MySmartBasket logo"
+            className="w-10 h-10 rounded-xl group-hover:scale-105 transition-transform"
+          />
           <span className="text-xl font-bold tracking-tight text-brand-black">MySmartBasket</span>
         </a>
 
@@ -721,10 +723,8 @@ export default function App() {
       <footer className="py-20 px-6 border-t border-slate-100">
         <div className="max-w-7xl mx-auto grid md:grid-cols-4 gap-12">
           <div className="col-span-2">
-            <div className="flex items-center gap-2 mb-6">
-              <div className="w-8 h-8 bg-brand-green rounded-lg flex items-center justify-center text-white">
-                <ShoppingBasket size={18} />
-              </div>
+            <div className="flex items-center gap-2.5 mb-6">
+              <img src="/logo.svg" alt="MySmartBasket logo" className="w-8 h-8 rounded-lg" />
               <span className="text-xl font-bold">MySmartBasket</span>
             </div>
             <p className="text-slate-500 max-w-sm mb-6">

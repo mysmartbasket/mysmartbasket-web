@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <rect width="100" height="100" rx="16" fill="#000000"/>
+  <!-- Handle (padlock arch shape) -->
+  <path d="M 37 47 C 37 27 63 27 63 47" fill="none" stroke="white" stroke-width="5.5" stroke-linecap="round"/>
+  <!-- Basket body: trapezoid wider at bottom, rounded corners -->
+  <path d="M 22 47 Q 20 47 19 49 L 15 82 Q 15 87 20 87 L 80 87 Q 85 87 85 82 L 81 49 Q 80 47 78 47 Z" fill="none" stroke="white" stroke-width="5.5" stroke-linejoin="round"/>
+  <!-- Two vertical bars (left side) -->
+  <line x1="38" y1="60" x2="38" y2="76" stroke="white" stroke-width="5" stroke-linecap="round"/>
+  <line x1="49" y1="60" x2="49" y2="76" stroke="white" stroke-width="5" stroke-linecap="round"/>
+  <!-- Checkmark (right side) -->
+  <path d="M 47 73 L 54 80 L 66 60" fill="none" stroke="white" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
