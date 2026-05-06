@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, memo, useCallback } from 'react';
 import { useForm, ValidationError } from '@formspree/react';
 import { motion, AnimatePresence, useScroll, useSpring, useInView, useMotionValue } from 'motion/react';
 import {
@@ -23,11 +23,11 @@ import {
   Sun,
 } from 'lucide-react';
 
-const ScrollProgress = () => {
+const ScrollProgress = memo(() => {
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, { stiffness: 120, damping: 30, restDelta: 0.001 });
   return <motion.div style={{ scaleX }} className="fixed top-0 left-0 right-0 h-[3px] bg-brand-green origin-left z-[60] shadow-[0_0_8px_rgba(34,197,94,0.6)]" />;
-};
+});
 
 const FadeUp = ({ children, delay = 0, className = '', index }: { children: React.ReactNode; delay?: number; className?: string; index?: number }) => (
   <motion.div
@@ -142,30 +142,42 @@ const TICKER_STORES = [
   '🏷️ Día', '🛒 El Corte Inglés', '🏪 Aldi', '🛍️ Eroski',
   '🏬 Hipercor', '🏷️ Simply', '🛒 BM Supermercados', '🏪 Condis',
 ];
-const StoreTicker = () => {
-  const items = [...TICKER_STORES, ...TICKER_STORES];
+const TICKER_ITEMS = [...TICKER_STORES, ...TICKER_STORES];
+const StoreTicker = memo(() => {
   return (
     <div className="overflow-hidden bg-slate-900 dark:bg-slate-800 py-3 border-y border-slate-800">
       <div className="flex gap-10 animate-marquee whitespace-nowrap">
-        {items.map((s, i) => (
+        {TICKER_ITEMS.map((s, i) => (
           <span key={i} className="text-slate-400 font-medium text-sm flex-shrink-0">{s}</span>
         ))}
       </div>
     </div>
   );
-};
+});
 
 /* ── Sticky CTA (mobile) ── */
-const StickyCTA = () => {
+const StickyCTA = memo(() => {
   const [visible, setVisible] = useState(false);
   useEffect(() => {
-    const check = () => {
-      const heroH = (document.querySelector('#top section') as HTMLElement)?.offsetHeight ?? 600;
-      const waitlistTop = document.getElementById('waitlist')?.getBoundingClientRect().top ?? Infinity;
-      setVisible(window.scrollY > heroH && waitlistTop > window.innerHeight);
+    let rafId = 0;
+    let heroH = 0;
+    const measure = () => { heroH = (document.querySelector('#top section') as HTMLElement)?.offsetHeight ?? 600; };
+    measure();
+    window.addEventListener('resize', measure, { passive: true });
+
+    const onScroll = () => {
+      cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(() => {
+        const waitlistTop = document.getElementById('waitlist')?.getBoundingClientRect().top ?? Infinity;
+        setVisible(window.scrollY > heroH && waitlistTop > window.innerHeight);
+      });
     };
-    window.addEventListener('scroll', check, { passive: true });
-    return () => window.removeEventListener('scroll', check);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => {
+      cancelAnimationFrame(rafId);
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', measure);
+    };
   }, []);
   return (
     <AnimatePresence>
@@ -187,7 +199,7 @@ const StickyCTA = () => {
       )}
     </AnimatePresence>
   );
-};
+});
 
 /* ── FAQ ── */
 const FAQ_ITEMS = [
@@ -240,9 +252,13 @@ const Navbar = () => {
   const [dark, setDark] = useState(() => typeof window !== 'undefined' && document.documentElement.classList.contains('dark'));
 
   useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 20);
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    let rafId = 0;
+    const handleScroll = () => {
+      cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(() => setIsScrolled(window.scrollY > 20));
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => { cancelAnimationFrame(rafId); window.removeEventListener('scroll', handleScroll); };
   }, []);
 
   useEffect(() => {
@@ -538,7 +554,7 @@ const SCREENS = [
   },
 ];
 
-const MockupApp = () => {
+const MockupApp = memo(() => {
   const [active, setActive] = useState(0);
 
   useEffect(() => {
@@ -605,7 +621,7 @@ const MockupApp = () => {
 
     </div>
   );
-};
+});
 
 const SECTIONS: { id: string; label: string }[] = [
   { id: 'top',          label: 'MySmartBasket'                        },
@@ -714,10 +730,10 @@ export default function App() {
       </AnimatePresence>
 
       {/* HERO */}
-      <section className="pt-32 pb-20 px-6 relative overflow-hidden bg-white dark:bg-slate-950">
-        {/* Animated background blobs */}
-        <div className="absolute inset-0 -z-10 overflow-hidden">
-          <div className="absolute top-0 right-0 w-[60%] h-[80%] bg-gradient-to-bl from-green-50 dark:from-green-950/20 to-transparent animate-hero-glow" />
+      <section className="pt-32 pb-20 px-6 relative overflow-hidden bg-white dark:bg-slate-950" style={{ contain: 'paint' }}>
+        {/* Background blobs — opacity-only animation avoids expensive blur+scale repaint */}
+        <div className="absolute inset-0 -z-10 overflow-hidden pointer-events-none">
+          <div className="absolute top-0 right-0 w-[60%] h-[80%] bg-gradient-to-bl from-green-50 dark:from-green-950/20 to-transparent" />
           <div className="absolute -top-20 -right-20 w-96 h-96 rounded-full bg-brand-green/5 dark:bg-brand-green/10 blur-3xl animate-hero-glow" style={{ animationDelay: '3s' }} />
           <div className="absolute top-40 left-0 w-64 h-64 rounded-full bg-green-100/40 dark:bg-green-900/10 blur-3xl animate-hero-glow" style={{ animationDelay: '1.5s' }} />
         </div>
@@ -1074,13 +1090,9 @@ export default function App() {
       </section>
 
       {/* SOCIAL PROOF */}
-      <section id="social-proof" className="py-24 px-6 bg-brand-black text-white rounded-[4rem] mx-4 overflow-hidden relative">
+      <section id="social-proof" className="py-24 px-6 bg-brand-black text-white rounded-[4rem] mx-4 overflow-hidden relative" style={{ contain: 'paint' }}>
         <div className="absolute top-0 right-0 w-[50%] h-full bg-gradient-to-l from-green-500/10 to-transparent pointer-events-none"></div>
-        <motion.div
-          className="absolute bottom-0 left-0 w-72 h-72 rounded-full bg-brand-green/5 blur-3xl pointer-events-none"
-          animate={{ scale: [1, 1.2, 1], opacity: [0.5, 0.8, 0.5] }}
-          transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
-        />
+        <div className="absolute bottom-0 left-0 w-72 h-72 rounded-full bg-brand-green/5 blur-3xl pointer-events-none animate-pulse-glow" />
         <div className="max-w-7xl mx-auto relative z-10">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <FadeUp>

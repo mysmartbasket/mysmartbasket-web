@@ -24,10 +24,16 @@
 .animate-fade-in { animation: fade-in 0.2s ease-out; }
 
 @keyframes hero-glow {
-  0%, 100% { opacity: 0.6; transform: scale(1) translateX(0); }
-  50%       { opacity: 1;   transform: scale(1.15) translateX(30px); }
+  0%, 100% { opacity: 0.5; }
+  50%       { opacity: 0.9; }
 }
-.animate-hero-glow { animation: hero-glow 8s ease-in-out infinite; }
+.animate-hero-glow { animation: hero-glow 8s ease-in-out infinite; will-change: opacity; }
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.4; transform: scale(1) translateZ(0); }
+  50%       { opacity: 0.7; transform: scale(1.2) translateZ(0); }
+}
+.animate-pulse-glow { animation: pulse-glow 6s ease-in-out infinite; will-change: transform, opacity; }
 
 /* Hide default cursor on desktop when custom cursor active */
 .custom-cursor-active * { cursor: none !important; }
