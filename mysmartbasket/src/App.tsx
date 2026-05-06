@@ -132,67 +132,265 @@ const FeatureCard = ({ icon: Icon, title, description }: { icon: any, title: str
   </div>
 );
 
-const MockupApp = () => (
-  <div className="relative w-full max-w-[320px] aspect-[9/18.5] bg-slate-900 rounded-[3rem] p-3 shadow-[0_0_50px_rgba(0,0,0,0.1)] border-[8px] border-slate-800 overflow-hidden mx-auto lg:mx-0">
-    <div className="w-full h-full bg-white rounded-[2.2rem] overflow-hidden flex flex-col font-sans">
-      <div className="p-5 flex justify-between items-center bg-white border-b border-slate-50">
-        <span className="text-xs font-bold text-brand-green">MySmartBasket</span>
-        <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center font-bold text-[10px]">MS</div>
+const SCREENS = [
+  {
+    tab: 'Listas',
+    tabIcon: <ShoppingBasket size={14} />,
+    content: (
+      <div className="flex-1 p-4 space-y-3 overflow-hidden">
+        <div className="flex items-center justify-between mb-1">
+          <div>
+            <p className="text-xs font-bold text-slate-900">Hola, Mario 👋</p>
+            <p className="text-[10px] text-slate-400">2 listas activas</p>
+          </div>
+          <div className="w-7 h-7 rounded-full bg-brand-green flex items-center justify-center text-white text-[9px] font-bold">MC</div>
+        </div>
+        {[
+          { name: 'Compra Semanal', items: 12, price: '42,50€', saving: '8,00€' },
+          { name: 'Mercadona Hoy', items: 7, price: '18,90€', saving: '3,40€' },
+        ].map((l, i) => (
+          <div key={i} className="p-3 bg-slate-50 rounded-2xl flex items-center gap-3">
+            <div className="w-9 h-9 bg-white rounded-xl flex items-center justify-center shadow-sm flex-shrink-0">
+              <ShoppingBasket size={14} className="text-brand-green" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-[11px] font-bold truncate">{l.name}</p>
+              <p className="text-[9px] text-slate-400">{l.items} productos</p>
+            </div>
+            <div className="text-right flex-shrink-0">
+              <p className="text-[11px] font-bold text-brand-green">{l.price}</p>
+              <p className="text-[9px] text-slate-400">–{l.saving}</p>
+            </div>
+          </div>
+        ))}
+        <div className="p-3 bg-white rounded-2xl border border-slate-100 space-y-2">
+          <p className="text-[10px] font-bold text-slate-400">PENDIENTES</p>
+          {['🥦 Brócoli', '🥛 Leche entera', '🍳 Huevos L'].map((item, i) => (
+            <div key={i} className="flex items-center gap-2">
+              <div className="w-4 h-4 rounded-full border-2 border-slate-200 flex-shrink-0" />
+              <span className="text-[11px] text-slate-700">{item}</span>
+            </div>
+          ))}
+        </div>
       </div>
-
-      <div className="flex-1 p-5 overflow-y-auto space-y-4">
-        <div className="flex items-center justify-between">
-          <span className="text-xs font-bold text-slate-400">TUS CESTAS</span>
-          <span className="text-[10px] text-brand-green font-medium">Ver todas</span>
+    ),
+  },
+  {
+    tab: 'Comparar',
+    tabIcon: <TrendingDown size={14} />,
+    content: (
+      <div className="flex-1 p-4 space-y-3 overflow-hidden">
+        <p className="text-[11px] font-bold text-slate-900">Comparador de precios</p>
+        <div className="p-3 bg-green-50 border border-brand-green/30 rounded-2xl">
+          <p className="text-[9px] text-slate-400 font-bold uppercase mb-1">Lista activa</p>
+          <p className="text-[11px] font-bold text-slate-900">Compra Semanal · 12 productos</p>
         </div>
-
-        <div className="p-4 bg-slate-50 rounded-2xl flex items-center gap-3">
-          <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow-sm">
-            <ShoppingBasket size={16} className="text-brand-green" />
-          </div>
-          <div className="flex-1">
-            <div className="text-xs font-bold">Compra Semanal</div>
-            <div className="text-[10px] text-slate-400">24 productos · FreshMart</div>
-          </div>
-          <div className="text-right">
-            <div className="text-xs font-bold text-brand-green">42,50€</div>
-            <div className="text-[9px] text-slate-400">Ahorro: 8€</div>
-          </div>
-        </div>
-
-        <div className="space-y-2 pt-2">
-          <div className="text-xs font-bold text-slate-400">MEJOR PRECIO HOY</div>
-          <div className="space-y-2">
-            {STORES.map((s, i) => (
-              <div key={i} className={`p-3 rounded-xl border flex justify-between items-center ${s.active ? 'border-brand-green bg-green-50/50' : 'border-slate-100'}`}>
-                <span className="text-[11px] font-medium">{s.label}</span>
-                <span className={`text-[11px] font-bold ${s.active ? 'text-brand-green' : 'text-brand-black'}`}>{s.price}</span>
+        <div className="space-y-2">
+          {[
+            { name: 'FreshMart',  price: '41,20€', width: '70%',  best: true },
+            { name: 'MaxiMarket', price: '43,80€', width: '85%',  best: false },
+            { name: 'EcoSuper',   price: '44,30€', width: '100%', best: false },
+          ].map((s, i) => (
+            <div key={i} className={`p-3 rounded-xl border ${s.best ? 'border-brand-green bg-green-50/50' : 'border-slate-100 bg-white'}`}>
+              <div className="flex justify-between items-center mb-1.5">
+                <span className="text-[11px] font-medium">{s.name}</span>
+                <span className={`text-[11px] font-bold ${s.best ? 'text-brand-green' : 'text-slate-700'}`}>{s.price}</span>
               </div>
-            ))}
+              <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                <div className={`h-full rounded-full ${s.best ? 'bg-brand-green' : 'bg-slate-300'}`} style={{ width: s.width }} />
+              </div>
+              {s.best && <p className="text-[9px] text-brand-green font-bold mt-1">✓ Mejor precio</p>}
+            </div>
+          ))}
+        </div>
+        <div className="p-3 bg-slate-900 rounded-2xl text-center">
+          <p className="text-[9px] text-slate-400">Ahorro estimado</p>
+          <p className="text-base font-bold text-brand-green">8,00€</p>
+        </div>
+      </div>
+    ),
+  },
+  {
+    tab: 'Recetas',
+    tabIcon: <Search size={14} />,
+    content: (
+      <div className="flex-1 p-4 space-y-3 overflow-hidden">
+        <p className="text-[11px] font-bold text-slate-900">Recetas de la semana</p>
+        <div className="flex items-center gap-2 bg-slate-100 rounded-xl px-3 py-2">
+          <Search size={10} className="text-slate-400" />
+          <span className="text-[10px] text-slate-400">Buscar receta…</span>
+        </div>
+        {[
+          { emoji: '🥗', name: 'Ensalada mediterránea', time: '10 min', items: 6 },
+          { emoji: '🍝', name: 'Pasta carbonara',       time: '20 min', items: 5 },
+          { emoji: '🥘', name: 'Pollo al curry',         time: '35 min', items: 8 },
+        ].map((r, i) => (
+          <div key={i} className="flex items-center gap-3 p-3 bg-white rounded-2xl border border-slate-100">
+            <div className="w-10 h-10 bg-slate-50 rounded-xl flex items-center justify-center text-2xl flex-shrink-0">{r.emoji}</div>
+            <div className="flex-1 min-w-0">
+              <p className="text-[11px] font-bold truncate">{r.name}</p>
+              <p className="text-[9px] text-slate-400">⏱ {r.time} · {r.items} ingredientes</p>
+            </div>
+            <ChevronRight size={12} className="text-slate-300 flex-shrink-0" />
           </div>
+        ))}
+      </div>
+    ),
+  },
+  {
+    tab: 'Asistente',
+    tabIcon: <Zap size={14} />,
+    content: (
+      <div className="flex-1 flex flex-col p-4 overflow-hidden">
+        <p className="text-[11px] font-bold text-slate-900 mb-3">Asistente IA</p>
+        <div className="flex-1 space-y-3 overflow-hidden">
+          <div className="flex gap-2">
+            <div className="w-6 h-6 rounded-full bg-brand-green flex items-center justify-center flex-shrink-0">
+              <Zap size={10} className="text-white" />
+            </div>
+            <div className="bg-slate-100 rounded-2xl rounded-tl-none p-2.5 max-w-[80%]">
+              <p className="text-[10px] text-slate-700">¡Hola! Puedo ayudarte a optimizar tu compra. ¿Qué necesitas?</p>
+            </div>
+          </div>
+          <div className="flex justify-end gap-2">
+            <div className="bg-brand-green rounded-2xl rounded-tr-none p-2.5 max-w-[80%]">
+              <p className="text-[10px] text-white">¿Cuánto ahorro esta semana?</p>
+            </div>
+          </div>
+          <div className="flex gap-2">
+            <div className="w-6 h-6 rounded-full bg-brand-green flex items-center justify-center flex-shrink-0">
+              <Zap size={10} className="text-white" />
+            </div>
+            <div className="bg-slate-100 rounded-2xl rounded-tl-none p-2.5 max-w-[80%]">
+              <p className="text-[10px] text-slate-700">Esta semana ahorras <span className="font-bold text-brand-green">11,40€</span> comprando en FreshMart. 🎉</p>
+            </div>
+          </div>
+        </div>
+        <div className="mt-3 flex items-center gap-2 bg-slate-100 rounded-xl px-3 py-2">
+          <span className="text-[10px] text-slate-400 flex-1">Escribe un mensaje…</span>
+          <ArrowRight size={12} className="text-brand-green" />
+        </div>
+      </div>
+    ),
+  },
+  {
+    tab: 'Perfil',
+    tabIcon: <Users size={14} />,
+    content: (
+      <div className="flex-1 p-4 space-y-3 overflow-hidden">
+        <div className="flex flex-col items-center py-3">
+          <div className="w-14 h-14 rounded-full bg-brand-green flex items-center justify-center text-white text-lg font-bold mb-2">MC</div>
+          <p className="text-[12px] font-bold text-slate-900">Mario Cohen</p>
+          <p className="text-[10px] text-slate-400">mario@email.com</p>
+        </div>
+        <div className="space-y-2">
+          {[
+            { label: 'Mi Hogar', value: '3 miembros' },
+            { label: 'Ahorro total', value: '1.240€' },
+            { label: 'Listas creadas', value: '47' },
+          ].map((stat, i) => (
+            <div key={i} className="flex items-center justify-between p-3 bg-slate-50 rounded-xl">
+              <span className="text-[11px] text-slate-600">{stat.label}</span>
+              <span className="text-[11px] font-bold text-slate-900">{stat.value}</span>
+            </div>
+          ))}
+        </div>
+        <div className="p-3 bg-green-50 border border-brand-green/20 rounded-2xl text-center">
+          <p className="text-[10px] text-brand-green font-bold">Plan Premium · Activo</p>
+          <p className="text-[9px] text-slate-400 mt-0.5">Comparte con hasta 5 personas</p>
+        </div>
+      </div>
+    ),
+  },
+];
+
+const MockupApp = () => {
+  const [active, setActive] = useState(0);
+
+  useEffect(() => {
+    const t = setInterval(() => setActive((i) => (i + 1) % SCREENS.length), 3000);
+    return () => clearInterval(t);
+  }, []);
+
+  return (
+    <div className="relative w-full max-w-[300px] aspect-[9/19] bg-slate-900 rounded-[3rem] p-2.5 shadow-[0_30px_80px_rgba(0,0,0,0.25)] border-[7px] border-slate-800 overflow-hidden mx-auto lg:mx-0">
+      {/* Notch */}
+      <div className="absolute top-[10px] left-1/2 -translate-x-1/2 w-20 h-5 bg-slate-900 rounded-full z-30" />
+
+      <div className="w-full h-full bg-white rounded-[2.4rem] overflow-hidden flex flex-col font-sans relative">
+        {/* Status bar */}
+        <div className="flex items-center justify-between px-5 pt-7 pb-1 flex-shrink-0">
+          <span className="text-[9px] font-bold text-slate-900">9:41</span>
+          <div className="flex items-center gap-1">
+            <div className="flex gap-0.5 items-end h-3">
+              {[2, 3, 4, 4].map((h, i) => (
+                <div key={i} className="w-1 bg-slate-900 rounded-sm" style={{ height: `${h * 3}px` }} />
+              ))}
+            </div>
+            <svg viewBox="0 0 24 12" className="w-5 h-2.5 fill-slate-900"><rect x="0" y="0" width="21" height="12" rx="3" fillOpacity="0.3"/><rect x="1" y="1" width="15" height="10" rx="2"/><rect x="22" y="3" width="2" height="6" rx="1"/></svg>
+          </div>
+        </div>
+
+        {/* Slides */}
+        <div className="flex-1 relative overflow-hidden">
+          {SCREENS.map((screen, i) => (
+            <div
+              key={i}
+              className="absolute inset-0 flex flex-col transition-all duration-500 ease-in-out"
+              style={{
+                transform: `translateX(${(i - active) * 100}%)`,
+                opacity: i === active ? 1 : 0.4,
+              }}
+            >
+              {/* Screen header */}
+              <div className="px-4 py-2 flex justify-between items-center border-b border-slate-50 flex-shrink-0">
+                <span className="text-[11px] font-bold text-brand-green">MySmartBasket</span>
+                <div className="w-6 h-6 rounded-full bg-slate-100 flex items-center justify-center font-bold text-[8px]">MC</div>
+              </div>
+              {screen.content}
+            </div>
+          ))}
+        </div>
+
+        {/* Dot indicators */}
+        <div className="flex justify-center gap-1.5 py-2 flex-shrink-0">
+          {SCREENS.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => setActive(i)}
+              className={`rounded-full transition-all duration-300 ${i === active ? 'w-4 h-1.5 bg-brand-green' : 'w-1.5 h-1.5 bg-slate-200'}`}
+            />
+          ))}
+        </div>
+
+        {/* Tab bar */}
+        <div className="border-t border-slate-100 flex justify-around pb-3 pt-2 flex-shrink-0">
+          {SCREENS.map((screen, i) => (
+            <button
+              key={i}
+              onClick={() => setActive(i)}
+              className={`flex flex-col items-center gap-0.5 transition-colors ${i === active ? 'text-brand-green' : 'text-slate-300'}`}
+            >
+              {screen.tabIcon}
+              <span className="text-[8px] font-medium">{screen.tab}</span>
+            </button>
+          ))}
         </div>
       </div>
 
-      <div className="p-5 border-t border-slate-50 flex justify-around">
-        <div className="w-8 h-8 rounded-lg bg-green-50 flex items-center justify-center text-brand-green"><Smartphone size={16} /></div>
-        <div className="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center text-slate-300"><TrendingDown size={16} /></div>
-        <div className="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center text-slate-300"><Users size={16} /></div>
-      </div>
-    </div>
-
-    <div className="absolute top-1/4 -right-12 bg-white p-4 rounded-2xl shadow-xl border border-slate-100 hidden lg:block z-20">
-      <div className="flex items-center gap-3">
-        <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center text-brand-green">
-          <TrendingDown size={16} />
+      {/* Floating badge */}
+      <div className="absolute top-1/4 -right-14 bg-white p-3 rounded-2xl shadow-xl border border-slate-100 hidden lg:flex items-center gap-2 z-20">
+        <div className="w-7 h-7 bg-green-100 rounded-full flex items-center justify-center text-brand-green">
+          <TrendingDown size={13} />
         </div>
         <div>
-          <div className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">AHORRO TOTAL</div>
-          <div className="text-lg font-bold text-brand-black">1.240€ <span className="text-xs text-brand-green">/ año</span></div>
+          <div className="text-[9px] text-slate-400 font-bold uppercase tracking-wider">AHORRO</div>
+          <div className="text-sm font-bold text-brand-black">1.240€<span className="text-[9px] text-brand-green">/año</span></div>
         </div>
       </div>
     </div>
-  </div>
-);
+  );
+};
 
 const SECTIONS: { id: string; label: string }[] = [
   { id: 'top',          label: 'MySmartBasket'                        },
