@@ -31,10 +31,10 @@ const ScrollProgress = memo(() => {
 
 const FadeUp = ({ children, delay = 0, className = '', index }: { children: React.ReactNode; delay?: number; className?: string; index?: number }) => (
   <motion.div
-    initial={{ opacity: 0, y: 28 }}
+    initial={{ opacity: 0, y: 44 }}
     whileInView={{ opacity: 1, y: 0 }}
-    viewport={{ once: true, margin: '-60px' }}
-    transition={{ duration: 0.55, delay: delay + (index ?? 0) * 0.12, ease: [0.22, 1, 0.36, 1] }}
+    viewport={{ once: true, margin: '-50px' }}
+    transition={{ duration: 0.7, delay: delay + (index ?? 0) * 0.12, ease: [0.22, 1, 0.36, 1] }}
     className={className}
   >
     {children}
@@ -503,6 +503,186 @@ const DemoSection = memo(() => {
   );
 });
 
+/* ── Word-by-word reveal ── */
+const WordReveal = ({ text, className = '', delay = 0 }: { text: string; className?: string; delay?: number }) => {
+  const ref = useRef<HTMLSpanElement>(null);
+  const isInView = useInView(ref, { once: true, margin: '-30px' });
+  return (
+    <span ref={ref} className={`inline ${className}`}>
+      {text.split(' ').map((word, i) => (
+        <motion.span
+          key={i}
+          className="inline-block mr-[0.28em] last:mr-0"
+          initial={{ opacity: 0, y: 32 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.55, delay: delay + i * 0.08, ease: [0.22, 1, 0.36, 1] }}
+        >
+          {word}
+        </motion.span>
+      ))}
+    </span>
+  );
+};
+
+/* ── Magnetic CTA button ── */
+const MagneticCTA = ({
+  href, onClick, children, className,
+}: { href?: string; onClick?: () => void; children: React.ReactNode; className: string }) => {
+  const ref = useRef<HTMLElement>(null);
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+  const sx = useSpring(x, { stiffness: 220, damping: 22 });
+  const sy = useSpring(y, { stiffness: 220, damping: 22 });
+  const onMove = (e: React.MouseEvent) => {
+    const r = (ref.current as HTMLElement)?.getBoundingClientRect();
+    if (!r) return;
+    x.set((e.clientX - r.left - r.width / 2) * 0.3);
+    y.set((e.clientY - r.top - r.height / 2) * 0.3);
+  };
+  const onLeave = () => { x.set(0); y.set(0); };
+  if (href) return (
+    <motion.a ref={ref as React.Ref<HTMLAnchorElement>} href={href} style={{ x: sx, y: sy }}
+      onMouseMove={onMove} onMouseLeave={onLeave} whileTap={{ scale: 0.96 }} className={className}>
+      {children}
+    </motion.a>
+  );
+  return (
+    <motion.button ref={ref as React.Ref<HTMLButtonElement>} onClick={onClick} style={{ x: sx, y: sy }}
+      onMouseMove={onMove} onMouseLeave={onLeave} whileTap={{ scale: 0.96 }} className={className}>
+      {children}
+    </motion.button>
+  );
+};
+
+/* ── 3-D tilt card ── */
+const TiltCard = ({ children, className }: { children: React.ReactNode; className: string }) => {
+  const ref = useRef<HTMLDivElement>(null);
+  const rx = useMotionValue(0);
+  const ry = useMotionValue(0);
+  const srx = useSpring(rx, { stiffness: 180, damping: 28 });
+  const sry = useSpring(ry, { stiffness: 180, damping: 28 });
+  const onMove = (e: React.MouseEvent) => {
+    const r = ref.current?.getBoundingClientRect();
+    if (!r) return;
+    rx.set(-((e.clientY - r.top) / r.height - 0.5) * 12);
+    ry.set(((e.clientX - r.left) / r.width - 0.5) * 12);
+  };
+  const onLeave = () => { rx.set(0); ry.set(0); };
+  return (
+    <motion.div ref={ref} style={{ rotateX: srx, rotateY: sry, transformStyle: 'preserve-3d' }}
+      onMouseMove={onMove} onMouseLeave={onLeave} className={className}>
+      {children}
+    </motion.div>
+  );
+};
+
+/* ── Scroll down indicator ── */
+const ScrollDownIndicator = () => (
+  <motion.div
+    initial={{ opacity: 0, y: 10 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ delay: 1.4, duration: 0.6 }}
+    className="hidden lg:flex flex-col items-center gap-2 mt-16"
+  >
+    <span className="text-[10px] text-slate-400 font-semibold tracking-[0.2em] uppercase">Scroll</span>
+    <div className="w-5 h-8 rounded-full border-2 border-slate-300 dark:border-slate-600 flex items-start justify-center pt-1.5">
+      <motion.div
+        animate={{ y: [0, 10, 0], opacity: [1, 0.2, 1] }}
+        transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
+        className="w-1 h-2 rounded-full bg-brand-green"
+      />
+    </div>
+  </motion.div>
+);
+
+/* ── Solution section (parallax image) ── */
+const SolutionSection = memo(() => {
+  const sectionRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ['start end', 'end start'] });
+  const imageY = useTransform(scrollYProgress, [0, 1], [60, -60]);
+  const imageScale = useTransform(scrollYProgress, [0, 0.5, 1], [0.93, 1, 0.93]);
+
+  return (
+    <section id="solution" ref={sectionRef} className="py-24 px-6 overflow-hidden">
+      <div className="max-w-7xl mx-auto">
+        <div className="grid lg:grid-cols-2 gap-16 items-center">
+          <motion.div
+            className="relative"
+            initial={{ opacity: 0, x: -50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: '-60px' }}
+            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+          >
+            {/* Image with parallax inside rounded mask */}
+            <div className="relative z-10 rounded-[2.5rem] overflow-hidden shadow-2xl border-4 border-white">
+              <motion.img
+                style={{ y: imageY, scale: imageScale }}
+                src="https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=800&h=600"
+                alt="Cesta de la compra saludable"
+                className="w-full block"
+                loading="lazy"
+                referrerPolicy="no-referrer"
+              />
+            </div>
+            <div className="absolute -top-10 -left-10 w-40 h-40 bg-brand-green/10 rounded-full blur-3xl pointer-events-none" />
+            <div className="absolute -bottom-10 -right-10 w-60 h-60 bg-green-200/20 rounded-full blur-3xl pointer-events-none" />
+            <motion.div
+              initial={{ opacity: 0, x: 20, y: 20 }}
+              whileInView={{ opacity: 1, x: 0, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
+              className="absolute bottom-10 -right-10 bg-brand-black text-white p-6 rounded-3xl shadow-2xl z-20 max-w-[200px]"
+            >
+              <div className="text-3xl font-bold mb-1">–€85</div>
+              <div className="text-sm text-slate-400">Ahorro medio en el primer mes de uso.</div>
+            </motion.div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, x: 50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: '-60px' }}
+            transition={{ duration: 0.7, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <SectionHeading title="La Solución" subtitle="Tecnología al servicio de tu compra diaria.">
+              <p className="text-slate-500 text-lg leading-relaxed mb-8">
+                MySmartBasket analiza tus hábitos de compra, compara precios entre tus supermercados habituales y genera la lista óptima para cada semana — sin que tengas que hacer nada manualmente.
+              </p>
+              <div className="space-y-4">
+                {[
+                  'Comparativa automática de precios entre supermercados',
+                  'Listas inteligentes basadas en tus hábitos de consumo',
+                  'Planificación de menús adaptada a lo que vas a comprar',
+                  'Integración con servicios de entrega a domicilio',
+                ].map((item, i) => (
+                  <motion.div
+                    key={i}
+                    initial={{ opacity: 0, x: 24 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.45, delay: 0.3 + i * 0.1 }}
+                    whileHover={{ x: 4 }}
+                    className="flex items-center gap-3 cursor-default"
+                  >
+                    <motion.div
+                      whileHover={{ scale: 1.2, backgroundColor: '#22C55E', color: '#fff' }}
+                      transition={{ duration: 0.2 }}
+                      className="w-6 h-6 bg-green-100 text-brand-green rounded-full flex items-center justify-center flex-shrink-0"
+                    >
+                      <CheckCircle2 size={14} />
+                    </motion.div>
+                    <span className="font-medium text-slate-700">{item}</span>
+                  </motion.div>
+                ))}
+              </div>
+            </SectionHeading>
+          </motion.div>
+        </div>
+      </div>
+    </section>
+  );
+});
+
 /* ── Hero mockup with parallax ── */
 const HeroMockup = memo(() => {
   const { scrollY } = useScroll();
@@ -637,13 +817,31 @@ const Navbar = () => {
   );
 };
 
-const SectionHeading = ({ children, title, subtitle, centered = false }: { children?: React.ReactNode, title: string, subtitle?: string, centered?: boolean }) => (
-  <div className={`mb-16 ${centered ? 'text-center' : ''}`}>
-    <span className="text-brand-green font-bold tracking-widest text-xs uppercase mb-3 block">{title}</span>
-    <h2 className="text-3xl md:text-5xl font-bold text-brand-black dark:text-white tracking-tight mb-6">{subtitle}</h2>
-    {children}
-  </div>
-);
+const SectionHeading = ({ children, title, subtitle, centered = false }: { children?: React.ReactNode, title: string, subtitle?: string, centered?: boolean }) => {
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true, margin: '-40px' });
+  return (
+    <div ref={ref} className={`mb-16 ${centered ? 'text-center' : ''}`}>
+      <motion.span
+        initial={{ opacity: 0, y: -10 }}
+        animate={isInView ? { opacity: 1, y: 0 } : {}}
+        transition={{ duration: 0.4, ease: 'easeOut' }}
+        className="text-brand-green font-bold tracking-widest text-xs uppercase mb-3 block"
+      >
+        {title}
+      </motion.span>
+      <motion.h2
+        initial={{ opacity: 0, y: 22 }}
+        animate={isInView ? { opacity: 1, y: 0 } : {}}
+        transition={{ duration: 0.65, delay: 0.12, ease: [0.22, 1, 0.36, 1] }}
+        className="text-3xl md:text-5xl font-bold text-brand-black dark:text-white tracking-tight mb-6"
+      >
+        {subtitle}
+      </motion.h2>
+      {children}
+    </div>
+  );
+};
 
 const FeatureCard = ({ icon: Icon, title, description }: { icon: any, title: string, description: string }) => (
   <motion.div
@@ -922,6 +1120,9 @@ const SECTIONS: { id: string; label: string }[] = [
 export default function App() {
   const [formState, handleSubmit] = useForm('mwvybvog');
   const [isCanvaOpen, setIsCanvaOpen] = useState(false);
+  const { scrollY: winScrollY } = useScroll();
+  const heroOpacity = useTransform(winScrollY, [0, 380], [1, 0]);
+  const heroTextY = useTransform(winScrollY, [0, 380], [0, -45]);
   const [formStep, setFormStep] = useState<'email' | 'spending' | 'done'>('email');
   const [emailValue, setEmailValue] = useState('');
   const [waitlistCount, setWaitlistCount] = useState(() => {
@@ -1023,72 +1224,100 @@ export default function App() {
           <div className="absolute top-40 left-0 w-64 h-64 rounded-full bg-green-100/40 dark:bg-green-900/10 blur-3xl animate-hero-glow" style={{ animationDelay: '1.5s' }} />
         </div>
         <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 items-center">
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.4 }}
-          >
-            <a
-              href="https://mysmartbasket.github.io/MySmartBasket-MVP/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 bg-green-50 border border-green-100 px-4 py-2 rounded-full text-brand-green text-sm font-bold mb-8 hover:bg-green-100 transition-colors"
+            {/* Scroll-fade wrapper: content drifts up + fades as user scrolls */}
+          <motion.div style={{ opacity: heroOpacity, y: heroTextY }}>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
             >
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-brand-green"></span>
-              </span>
-              Demo disponible — pruébala ahora
-            </a>
-
-            <h1 className="text-5xl lg:text-7xl font-bold text-brand-black dark:text-white leading-[1.1] tracking-tight mb-8">
-              Ahorra en la compra semanal{' '}
-              <span className="text-brand-green">sin cambiar lo que compras.</span>
-            </h1>
-            <p className="text-xl text-slate-500 dark:text-slate-400 leading-relaxed mb-10 max-w-lg">
-              Cada semana pagas más de lo que deberías sin saber exactamente por qué. MySmartBasket analiza los precios de los supermercados de tu zona, genera tu lista y te indica dónde comprar cada producto para gastar lo menos posible.
-            </p>
-
-            <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center">
-              <a
-                href="#waitlist"
-                className="bg-brand-green text-white px-7 py-4 rounded-2xl font-bold text-base hover:opacity-90 transition-all flex items-center justify-center gap-2 group shadow-xl shadow-green-100"
+              <motion.a
+                href="https://mysmartbasket.github.io/MySmartBasket-MVP/"
+                target="_blank"
+                rel="noopener noreferrer"
+                whileHover={{ scale: 1.04 }}
+                whileTap={{ scale: 0.97 }}
+                className="inline-flex items-center gap-2 bg-green-50 border border-green-100 px-4 py-2 rounded-full text-brand-green text-sm font-bold mb-8 hover:bg-green-100 transition-colors"
               >
-                Reservar mi plaza <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
-              </a>
-              <button
-                onClick={() => setIsCanvaOpen(true)}
-                className="bg-brand-black text-white px-7 py-4 rounded-2xl font-bold text-base hover:bg-slate-800 transition-all flex items-center justify-center gap-2"
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-brand-green" />
+                </span>
+                Demo disponible — pruébala ahora
+              </motion.a>
+
+              <h1 className="text-5xl lg:text-7xl font-bold text-brand-black dark:text-white leading-[1.1] tracking-tight mb-8 overflow-hidden">
+                <WordReveal text="Ahorra en la compra semanal" delay={0.1} />
+                {' '}
+                <WordReveal text="sin cambiar lo que compras." className="text-brand-green" delay={0.55} />
+              </h1>
+
+              <motion.p
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.55, delay: 0.9 }}
+                className="text-xl text-slate-500 dark:text-slate-400 leading-relaxed mb-10 max-w-lg"
               >
-                Conócenos mejor
-              </button>
-            </div>
+                Cada semana pagas más de lo que deberías sin saber exactamente por qué. MySmartBasket analiza los precios de los supermercados de tu zona, genera tu lista y te indica dónde comprar cada producto para gastar lo menos posible.
+              </motion.p>
 
-            {/* Trust badges */}
-            <div className="mt-8 flex flex-wrap items-center gap-6 text-sm text-slate-500">
-              <span className="flex items-center gap-1.5"><CheckCircle2 size={15} className="text-brand-green" /> Sin spam</span>
-              <span className="flex items-center gap-1.5"><CheckCircle2 size={15} className="text-brand-green" /> Acceso anticipado, sin coste</span>
-              <span className="flex items-center gap-1.5"><CheckCircle2 size={15} className="text-brand-green" /> Cancelas cuando quieras</span>
-            </div>
+              <motion.div
+                initial={{ opacity: 0, y: 14 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 1.0 }}
+                className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center"
+              >
+                <MagneticCTA
+                  href="#waitlist"
+                  className="bg-brand-green text-white px-7 py-4 rounded-2xl font-bold text-base hover:opacity-90 transition-opacity flex items-center justify-center gap-2 shadow-xl shadow-green-100"
+                >
+                  Reservar mi plaza <ArrowRight size={18} />
+                </MagneticCTA>
+                <MagneticCTA
+                  onClick={() => setIsCanvaOpen(true)}
+                  className="bg-brand-black text-white px-7 py-4 rounded-2xl font-bold text-base hover:bg-slate-800 transition-all flex items-center justify-center gap-2"
+                >
+                  Conócenos mejor
+                </MagneticCTA>
+              </motion.div>
 
-            {/* Store Banners */}
-            <div className="mt-8 flex flex-wrap gap-4 opacity-70">
-              <div className="flex items-center gap-3 bg-black text-white px-4 py-2 rounded-xl border border-white/10 cursor-not-allowed select-none">
-                <Apple size={20} fill="white" />
-                <div className="leading-none">
-                  <div className="text-[9px] uppercase opacity-60">Próximamente en</div>
-                  <div className="text-sm font-bold">App Store</div>
+              {/* Trust badges */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.5, delay: 1.1 }}
+                className="mt-8 flex flex-wrap items-center gap-6 text-sm text-slate-500"
+              >
+                <span className="flex items-center gap-1.5"><CheckCircle2 size={15} className="text-brand-green" /> Sin spam</span>
+                <span className="flex items-center gap-1.5"><CheckCircle2 size={15} className="text-brand-green" /> Acceso anticipado, sin coste</span>
+                <span className="flex items-center gap-1.5"><CheckCircle2 size={15} className="text-brand-green" /> Cancelas cuando quieras</span>
+              </motion.div>
+
+              {/* Store Banners */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.5, delay: 1.2 }}
+                className="mt-8 flex flex-wrap gap-4 opacity-70"
+              >
+                <div className="flex items-center gap-3 bg-black text-white px-4 py-2 rounded-xl border border-white/10 cursor-not-allowed select-none">
+                  <Apple size={20} fill="white" />
+                  <div className="leading-none">
+                    <div className="text-[9px] uppercase opacity-60">Próximamente en</div>
+                    <div className="text-sm font-bold">App Store</div>
+                  </div>
                 </div>
-              </div>
-              <div className="flex items-center gap-3 bg-black text-white px-4 py-2 rounded-xl border border-white/10 cursor-not-allowed select-none">
-                <Play size={18} fill="white" />
-                <div className="leading-none">
-                  <div className="text-[9px] uppercase opacity-60">Próximamente en</div>
-                  <div className="text-sm font-bold">Google Play</div>
+                <div className="flex items-center gap-3 bg-black text-white px-4 py-2 rounded-xl border border-white/10 cursor-not-allowed select-none">
+                  <Play size={18} fill="white" />
+                  <div className="leading-none">
+                    <div className="text-[9px] uppercase opacity-60">Próximamente en</div>
+                    <div className="text-sm font-bold">Google Play</div>
+                  </div>
                 </div>
-              </div>
-            </div>
+              </motion.div>
+
+              <ScrollDownIndicator />
+            </motion.div>
           </motion.div>
 
           <HeroMockup />
@@ -1133,70 +1362,7 @@ export default function App() {
       </section>
 
       {/* SOLUTION */}
-      <section id="solution" className="py-24 px-6 overflow-hidden">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            <motion.div
-              className="relative"
-              initial={{ opacity: 0, x: -50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true, margin: '-60px' }}
-              transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-            >
-              <div className="relative z-10">
-                <img
-                  src="https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=800&h=600"
-                  alt="Cesta de la compra saludable"
-                  className="rounded-[2.5rem] shadow-2xl border-4 border-white"
-                  loading="lazy"
-                  referrerPolicy="no-referrer"
-                />
-              </div>
-              <div className="absolute -top-10 -left-10 w-40 h-40 bg-brand-green/10 rounded-full blur-3xl pointer-events-none"></div>
-              <div className="absolute -bottom-10 -right-10 w-60 h-60 bg-green-200/20 rounded-full blur-3xl pointer-events-none"></div>
-              <div className="absolute bottom-10 -right-10 bg-brand-black text-white p-6 rounded-3xl shadow-2xl z-20 max-w-[200px]">
-                <div className="text-3xl font-bold mb-1">–€85</div>
-                <div className="text-sm text-slate-400">Ahorro medio en el primer mes de uso.</div>
-              </div>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, x: 50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true, margin: '-60px' }}
-              transition={{ duration: 0.7, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
-            >
-              <SectionHeading title="La Solución" subtitle="Tecnología al servicio de tu compra diaria.">
-                <p className="text-slate-500 text-lg leading-relaxed mb-8">
-                  MySmartBasket analiza tus hábitos de compra, compara precios entre tus supermercados habituales y genera la lista óptima para cada semana — sin que tengas que hacer nada manualmente.
-                </p>
-                <div className="space-y-4">
-                  {[
-                    'Comparativa automática de precios entre supermercados',
-                    'Listas inteligentes basadas en tus hábitos de consumo',
-                    'Planificación de menús adaptada a lo que vas a comprar',
-                    'Integración con servicios de entrega a domicilio',
-                  ].map((item, i) => (
-                    <motion.div
-                      key={i}
-                      initial={{ opacity: 0, x: 20 }}
-                      whileInView={{ opacity: 1, x: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 0.4, delay: 0.3 + i * 0.1 }}
-                      className="flex items-center gap-3"
-                    >
-                      <div className="w-6 h-6 bg-green-100 text-brand-green rounded-full flex items-center justify-center flex-shrink-0">
-                        <CheckCircle2 size={14} />
-                      </div>
-                      <span className="font-medium text-slate-700">{item}</span>
-                    </motion.div>
-                  ))}
-                </div>
-              </SectionHeading>
-            </motion.div>
-          </div>
-        </div>
-      </section>
+      <SolutionSection />
 
       {/* FEATURES */}
       <section id="features" className="py-24 px-6 bg-slate-50 dark:bg-slate-900 rounded-[4rem] mx-4">
@@ -1325,14 +1491,14 @@ export default function App() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.55, delay: i * 0.2, ease: [0.22, 1, 0.36, 1] }}
-                  whileHover={{ scale: 1.02, backgroundColor: 'rgba(255,255,255,0.1)' }}
-                  className="p-8 bg-white/5 border border-white/10 rounded-[2rem] transition-colors cursor-default"
                 >
-                  <p className="text-xl text-slate-300 italic mb-6">"{t.quote}"</p>
-                  <div>
-                    <div className="font-bold text-lg">{t.name}</div>
-                    <div className="text-sm text-brand-green font-medium">{t.role}</div>
-                  </div>
+                  <TiltCard className="p-8 bg-white/5 border border-white/10 rounded-[2rem] cursor-default hover:bg-white/10 transition-colors">
+                    <p className="text-xl text-slate-300 italic mb-6">"{t.quote}"</p>
+                    <div>
+                      <div className="font-bold text-lg">{t.name}</div>
+                      <div className="text-sm text-brand-green font-medium">{t.role}</div>
+                    </div>
+                  </TiltCard>
                 </motion.div>
               ))}
             </div>
