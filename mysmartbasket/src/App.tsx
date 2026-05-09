@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, memo, useCallback } from 'react';
 import { useForm, ValidationError } from '@formspree/react';
-import { motion, AnimatePresence, useScroll, useSpring, useInView, useMotionValue } from 'motion/react';
+import { motion, AnimatePresence, useScroll, useSpring, useInView, useMotionValue, useTransform, animate as motionAnimate } from 'motion/react';
 import {
   ShoppingBasket,
   Search,
@@ -44,6 +44,17 @@ const FadeUp = ({ children, delay = 0, className = '', index }: { children: Reac
 const AnimatedStat = ({ value, label }: { value: string; label: string }) => {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: '-80px' });
+  const num = parseFloat(value);
+  const suffix = value.replace(/^[\d.]+/, '');
+  const count = useMotionValue(0);
+  const display = useTransform(count, (v) => `${Math.round(v)}${suffix}`);
+
+  useEffect(() => {
+    if (isInView) {
+      motionAnimate(count, num, { duration: 1.8, ease: [0.16, 1, 0.3, 1] });
+    }
+  }, [isInView, count, num]);
+
   return (
     <div ref={ref}>
       <motion.div
@@ -52,7 +63,7 @@ const AnimatedStat = ({ value, label }: { value: string; label: string }) => {
         transition={{ duration: 0.6, type: 'spring', bounce: 0.4 }}
         className="text-5xl font-bold text-brand-green mb-2"
       >
-        {value}
+        <motion.span>{display}</motion.span>
       </motion.div>
       <p className="text-slate-400 text-sm">{label}</p>
     </div>
@@ -238,6 +249,16 @@ const FAQItem = ({ question, answer }: { question: string; answer: string }) => 
       </AnimatePresence>
     </div>
   );
+};
+
+/* ── Stagger variants for grids ── */
+const gridContainer = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.1, delayChildren: 0.05 } },
+};
+const gridItem = {
+  hidden: { opacity: 0, y: 32 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] } },
 };
 
 const STORES = [
@@ -482,6 +503,24 @@ const DemoSection = memo(() => {
   );
 });
 
+/* ── Hero mockup with parallax ── */
+const HeroMockup = memo(() => {
+  const { scrollY } = useScroll();
+  const y = useTransform(scrollY, [0, 700], [0, -60]);
+  const rotate = useTransform(scrollY, [0, 700], [0, 3]);
+  return (
+    <motion.div
+      style={{ y, rotateZ: rotate }}
+      initial={{ opacity: 0, scale: 0.95 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 0.6, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+      className="perspective-1000"
+    >
+      <MockupApp />
+    </motion.div>
+  );
+});
+
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -607,13 +646,21 @@ const SectionHeading = ({ children, title, subtitle, centered = false }: { child
 );
 
 const FeatureCard = ({ icon: Icon, title, description }: { icon: any, title: string, description: string }) => (
-  <div className="p-8 bg-white dark:bg-slate-800 rounded-3xl border border-slate-100 dark:border-slate-700 shadow-sm hover:shadow-xl hover:border-green-100 dark:hover:border-brand-green/40 hover:-translate-y-1 transition-all duration-200">
-    <div className="w-14 h-14 bg-green-50 dark:bg-green-900/30 rounded-2xl flex items-center justify-center text-brand-green mb-6">
+  <motion.div
+    whileHover={{ y: -8, boxShadow: '0 24px 48px rgba(34,197,94,0.12)' }}
+    transition={{ type: 'spring', stiffness: 280, damping: 20 }}
+    className="p-8 bg-white dark:bg-slate-800 rounded-3xl border border-slate-100 dark:border-slate-700 shadow-sm hover:border-green-100 dark:hover:border-brand-green/40 cursor-default"
+  >
+    <motion.div
+      whileHover={{ rotate: 10, scale: 1.12 }}
+      transition={{ type: 'spring', stiffness: 400, damping: 14 }}
+      className="w-14 h-14 bg-green-50 dark:bg-green-900/30 rounded-2xl flex items-center justify-center text-brand-green mb-6"
+    >
       <Icon size={28} />
-    </div>
+    </motion.div>
     <h3 className="text-xl font-bold text-brand-black dark:text-white mb-3">{title}</h3>
     <p className="text-slate-500 dark:text-slate-400 leading-relaxed text-sm">{description}</p>
-  </div>
+  </motion.div>
 );
 
 const SCREENS = [
@@ -1044,15 +1091,7 @@ export default function App() {
             </div>
           </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.4, delay: 0.15 }}
-            className="perspective-1000"
-          >
-            <MockupApp />
-          </motion.div>
+          <HeroMockup />
         </div>
       </section>
 
@@ -1063,16 +1102,22 @@ export default function App() {
       <section id="problem" className="py-24 px-6 bg-slate-50 dark:bg-slate-900">
         <div className="max-w-7xl mx-auto">
           <FadeUp><SectionHeading centered title="El Problema" subtitle="Tres problemas que tienen solución" /></FadeUp>
-          <div className="grid md:grid-cols-3 gap-8 text-center">
+          <motion.div
+            className="grid md:grid-cols-3 gap-8 text-center"
+            variants={gridContainer}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, margin: '-60px' }}
+          >
             {[
               { icon: Clock,        title: 'Comprar sin planificar',       text: 'Sin una lista clara es fácil gastar más de lo previsto, olvidar productos y volver al supermercado a mitad de semana.' },
               { icon: TrendingDown, title: 'Pagar de más sin saberlo',     text: 'El mismo producto puede variar hasta un 40% de precio según la cadena. Comparar manualmente cada semana no es viable.' },
               { icon: Leaf,         title: 'Desperdiciar comida y dinero', text: 'Comprar sin planificar los menús lleva a tirar alimentos y a que falten productos justo cuando más se necesitan.' },
             ].map((p, i) => (
-              <div key={i}><FadeUp delay={i * 0.15}>
+              <motion.div key={i} variants={gridItem}>
                 <div className="p-8">
                   <motion.div
-                    whileHover={{ scale: 1.08, rotate: 3 }}
+                    whileHover={{ scale: 1.12, rotate: 5 }}
                     transition={{ type: 'spring', stiffness: 300 }}
                     className="inline-flex items-center justify-center w-16 h-16 bg-white dark:bg-slate-800 rounded-2xl shadow-sm mb-6 text-slate-400 dark:text-slate-300"
                   >
@@ -1081,9 +1126,9 @@ export default function App() {
                   <h3 className="text-xl font-bold dark:text-white mb-4">{p.title}</h3>
                   <p className="text-slate-500 dark:text-slate-400">{p.text}</p>
                 </div>
-              </FadeUp></div>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
       </section>
 
@@ -1157,7 +1202,13 @@ export default function App() {
       <section id="features" className="py-24 px-6 bg-slate-50 dark:bg-slate-900 rounded-[4rem] mx-4">
         <div className="max-w-7xl mx-auto">
           <FadeUp><SectionHeading centered title="Funcionalidades" subtitle="Qué hace MySmartBasket por ti" /></FadeUp>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <motion.div
+            className="grid md:grid-cols-2 lg:grid-cols-3 gap-8"
+            variants={gridContainer}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, margin: '-60px' }}
+          >
             {[
               { icon: Zap,          title: 'Reposición automática',                  description: 'Aprende tus ciclos de consumo y anticipa lo que vas a necesitar antes de que se agote, sin intervención manual.' },
               { icon: TrendingDown, title: 'Optimización por supermercado',          description: 'Identifica en qué cadena cada producto está más barato en ese momento y propone la combinación más rentable.' },
@@ -1166,11 +1217,11 @@ export default function App() {
               { icon: Leaf,         title: 'Reducción de desperdicio alimentario',   description: 'Registra las fechas de caducidad y avisa de qué consumir primero para minimizar lo que se tira cada semana.' },
               { icon: Search,       title: 'Cobertura de más de 45 cadenas',        description: 'Mercadona, Lidl, Carrefour, Alcampo, Día y 40 cadenas más. Precios actualizados cada 30 minutos de forma automática.' },
             ].map((f, i) => (
-              <div key={i}><FadeUp delay={i * 0.08}>
+              <motion.div key={i} variants={gridItem}>
                 <FeatureCard icon={f.icon} title={f.title} description={f.description} />
-              </FadeUp></div>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
       </section>
 
@@ -1181,7 +1232,13 @@ export default function App() {
       <section id="how-it-works" className="py-24 px-6">
         <div className="max-w-7xl mx-auto">
           <FadeUp><SectionHeading centered title="Cómo funciona" subtitle="Tres pasos para empezar a ahorrar" /></FadeUp>
-          <div className="grid md:grid-cols-3 gap-12 relative">
+          <motion.div
+            className="grid md:grid-cols-3 gap-12 relative"
+            variants={gridContainer}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, margin: '-60px' }}
+          >
             <div className="hidden md:block absolute top-8 left-[25%] right-[25%] h-px -z-10 overflow-hidden">
               <motion.div
                 initial={{ scaleX: 0 }}
@@ -1196,21 +1253,21 @@ export default function App() {
               { step: '02', title: 'Recibe tu lista semanal',          text: 'Generada en base a tus hábitos de consumo, lo que ya tienes en casa y los precios actuales de tu zona.' },
               { step: '03', title: 'Compra en tienda o desde casa',    text: 'Usa la lista en el móvil durante la compra, o realiza el pedido online directamente desde la app.' },
             ].map((s, i) => (
-              <div key={i}><FadeUp delay={i * 0.2}>
+              <motion.div key={i} variants={gridItem}>
                 <div className="text-center group">
                   <motion.div
-                    whileHover={{ scale: 1.12 }}
-                    transition={{ type: 'spring', stiffness: 300 }}
-                    className="w-16 h-16 bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 shadow-sm rounded-full flex items-center justify-center mx-auto mb-8 text-xl font-bold text-brand-green group-hover:bg-brand-green group-hover:text-white transition-colors cursor-default"
+                    whileHover={{ scale: 1.15, backgroundColor: '#22C55E', color: '#fff' }}
+                    transition={{ type: 'spring', stiffness: 320, damping: 18 }}
+                    className="w-16 h-16 bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 shadow-sm rounded-full flex items-center justify-center mx-auto mb-8 text-xl font-bold text-brand-green cursor-default"
                   >
                     {s.step}
                   </motion.div>
                   <h3 className="text-xl font-bold dark:text-white mb-4">{s.title}</h3>
                   <p className="text-slate-500 dark:text-slate-400 px-4">{s.text}</p>
                 </div>
-              </FadeUp></div>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
       </section>
 
