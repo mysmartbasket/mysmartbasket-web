@@ -1204,20 +1204,10 @@ const SECTIONS: { id: string; label: string }[] = [
 export default function App() {
   const [formState, handleSubmit] = useForm('mwvybvog');
   const [isCanvaOpen, setIsCanvaOpen] = useState(false);
-  const [formStep, setFormStep] = useState<'email' | 'spending' | 'done'>('email');
+  const [formStep, setFormStep] = useState<'form' | 'done'>('form');
   const [emailValue, setEmailValue] = useState('');
-  const [waitlistCount, setWaitlistCount] = useState(() => {
-    const saved = typeof window !== 'undefined' ? localStorage.getItem('msb_wl_count') : null;
-    return saved ? parseInt(saved, 10) : 5247;
-  });
-
-  const incrementCount = () => {
-    setWaitlistCount(n => {
-      const next = n + 1;
-      localStorage.setItem('msb_wl_count', String(next));
-      return next;
-    });
-  };
+  const [spendingValue, setSpendingValue] = useState('');
+  const [submitting, setSubmitting] = useState(false);
   const year = new Date().getFullYear();
 
   // Init dark mode from localStorage
@@ -1314,9 +1304,7 @@ export default function App() {
               transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
             >
               <motion.a
-                href="https://mysmartbasket.github.io/MySmartBasket-MVP/"
-                target="_blank"
-                rel="noopener noreferrer"
+                href="#demo"
                 whileHover={{ scale: 1.04 }}
                 whileTap={{ scale: 0.97 }}
                 className="inline-flex items-center gap-2 bg-green-50 border border-green-100 px-4 py-2 rounded-full text-brand-green text-sm font-bold mb-8 hover:bg-green-100 transition-colors"
@@ -1325,7 +1313,7 @@ export default function App() {
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-brand-green" />
                 </span>
-                Demo disponible — pruébala ahora
+                Demo interactiva más abajo
               </motion.a>
 
               <h1 className="text-5xl lg:text-7xl font-bold text-brand-black dark:text-white leading-[1.1] tracking-tight mb-8 overflow-hidden">
@@ -1371,7 +1359,7 @@ export default function App() {
                 className="mt-8 flex flex-wrap items-center gap-6 text-sm text-slate-500"
               >
                 <span className="flex items-center gap-1.5"><CheckCircle2 size={15} className="text-brand-green" /> Sin spam</span>
-                <span className="flex items-center gap-1.5"><CheckCircle2 size={15} className="text-brand-green" /> Acceso anticipado, sin coste</span>
+                <span className="flex items-center gap-1.5"><CheckCircle2 size={15} className="text-brand-green" /> Gratis durante la beta</span>
                 <span className="flex items-center gap-1.5"><CheckCircle2 size={15} className="text-brand-green" /> Cancelas cuando quieras</span>
               </motion.div>
 
@@ -1527,46 +1515,21 @@ export default function App() {
         <div className="max-w-7xl mx-auto relative z-10">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <FadeUp>
-              <span className="text-brand-green font-bold text-xs uppercase mb-3 block">Resultados reales</span>
-              <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-12">Datos de personas que ya lo están usando.</h2>
+              <span className="text-brand-green font-bold text-xs uppercase mb-3 block">El impacto que buscamos</span>
+              <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-12">Cuánto podrías ahorrar desde el primer mes.</h2>
               <div className="grid grid-cols-2 gap-8">
                 <AnimatedStat value="20%" label="De ahorro medio en la primera compra" />
                 <AnimatedStat value="90m" label="Menos de gestión de la compra al mes" />
-                <motion.div
-                  className="pt-8 col-span-2 border-t border-slate-800"
-                  initial={{ opacity: 0 }}
-                  whileInView={{ opacity: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: 0.5 }}
-                >
-                  <div className="flex items-center gap-4">
-                    <div className="flex -space-x-3">
-                      {[1, 2, 3, 4].map(idx => (
-                        <motion.div
-                          key={idx}
-                          initial={{ opacity: 0, x: -10 }}
-                          whileInView={{ opacity: 1, x: 0 }}
-                          viewport={{ once: true }}
-                          transition={{ delay: 0.6 + idx * 0.1 }}
-                          className="w-11 h-11 rounded-full border-4 border-brand-black overflow-hidden bg-slate-700 flex items-center justify-center text-white font-bold text-xs"
-                        >
-                          {['AR', 'CM', 'PG', 'RL'][idx - 1]}
-                        </motion.div>
-                      ))}
-                    </div>
-                    <div>
-                      <div className="text-lg font-bold">Más de 5.000 personas</div>
-                      <p className="text-xs text-slate-500">Ya apuntadas a la lista de espera</p>
-                    </div>
-                  </div>
-                </motion.div>
               </div>
+              <p className="text-xs text-slate-500 mt-6 max-w-sm">
+                Estimación basada en el análisis de precios reales entre supermercados de la misma zona. Se confirmará con datos de uso una vez lancemos la beta.
+              </p>
             </FadeUp>
 
             <div className="space-y-6">
               {[
-                { name: 'Marta G.', role: 'Madre de 3 hijos, Madrid', quote: 'El primer mes ahorré 150€ comprando exactamente lo mismo. Solo dejé de ir al supermercado más caro por inercia.' },
-                { name: 'Jorge R.', role: 'Profesional independiente, Barcelona', quote: 'Antes tiraba comida cada semana. Ahora compro lo que necesito y la nevera no acaba medio vacía a mitad de semana.' },
+                { title: 'El mismo carro, hasta un 40% más barato', body: 'Un mismo producto puede variar hasta un 40% de precio según la cadena. Comprando cada cosa donde está más barata en ese momento, sin cambiar tu lista, ahí está el ahorro.' },
+                { title: 'Menos comida tirada a la basura', body: 'Registrando fechas de caducidad y lo que ya tienes en casa, la lista se ajusta para que compres lo que realmente vas a consumir esa semana.' },
               ].map((t, i) => (
                 <motion.div
                   key={i}
@@ -1576,11 +1539,8 @@ export default function App() {
                   transition={{ duration: 0.55, delay: i * 0.2, ease: [0.22, 1, 0.36, 1] }}
                 >
                   <TiltCard className="p-8 bg-white/5 border border-white/10 rounded-[2rem] cursor-default hover:bg-white/10 transition-colors">
-                    <p className="text-xl text-slate-300 italic mb-6">"{t.quote}"</p>
-                    <div>
-                      <div className="font-bold text-lg">{t.name}</div>
-                      <div className="text-sm text-brand-green font-medium">{t.role}</div>
-                    </div>
+                    <p className="text-lg font-bold text-white mb-3">{t.title}</p>
+                    <p className="text-slate-400 leading-relaxed">{t.body}</p>
                   </TiltCard>
                 </motion.div>
               ))}
@@ -1609,23 +1569,14 @@ export default function App() {
       <section id="waitlist" className="py-32 px-6 dark:bg-slate-950">
         <div className="max-w-3xl mx-auto text-center">
           <FadeUp>
-            {/* Live counter */}
             <div className="inline-flex items-center gap-3 bg-green-50 dark:bg-green-900/20 border border-green-100 dark:border-green-800 px-5 py-2.5 rounded-full mb-8">
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-brand-green" />
               </span>
-              <motion.span
-                key={waitlistCount}
-                initial={{ y: -10, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                className="text-sm font-bold text-brand-green tabular-nums"
-              >
-                {waitlistCount.toLocaleString('es-ES')}
-              </motion.span>
-              <span className="text-sm font-medium text-brand-green">personas ya apuntadas</span>
+              <span className="text-sm font-medium text-brand-green">Sé de los primeros en probarlo</span>
             </div>
-            <SectionHeading centered title="Solicita tu acceso anticipado" subtitle="Las plazas son limitadas." />
+            <SectionHeading centered title="Solicita tu acceso anticipado" subtitle="Estamos dando acceso de forma gradual, por orden de inscripción." />
           </FadeUp>
           <p className="text-slate-500 dark:text-slate-400 text-xl mb-12">
             Estamos ampliando el acceso gradualmente. Deja tu correo y te notificamos en cuanto tu plaza esté disponible. Sin comunicaciones comerciales, solo el aviso de acceso.
@@ -1645,68 +1596,64 @@ export default function App() {
                 <p className="text-brand-green font-bold text-xl mb-1">Solicitud recibida</p>
                 <p className="text-slate-500 dark:text-slate-400 text-sm">Te notificaremos cuando tu plaza esté disponible. Revisa también la carpeta de correo no deseado.</p>
               </motion.div>
-            ) : formStep === 'spending' ? (
-              <motion.div
-                key="spending"
-                initial={{ opacity: 0, x: 40 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -40 }}
-                className="max-w-lg mx-auto"
-              >
-                <p className="font-bold text-slate-900 dark:text-white text-lg mb-6">¿Cuánto sueles gastar al mes en la compra?</p>
-                <div className="grid grid-cols-2 gap-3 mb-6">
-                  {['Menos de 200€', '200 – 400€', '400 – 600€', 'Más de 600€'].map((opt) => (
-                    <motion.button
-                      key={opt}
-                      whileHover={{ scale: 1.03 }}
-                      whileTap={{ scale: 0.97 }}
-                      onClick={async () => {
-                        const fd = new FormData();
-                        fd.append('email', emailValue);
-                        fd.append('gasto_mensual', opt);
-                        await fetch('https://formspree.io/f/mwvybvog', { method: 'POST', body: fd, headers: { Accept: 'application/json' } });
-                        setFormStep('done');
-                      }}
-                      className="py-4 px-5 rounded-2xl border-2 border-slate-100 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 font-semibold text-sm hover:border-brand-green hover:text-brand-green transition-all"
-                    >
-                      {opt}
-                    </motion.button>
-                  ))}
-                </div>
-                <button onClick={() => setFormStep('done')} className="text-xs text-slate-400 hover:text-slate-600 transition-colors">
-                  Omitir →
-                </button>
-              </motion.div>
             ) : (
               <motion.form
                 key="email"
                 initial={{ opacity: 0, x: -40 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -40 }}
-                onSubmit={(e) => {
+                onSubmit={async (e) => {
                   e.preventDefault();
-                  if (emailValue) { incrementCount(); setFormStep('spending'); }
+                  if (!emailValue || submitting) return;
+                  setSubmitting(true);
+                  try {
+                    const fd = new FormData();
+                    fd.append('email', emailValue);
+                    if (spendingValue) fd.append('gasto_mensual', spendingValue);
+                    await fetch('https://formspree.io/f/mwvybvog', { method: 'POST', body: fd, headers: { Accept: 'application/json' } });
+                    setFormStep('done');
+                  } finally {
+                    setSubmitting(false);
+                  }
                 }}
-                className="relative max-w-lg mx-auto"
+                className="max-w-lg mx-auto"
                 noValidate
               >
-                <input
-                  type="email"
-                  name="email"
-                  required
-                  value={emailValue}
-                  onChange={(e) => setEmailValue(e.target.value)}
-                  placeholder="tu@email.com"
-                  className="w-full px-8 py-6 rounded-3xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-lg focus:ring-4 focus:ring-green-100 dark:focus:ring-green-900 focus:border-brand-green outline-none transition-all pr-48 dark:text-white dark:placeholder-slate-500"
-                  aria-label="Tu correo electrónico"
-                />
-                <ValidationError field="email" errors={formState.errors} className="mt-2 text-sm text-red-500 text-left absolute -bottom-6 left-2" />
-                <button
-                  type="submit"
-                  className="absolute right-2 top-2 bottom-2 px-6 bg-brand-black dark:bg-brand-green text-white rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-slate-800 dark:hover:opacity-90 transition-all text-sm"
-                >
-                  Continuar <ArrowRight size={15} />
-                </button>
+                <div className="relative">
+                  <input
+                    type="email"
+                    name="email"
+                    required
+                    value={emailValue}
+                    onChange={(e) => setEmailValue(e.target.value)}
+                    placeholder="tu@email.com"
+                    className="w-full px-8 py-6 rounded-3xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-lg focus:ring-4 focus:ring-green-100 dark:focus:ring-green-900 focus:border-brand-green outline-none transition-all pr-48 dark:text-white dark:placeholder-slate-500"
+                    aria-label="Tu correo electrónico"
+                  />
+                  <ValidationError field="email" errors={formState.errors} className="mt-2 text-sm text-red-500 text-left absolute -bottom-6 left-2" />
+                  <button
+                    type="submit"
+                    disabled={submitting}
+                    className="absolute right-2 top-2 bottom-2 px-6 bg-brand-black dark:bg-brand-green text-white rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-slate-800 dark:hover:opacity-90 transition-all text-sm disabled:opacity-60"
+                  >
+                    {submitting ? 'Enviando…' : <>Continuar <ArrowRight size={15} /></>}
+                  </button>
+                </div>
+
+                <label className="block mt-6 text-left">
+                  <span className="text-xs text-slate-400 dark:text-slate-500">¿Cuánto sueles gastar al mes en la compra? (opcional, nos ayuda a priorizar funciones)</span>
+                  <select
+                    value={spendingValue}
+                    onChange={(e) => setSpendingValue(e.target.value)}
+                    className="mt-1.5 w-full sm:w-auto px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm text-slate-700 dark:text-slate-200 outline-none focus:border-brand-green"
+                  >
+                    <option value="">Prefiero no decirlo</option>
+                    <option value="Menos de 200€">Menos de 200€</option>
+                    <option value="200 – 400€">200 – 400€</option>
+                    <option value="400 – 600€">400 – 600€</option>
+                    <option value="Más de 600€">Más de 600€</option>
+                  </select>
+                </label>
               </motion.form>
             )}
           </AnimatePresence>
