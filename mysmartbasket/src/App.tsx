@@ -29,6 +29,141 @@ const ScrollProgress = memo(() => {
   return <motion.div style={{ scaleX }} className="fixed top-0 left-0 right-0 h-[3px] bg-brand-green origin-left z-[60] shadow-[0_0_8px_rgba(34,197,94,0.6)]" />;
 });
 
+/* ── Google AdSense: consent + ad slots ──
+ * Google suspends AdSense accounts that serve ads or set cookies for EU
+ * visitors without verifiable consent (AdSense ToS §10 / ePrivacy), so no
+ * ad script may load before the visitor has answered this banner. Consent
+ * is stored in localStorage and is separate from the theme/waitlist-count
+ * keys already documented in privacidad.html — see section 8 there.
+ */
+const ADSENSE_CONSENT_KEY = 'msb_ad_consent';
+const ADSENSE_CONSENT_EVENT = 'msb-ad-consent-changed';
+const ADSENSE_CLIENT_ID = import.meta.env.VITE_ADSENSE_CLIENT_ID as string | undefined;
+const isAdSenseConfigured = !!ADSENSE_CLIENT_ID && !ADSENSE_CLIENT_ID.includes('XXXXXXXXXX');
+
+let adsenseScriptPromise: Promise<void> | null = null;
+function loadAdSenseScript(): Promise<void> {
+  if (adsenseScriptPromise) return adsenseScriptPromise;
+  adsenseScriptPromise = new Promise((resolve, reject) => {
+    const script = document.createElement('script');
+    script.async = true;
+    script.src = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT_ID}`;
+    script.crossOrigin = 'anonymous';
+    script.onload = () => resolve();
+    script.onerror = () => reject(new Error('Failed to load AdSense script'));
+    document.head.appendChild(script);
+  });
+  return adsenseScriptPromise;
+}
+
+const ConsentBanner = () => {
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const saved = localStorage.getItem(ADSENSE_CONSENT_KEY);
+    setVisible(saved !== 'granted' && saved !== 'denied');
+  }, []);
+
+  const respond = (value: 'granted' | 'denied') => {
+    localStorage.setItem(ADSENSE_CONSENT_KEY, value);
+    window.dispatchEvent(new CustomEvent(ADSENSE_CONSENT_EVENT, { detail: value }));
+    setVisible(false);
+  };
+
+  return (
+    <AnimatePresence>
+      {visible && (
+        <motion.div
+          initial={{ y: 80, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          exit={{ y: 80, opacity: 0 }}
+          transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+          className="fixed bottom-0 inset-x-0 z-[70] bg-brand-black text-white px-6 py-4 flex flex-col sm:flex-row items-center gap-4 shadow-2xl"
+        >
+          <p className="text-xs sm:text-sm text-slate-300 flex-1 text-center sm:text-left leading-relaxed">
+            Usamos cookies para mostrar publicidad y mantener la web gratuita. Puedes aceptar o rechazar la
+            personalizada — la página funciona igual en ambos casos. Más info en la{' '}
+            <a href="/privacidad.html" className="underline hover:text-white">política de privacidad</a>.
+          </p>
+          <div className="flex gap-2 shrink-0">
+            <button
+              onClick={() => respond('denied')}
+              className="px-4 py-2 text-xs font-bold rounded-full bg-slate-800 hover:bg-slate-700 transition-colors"
+            >
+              Rechazar
+            </button>
+            <button
+              onClick={() => respond('granted')}
+              className="px-4 py-2 text-xs font-bold rounded-full bg-brand-green text-white hover:opacity-90 transition-opacity"
+            >
+              Aceptar
+            </button>
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+};
+
+const AdSlot = ({ slotId, className = '' }: { slotId?: string; className?: string }) => {
+  const [consent, setConsent] = useState<'granted' | 'denied' | null>(
+    () => localStorage.getItem(ADSENSE_CONSENT_KEY) as 'granted' | 'denied' | null
+  );
+  const pushedRef = useRef(false);
+
+  useEffect(() => {
+    // 'storage' fires only across tabs; the custom event covers the tab
+    // where the visitor actually clicked "Aceptar" in ConsentBanner.
+    const onStorage = () => setConsent(localStorage.getItem(ADSENSE_CONSENT_KEY) as 'granted' | 'denied' | null);
+    const onCustom = (e: Event) => setConsent((e as CustomEvent).detail);
+    window.addEventListener('storage', onStorage);
+    window.addEventListener(ADSENSE_CONSENT_EVENT, onCustom);
+    return () => {
+      window.removeEventListener('storage', onStorage);
+      window.removeEventListener(ADSENSE_CONSENT_EVENT, onCustom);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (consent !== 'granted' || !isAdSenseConfigured || pushedRef.current) return;
+    loadAdSenseScript()
+      .then(() => {
+        try {
+          ((window as any).adsbygoogle = (window as any).adsbygoogle || []).push({});
+          pushedRef.current = true;
+        } catch (err) {
+          console.error('AdSense push failed:', err);
+        }
+      })
+      .catch((err) => console.error(err));
+  }, [consent]);
+
+  if (consent !== 'granted') return null;
+
+  if (!isAdSenseConfigured) {
+    // Real visitors on the live site should never see an empty ad box before
+    // there's an approved AdSense account — only show the placeholder locally
+    // so the layout can still be reviewed during development.
+    if (!import.meta.env.DEV) return null;
+    return (
+      <div className={`flex items-center justify-center border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-2xl text-slate-400 text-[11px] font-bold uppercase tracking-wider py-8 ${className}`}>
+        Espacio publicitario (solo visible en desarrollo — falta configurar AdSense)
+      </div>
+    );
+  }
+
+  return (
+    <ins
+      className={`adsbygoogle block ${className}`}
+      style={{ display: 'block' }}
+      data-ad-client={ADSENSE_CLIENT_ID}
+      data-ad-slot={slotId}
+      data-ad-format="auto"
+      data-full-width-responsive="true"
+    />
+  );
+};
+
 const FadeUp = ({ children, delay = 0, className = '', index }: { children: React.ReactNode; delay?: number; className?: string; index?: number }) => (
   <motion.div
     initial={{ opacity: 0, y: 44 }}
@@ -1177,6 +1312,7 @@ export default function App() {
       <CustomCursor />
       <StickyCTA />
       <ScrollProgress />
+      <ConsentBanner />
       <Navbar />
 
       {/* VIDEO MODAL */}
@@ -1631,6 +1767,10 @@ export default function App() {
           </p>
         </div>
       </section>
+
+      <div className="max-w-7xl mx-auto px-6">
+        <AdSlot slotId="landing_below_waitlist" />
+      </div>
 
       {/* FOOTER */}
       <footer className="py-20 px-6 border-t border-slate-100 dark:border-slate-800 dark:bg-slate-950">

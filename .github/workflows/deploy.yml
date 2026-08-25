@@ -32,6 +32,8 @@ jobs:
 
       - name: Build
         working-directory: mysmartbasket
+        env:
+          VITE_ADSENSE_CLIENT_ID: ${{ vars.VITE_ADSENSE_CLIENT_ID }}
         run: npm run build
 
       - name: Setup Pages

@@ -49,9 +49,10 @@ Este repositorio contiene el código fuente de la **landing page oficial**, util
 
 ## 🛠️ Tecnologías utilizadas
 
-- HTML5  
-- CSS3  
-- JavaScript  
+- React + TypeScript  
+- Vite  
+- Tailwind CSS  
+- Despliegue automático a GitHub Pages (`mysmartbasket/` → `mysmartbasket/dist`) vía GitHub Actions  
 
 ---
 
