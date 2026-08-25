@@ -226,52 +226,6 @@ const AnimatedStat = ({ value, label }: { value: string; label: string }) => {
   );
 };
 
-/* ── Custom cursor ── */
-const CustomCursor = () => {
-  const mx = useMotionValue(-100);
-  const my = useMotionValue(-100);
-  const [hov, setHov] = useState(false);
-
-  // Dot: near-instant (high stiffness, low mass)
-  const dotX = useSpring(mx, { stiffness: 5000, damping: 60, mass: 0.05 });
-  const dotY = useSpring(my, { stiffness: 5000, damping: 60, mass: 0.05 });
-  // Ring: subtle lag
-  const ringX = useSpring(mx, { stiffness: 600, damping: 40, mass: 0.1 });
-  const ringY = useSpring(my, { stiffness: 600, damping: 40, mass: 0.1 });
-
-  useEffect(() => {
-    document.documentElement.classList.add('custom-cursor-active');
-    const mv = (e: MouseEvent) => { mx.set(e.clientX); my.set(e.clientY); };
-    const ov = (e: MouseEvent) => setHov(!!(e.target as HTMLElement).closest('a,button'));
-    window.addEventListener('mousemove', mv);
-    window.addEventListener('mouseover', ov);
-    return () => {
-      document.documentElement.classList.remove('custom-cursor-active');
-      window.removeEventListener('mousemove', mv);
-      window.removeEventListener('mouseover', ov);
-    };
-  }, [mx, my]);
-
-  return (
-    <div className="hidden lg:block">
-      {/* Dot — instant */}
-      <motion.div
-        className="fixed rounded-full bg-brand-green pointer-events-none z-[999]"
-        style={{ width: 8, height: 8, x: dotX, y: dotY, translateX: '-50%', translateY: '-50%' }}
-        animate={{ scale: hov ? 0 : 1 }}
-        transition={{ duration: 0.15 }}
-      />
-      {/* Ring — slight trail */}
-      <motion.div
-        className="fixed rounded-full border-2 border-brand-green pointer-events-none z-[998]"
-        style={{ width: 32, height: 32, x: ringX, y: ringY, translateX: '-50%', translateY: '-50%' }}
-        animate={{ scale: hov ? 1.5 : 1, opacity: hov ? 0.8 : 0.35 }}
-        transition={{ duration: 0.2 }}
-      />
-    </div>
-  );
-};
-
 /* ── Store ticker ── */
 const TICKER_STORES = [
   '🛒 Mercadona', '🏪 Lidl', '🛍️ Carrefour', '🏬 Alcampo',
@@ -745,7 +699,6 @@ const SolutionSection = memo(() => {
                 src="https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=800&h=600"
                 alt="Cesta de la compra saludable"
                 className="w-full block"
-                loading="lazy"
                 referrerPolicy="no-referrer"
               />
             </div>
@@ -1251,9 +1204,6 @@ const SECTIONS: { id: string; label: string }[] = [
 export default function App() {
   const [formState, handleSubmit] = useForm('mwvybvog');
   const [isCanvaOpen, setIsCanvaOpen] = useState(false);
-  const { scrollY: winScrollY } = useScroll();
-  const heroOpacity = useTransform(winScrollY, [0, 380], [1, 0]);
-  const heroTextY = useTransform(winScrollY, [0, 380], [0, -45]);
   const [formStep, setFormStep] = useState<'email' | 'spending' | 'done'>('email');
   const [emailValue, setEmailValue] = useState('');
   const [waitlistCount, setWaitlistCount] = useState(() => {
@@ -1308,7 +1258,6 @@ export default function App() {
     // has no other place where that preference was being checked.
     <MotionConfig reducedMotion="user">
     <div id="top" className="min-h-screen selection:bg-green-100 selection:text-brand-green bg-white dark:bg-slate-950">
-      <CustomCursor />
       <StickyCTA />
       <ScrollProgress />
       <ConsentBanner />
@@ -1359,9 +1308,7 @@ export default function App() {
           <div className="absolute top-40 left-0 w-64 h-64 rounded-full bg-green-100/40 dark:bg-green-900/10 blur-3xl animate-hero-glow" style={{ animationDelay: '1.5s' }} />
         </div>
         <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 items-center">
-            {/* Scroll-fade wrapper: content drifts up + fades as user scrolls */}
-          <motion.div style={{ opacity: heroOpacity, y: heroTextY }}>
-            <motion.div
+          <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
@@ -1453,7 +1400,6 @@ export default function App() {
 
               <ScrollDownIndicator />
             </motion.div>
-          </motion.div>
 
           <HeroMockup />
         </div>

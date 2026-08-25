@@ -35,9 +35,6 @@
 }
 .animate-pulse-glow { animation: pulse-glow 6s ease-in-out infinite; will-change: transform, opacity; }
 
-/* Hide default cursor on desktop when custom cursor active */
-.custom-cursor-active * { cursor: none !important; }
-
 @layer base {
   html {
     scroll-behavior: smooth;
