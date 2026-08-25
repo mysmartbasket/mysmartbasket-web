@@ -164,7 +164,20 @@ const AdSlot = ({ slotId, className = '' }: { slotId?: string; className?: strin
   );
 };
 
-const FadeUp = ({ children, delay = 0, className = '', index }: { children: React.ReactNode; delay?: number; className?: string; index?: number }) => (
+// Consistent ad break: clearly labeled "Publicidad" (AdSense requires ads to
+// be distinguishable from editorial content), placed at natural content
+// pauses — never inside the hero or right next to the waitlist form/CTA, to
+// avoid accidental clicks and to not compete with the primary conversion.
+const AdBreak = ({ slotId }: { slotId: string }) => (
+  <div className="max-w-3xl mx-auto px-6 my-4">
+    <span className="block text-center text-[10px] font-bold uppercase tracking-widest text-slate-300 dark:text-slate-600 mb-2">
+      Publicidad
+    </span>
+    <AdSlot slotId={slotId} />
+  </div>
+);
+
+const FadeUp =({ children, delay = 0, className = '', index }: { children: React.ReactNode; delay?: number; className?: string; index?: number }) => (
   <motion.div
     initial={{ opacity: 0, y: 44 }}
     whileInView={{ opacity: 1, y: 0 }}
@@ -1497,6 +1510,8 @@ export default function App() {
         </div>
       </section>
 
+      <AdBreak slotId="landing_after_problem" />
+
       {/* SOLUTION */}
       <SolutionSection />
 
@@ -1642,6 +1657,8 @@ export default function App() {
         </div>
       </section>
 
+      <AdBreak slotId="landing_after_social_proof" />
+
       {/* FAQ */}
       <section id="faq" className="py-24 px-6 dark:bg-slate-950">
         <div className="max-w-2xl mx-auto">
@@ -1768,9 +1785,7 @@ export default function App() {
         </div>
       </section>
 
-      <div className="max-w-7xl mx-auto px-6">
-        <AdSlot slotId="landing_below_waitlist" />
-      </div>
+      <AdBreak slotId="landing_below_waitlist" />
 
       {/* FOOTER */}
       <footer className="py-20 px-6 border-t border-slate-100 dark:border-slate-800 dark:bg-slate-950">
