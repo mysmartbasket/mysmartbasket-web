@@ -264,37 +264,6 @@ const CustomCursor = () => {
   );
 };
 
-/* ── Page transition (fade-in on load) ── */
-const PageTransition = () => {
-  const [visible, setVisible] = useState(true);
-  useEffect(() => {
-    const t = setTimeout(() => setVisible(false), 700);
-    return () => clearTimeout(t);
-  }, []);
-  return (
-    <AnimatePresence>
-      {visible && (
-        <motion.div
-          initial={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.6, ease: 'easeOut' }}
-          className="fixed inset-0 bg-white dark:bg-slate-950 z-[300] pointer-events-none flex items-center justify-center"
-        >
-          <motion.div
-            initial={{ scale: 0.8, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 1.1, opacity: 0 }}
-            transition={{ duration: 0.4 }}
-            className="text-brand-green"
-          >
-            <ShoppingBasket size={40} />
-          </motion.div>
-        </motion.div>
-      )}
-    </AnimatePresence>
-  );
-};
-
 /* ── Store ticker ── */
 const TICKER_STORES = [
   '🛒 Mercadona', '🏪 Lidl', '🛍️ Carrefour', '🏬 Alcampo',
@@ -1321,7 +1290,6 @@ export default function App() {
 
   return (
     <div id="top" className="min-h-screen selection:bg-green-100 selection:text-brand-green bg-white dark:bg-slate-950">
-      <PageTransition />
       <CustomCursor />
       <StickyCTA />
       <ScrollProgress />
