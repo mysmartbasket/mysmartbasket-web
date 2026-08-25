@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef, memo, useCallback } from 'react';
 import { useForm, ValidationError } from '@formspree/react';
-import { motion, AnimatePresence, useScroll, useSpring, useInView, useMotionValue, useTransform, animate as motionAnimate } from 'motion/react';
+import { motion, AnimatePresence, MotionConfig, useScroll, useSpring, useInView, useMotionValue, useTransform, animate as motionAnimate } from 'motion/react';
 import {
   ShoppingBasket,
+  ShoppingCart,
   Search,
   Users,
   TrendingDown,
@@ -21,6 +22,13 @@ import {
   Leaf,
   Moon,
   Sun,
+  PartyPopper,
+  Salad,
+  UtensilsCrossed,
+  ChefHat,
+  Carrot,
+  Milk,
+  Egg,
 } from 'lucide-react';
 
 const ScrollProgress = memo(() => {
@@ -986,7 +994,7 @@ const SCREENS = [
       <div className="flex-1 px-4 pt-3 pb-2 space-y-2.5 overflow-hidden">
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-[12px] font-bold text-slate-900">Mis listas 🛒</p>
+            <p className="text-[12px] font-bold text-slate-900 flex items-center gap-1.5">Mis listas <ShoppingCart size={12} className="text-brand-green" /></p>
             <p className="text-[10px] text-slate-400">2 listas activas</p>
           </div>
           <div className="w-7 h-7 rounded-full bg-brand-green flex items-center justify-center text-white">
@@ -1013,10 +1021,16 @@ const SCREENS = [
         ))}
         <div className="p-3 bg-white rounded-2xl border border-slate-100 space-y-2">
           <p className="text-[10px] font-bold text-slate-400">PENDIENTES</p>
-          {['🥦 Brócoli', '🥛 Leche entera', '🍳 Huevos L'].map((item, i) => (
+          {[
+            { icon: <Carrot size={11} />, name: 'Brócoli' },
+            { icon: <Milk size={11} />, name: 'Leche entera' },
+            { icon: <Egg size={11} />, name: 'Huevos L' },
+          ].map((item, i) => (
             <div key={i} className="flex items-center gap-2">
-              <div className="w-4 h-4 rounded-full border-2 border-slate-200 flex-shrink-0" />
-              <span className="text-[11px] text-slate-700">{item}</span>
+              <div className="w-4 h-4 rounded-full border-2 border-slate-200 flex-shrink-0 flex items-center justify-center text-slate-400">
+                {item.icon}
+              </div>
+              <span className="text-[11px] text-slate-700">{item.name}</span>
             </div>
           ))}
         </div>
@@ -1069,15 +1083,15 @@ const SCREENS = [
           <span className="text-[10px] text-slate-400">Buscar receta…</span>
         </div>
         {[
-          { emoji: '🥗', name: 'Ensalada mediterránea', time: '10 min', items: 6 },
-          { emoji: '🍝', name: 'Pasta carbonara',       time: '20 min', items: 5 },
-          { emoji: '🥘', name: 'Pollo al curry',         time: '35 min', items: 8 },
+          { icon: <Salad size={16} />, name: 'Ensalada mediterránea', time: '10 min', items: 6 },
+          { icon: <UtensilsCrossed size={16} />, name: 'Pasta carbonara', time: '20 min', items: 5 },
+          { icon: <ChefHat size={16} />, name: 'Pollo al curry', time: '35 min', items: 8 },
         ].map((r, i) => (
           <div key={i} className="flex items-center gap-3 p-3 bg-white rounded-2xl border border-slate-100">
-            <div className="w-9 h-9 bg-slate-50 rounded-xl flex items-center justify-center text-2xl flex-shrink-0">{r.emoji}</div>
+            <div className="w-9 h-9 bg-slate-50 rounded-xl flex items-center justify-center text-brand-green flex-shrink-0">{r.icon}</div>
             <div className="flex-1 min-w-0">
               <p className="text-[11px] font-bold truncate">{r.name}</p>
-              <p className="text-[9px] text-slate-400">⏱ {r.time} · {r.items} ing.</p>
+              <p className="text-[9px] text-slate-400 flex items-center gap-1"><Clock size={9} /> {r.time} · {r.items} ing.</p>
             </div>
             <ChevronRight size={11} className="text-slate-300 flex-shrink-0" />
           </div>
@@ -1289,6 +1303,10 @@ export default function App() {
   }, []);
 
   return (
+    // reducedMotion="user" makes every motion.* component in the tree honor
+    // the OS-level prefers-reduced-motion setting automatically — this page
+    // has no other place where that preference was being checked.
+    <MotionConfig reducedMotion="user">
     <div id="top" className="min-h-screen selection:bg-green-100 selection:text-brand-green bg-white dark:bg-slate-950">
       <CustomCursor />
       <StickyCTA />
@@ -1675,7 +1693,9 @@ export default function App() {
                 animate={{ opacity: 1, scale: 1 }}
                 className="max-w-lg mx-auto p-8 rounded-3xl bg-green-50 dark:bg-green-900/20 border border-green-100 dark:border-green-800"
               >
-                <div className="text-4xl mb-3">🎉</div>
+                <div className="w-12 h-12 rounded-2xl bg-brand-green/10 flex items-center justify-center mb-3">
+                  <PartyPopper size={24} className="text-brand-green" />
+                </div>
                 <p className="text-brand-green font-bold text-xl mb-1">Solicitud recibida</p>
                 <p className="text-slate-500 dark:text-slate-400 text-sm">Te notificaremos cuando tu plaza esté disponible. Revisa también la carpeta de correo no deseado.</p>
               </motion.div>
@@ -1801,5 +1821,6 @@ export default function App() {
         </div>
       </footer>
     </div>
+    </MotionConfig>
   );
 }
