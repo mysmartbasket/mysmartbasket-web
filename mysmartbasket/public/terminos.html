@@ -1,0 +1,312 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Términos y Condiciones · MySmartBasket</title>
+  <meta name="description" content="Términos y condiciones de uso de MySmartBasket." />
+  <meta name="robots" content="noindex, follow" />
+  <link rel="canonical" href="https://mysmartbasket.app/terminos.html" />
+  <link rel="icon" href="/favicon.ico" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --green: #22C55E;
+      --black: #0F172A;
+      --slate-50: #f8fafc;
+      --slate-100: #f1f5f9;
+      --slate-400: #94a3b8;
+      --slate-500: #64748b;
+      --slate-700: #334155;
+    }
+
+    body {
+      font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+      background: #fff;
+      color: var(--black);
+      -webkit-font-smoothing: antialiased;
+      line-height: 1.6;
+    }
+
+    a { color: var(--green); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    nav {
+      position: sticky; top: 0; z-index: 50;
+      background: rgba(255,255,255,.85); backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--slate-100);
+      padding: 16px 24px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: inherit; }
+    .brand-icon {
+      width: 36px; height: 36px; background: var(--green); border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; font-weight: 700; font-size: 14px; letter-spacing: .06em;
+    }
+    .brand-name { font-weight: 700; font-size: 17px; letter-spacing: -.01em; color: var(--black); }
+    .nav-back {
+      font-size: 13px; font-weight: 500; color: var(--slate-500);
+      display: flex; align-items: center; gap: 6px;
+    }
+    .nav-back:hover { color: var(--black); text-decoration: none; }
+
+    main { max-width: 740px; margin: 0 auto; padding: 56px 24px 100px; }
+
+    .page-tag {
+      display: inline-block; background: #f0fdf4; color: var(--green);
+      border: 1px solid #bbf7d0; border-radius: 999px;
+      font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+      padding: 4px 14px; margin-bottom: 20px;
+    }
+    h1 {
+      font-size: clamp(28px, 4vw, 40px); font-weight: 700;
+      letter-spacing: -.025em; line-height: 1.15; color: var(--black); margin-bottom: 10px;
+    }
+    .updated {
+      font-size: 13px; color: var(--slate-400); margin-bottom: 24px;
+      padding-bottom: 32px; border-bottom: 1px solid var(--slate-100);
+    }
+    .doc-links { display: flex; gap: 8px; margin-bottom: 32px; flex-wrap: wrap; }
+    .doc-links a {
+      font-size: 13px; font-weight: 600; padding: 8px 16px; border-radius: 999px;
+      border: 1px solid var(--slate-100); color: var(--slate-500);
+    }
+    .doc-links a.active { background: var(--black); color: #fff; border-color: var(--black); }
+    .doc-links a:hover { text-decoration: none; border-color: var(--green); color: var(--green); }
+    .doc-links a.active:hover { color: #fff; }
+
+    section { margin-bottom: 40px; }
+
+    h2 {
+      font-size: 17px; font-weight: 700; color: var(--black); margin-bottom: 12px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .h2-num {
+      width: 28px; height: 28px; background: #f0fdf4; border: 1px solid #bbf7d0;
+      border-radius: 8px; display: inline-flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 700; color: var(--green); flex-shrink: 0;
+    }
+    h3 { font-size: 14px; font-weight: 700; color: var(--slate-700); margin: 16px 0 8px; }
+
+    p { color: var(--slate-500); font-size: 15px; line-height: 1.8; margin-bottom: 12px; }
+    p:last-child { margin-bottom: 0; }
+
+    ul { list-style: none; margin: 12px 0; display: flex; flex-direction: column; gap: 8px; }
+    li { display: flex; align-items: flex-start; gap: 10px; color: var(--slate-500); font-size: 15px; line-height: 1.7; }
+    li::before {
+      content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--green);
+      flex-shrink: 0; margin-top: 9px;
+    }
+
+    strong { color: var(--slate-700); font-weight: 600; }
+
+    .info-box {
+      background: var(--slate-50); border: 1px solid var(--slate-100);
+      border-left: 3px solid var(--green); border-radius: 12px; padding: 16px 20px; margin-top: 16px;
+    }
+    .info-box p { margin: 0; font-size: 14px; }
+    .info-box.warn { border-left-color: #f59e0b; }
+
+    .contact-card {
+      background: var(--black); color: #fff; border-radius: 20px; padding: 28px 32px;
+      margin-top: 16px; display: flex; align-items: center; justify-content: space-between;
+      gap: 20px; flex-wrap: wrap;
+    }
+    .contact-card p { color: #94a3b8; margin: 0; font-size: 14px; }
+    .contact-card strong { color: #fff; display: block; font-size: 16px; margin-bottom: 4px; }
+    .contact-btn {
+      display: inline-flex; align-items: center; gap: 8px; background: var(--green);
+      color: #fff; font-weight: 600; font-size: 14px; padding: 10px 20px;
+      border-radius: 999px; text-decoration: none; white-space: nowrap; flex-shrink: 0;
+    }
+    .contact-btn:hover { opacity: .9; text-decoration: none; }
+
+    footer {
+      border-top: 1px solid var(--slate-100); padding: 24px;
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 12px; color: var(--slate-400); font-size: 13px;
+      max-width: 740px; margin: 0 auto;
+    }
+    footer a { color: var(--slate-400); }
+    footer a:hover { color: var(--black); text-decoration: none; }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a class="brand" href="/">
+      <div class="brand-icon">MSB</div>
+      <span class="brand-name">MySmartBasket</span>
+    </a>
+    <a class="nav-back" href="/">← Volver al inicio</a>
+  </nav>
+
+  <main>
+    <div class="page-tag">Legal</div>
+    <h1>Términos y Condiciones</h1>
+    <p class="updated">Última actualización: agosto de 2026</p>
+    <div class="doc-links">
+      <a href="/privacidad.html">Política de Privacidad</a>
+      <a href="/terminos.html" class="active">Términos y Condiciones</a>
+    </div>
+
+    <section>
+      <h2><span class="h2-num">1</span> Aceptación de los términos</h2>
+      <p>
+        Estos Términos y Condiciones («Términos») regulan el acceso y uso de MySmartBasket, tanto el sitio web
+        <strong>mysmartbasket.app</strong> como la aplicación (en conjunto, el «Servicio»), operados por
+        <strong>MySmartBasket</strong> («nosotros»).
+      </p>
+      <p>
+        Al crear una cuenta, marcar la casilla de aceptación durante el registro, o usar el Servicio de cualquier
+        otra forma, confirmas que has leído, entendido y aceptas quedar vinculado por estos Términos y por nuestra
+        <a href="/privacidad.html">Política de Privacidad</a>. Si no estás de acuerdo, no debes usar el Servicio.
+      </p>
+    </section>
+
+    <section>
+      <h2><span class="h2-num">2</span> Quién puede usar el Servicio</h2>
+      <ul>
+        <li>Debes tener al menos <strong>18 años</strong> para crear una cuenta.</li>
+        <li>Los datos que nos proporciones (email, nombre, información de pago) deben ser veraces y estar actualizados.</li>
+        <li>Eres responsable de mantener la confidencialidad de tu contraseña y de toda actividad que ocurra en tu cuenta.</li>
+        <li>Solo puedes tener una cuenta personal, salvo que formes parte de un hogar compartido por otro usuario.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2><span class="h2-num">3</span> Descripción del servicio</h2>
+      <p>
+        MySmartBasket es una herramienta que te ayuda a organizar la compra: crear listas compartidas con tu
+        hogar, comparar precios estimados entre supermercados, y recibir sugerencias generadas por un asistente
+        de inteligencia artificial (recomendaciones de productos, planificación de menús).
+      </p>
+      <div class="info-box">
+        <p>
+          Los precios mostrados son <strong>estimaciones</strong> basadas en la información disponible en cada
+          momento y pueden no coincidir exactamente con el precio final en tienda. No garantizamos la
+          disponibilidad de un producto ni que un supermercado concreto mantenga un precio indicado.
+        </p>
+      </div>
+    </section>
+
+    <section>
+      <h2><span class="h2-num">4</span> Planes y pagos</h2>
+      <h3>4.1 Plan gratuito</h3>
+      <p>El acceso básico a MySmartBasket es gratuito. Puede incluir publicidad de terceros (Google AdSense, Meta Ads) conforme a nuestra <a href="/privacidad.html">Política de Privacidad</a>.</p>
+
+      <h3>4.2 Planes de pago</h3>
+      <ul>
+        <li>Podemos ofrecer planes de suscripción de pago con funciones adicionales. El precio, la periodicidad (mensual/anual) y las funciones incluidas se muestran antes de contratar.</li>
+        <li>Los pagos se procesan a través de <strong>Stripe</strong>. No almacenamos los datos completos de tu tarjeta — ver nuestra <a href="/privacidad.html">Política de Privacidad</a>.</li>
+        <li>Las suscripciones se <strong>renuevan automáticamente</strong> al final de cada periodo, salvo que las canceles antes de la fecha de renovación.</li>
+        <li>Puedes cancelar tu suscripción en cualquier momento desde los ajustes de la cuenta; la cancelación surte efecto al final del periodo ya pagado, sin reembolso proporcional salvo que la ley aplicable exija lo contrario.</li>
+        <li>Nos reservamos el derecho a modificar los precios de los planes de pago, avisando con al menos 30 días de antelación a los usuarios con suscripción activa.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2><span class="h2-num">5</span> El Asistente de Inteligencia Artificial</h2>
+      <ul>
+        <li>Las respuestas del Asistente se generan mediante un modelo de IA de terceros (Google Gemini) y pueden contener errores o imprecisiones.</li>
+        <li>El Asistente <strong>no ofrece consejo médico, nutricional ni financiero profesional</strong>. Para dietas especiales (sin gluten, sin lactosa, kosher, halal, etc.), verifica siempre el etiquetado físico del producto — no confíes únicamente en la respuesta del Asistente.</li>
+        <li>No debes usar el Asistente para obtener información que ponga en riesgo tu salud o la de terceros sin supervisión de un profesional cualificado.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2><span class="h2-num">6</span> Uso aceptable</h2>
+      <p>Al usar el Servicio, te comprometes a NO:</p>
+      <ul>
+        <li>Usar el Servicio con fines ilegales o no autorizados.</li>
+        <li>Intentar acceder a cuentas, hogares o datos de otros usuarios sin autorización.</li>
+        <li>Realizar ingeniería inversa, descompilar o intentar extraer el código fuente del Servicio, salvo que la ley lo permita expresamente.</li>
+        <li>Usar bots, scraping automatizado o cualquier medio automatizado para extraer datos del Servicio a gran escala.</li>
+        <li>Sobrecargar deliberadamente nuestra infraestructura o los sistemas de terceros integrados (por ejemplo, generando peticiones masivas al Asistente de IA).</li>
+        <li>Suplantar la identidad de otra persona o proporcionar información falsa al registrarte.</li>
+      </ul>
+      <p>El incumplimiento de esta sección puede conllevar la suspensión o cancelación de tu cuenta, sin perjuicio de otras acciones legales que correspondan.</p>
+    </section>
+
+    <section>
+      <h2><span class="h2-num">7</span> Propiedad intelectual</h2>
+      <p>
+        El Servicio, su código, diseño, marca y contenidos son propiedad de MySmartBasket o de sus licenciantes,
+        y están protegidos por la normativa de propiedad intelectual aplicable. Te concedemos una licencia
+        limitada, no exclusiva e intransferible para usar el Servicio conforme a estos Términos.
+      </p>
+      <p>
+        Los datos que introduces (listas, preferencias, mensajes al Asistente) siguen siendo tuyos; nos concedes
+        una licencia limitada para procesarlos con el único fin de prestarte el Servicio.
+      </p>
+    </section>
+
+    <section>
+      <h2><span class="h2-num">8</span> Limitación de responsabilidad</h2>
+      <p>
+        El Servicio se ofrece «tal cual» y «según disponibilidad». En la medida permitida por la ley:
+      </p>
+      <ul>
+        <li>No garantizamos que el Servicio esté libre de errores o interrupciones en todo momento.</li>
+        <li>No somos responsables de decisiones de compra tomadas basándote en precios estimados o sugerencias del Asistente de IA.</li>
+        <li>No somos responsables de daños indirectos, incidentales o consecuentes derivados del uso del Servicio.</li>
+        <li>Nada en esta sección excluye responsabilidad que no pueda excluirse legalmente (por ejemplo, por dolo o negligencia grave).</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2><span class="h2-num">9</span> Servicios de terceros</h2>
+      <p>
+        El Servicio se apoya en proveedores externos (Supabase, Google Gemini, Stripe, Google AdSense, Meta Ads,
+        entre otros). No controlamos estos servicios y no somos responsables de sus interrupciones, cambios de
+        condiciones o tratamiento de datos más allá de lo descrito en nuestra
+        <a href="/privacidad.html">Política de Privacidad</a>.
+      </p>
+    </section>
+
+    <section>
+      <h2><span class="h2-num">10</span> Modificación y terminación</h2>
+      <ul>
+        <li>Podemos modificar estos Términos en cualquier momento. Publicaremos la versión actualizada en esta página con la fecha de revisión, y te avisaremos de cambios significativos por email o dentro de la aplicación.</li>
+        <li>Puedes eliminar tu cuenta en cualquier momento desde los ajustes de la aplicación.</li>
+        <li>Podemos suspender o cancelar tu acceso al Servicio si incumples estos Términos, incluyendo el uso indebido descrito en la sección 6.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2><span class="h2-num">11</span> Ley aplicable y jurisdicción</h2>
+      <p>
+        Estos Términos se rigen por la legislación española. Para cualquier controversia derivada de estos
+        Términos, las partes se someten a los juzgados y tribunales competentes según la normativa española de
+        protección de consumidores, sin perjuicio del fuero que pudiera corresponder por normativa imperativa
+        aplicable a usuarios consumidores.
+      </p>
+    </section>
+
+    <section>
+      <h2><span class="h2-num">12</span> Contacto</h2>
+      <div class="contact-card">
+        <div>
+          <strong>¿Dudas sobre estos Términos?</strong>
+          <p>Escríbenos y te respondemos lo antes posible.</p>
+        </div>
+        <a class="contact-btn" href="mailto:contacto@mysmartbasket.app?subject=Consulta sobre Términos y Condiciones">
+          Escribir al equipo →
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>© <span id="year"></span> MySmartBasket. Todos los derechos reservados.</span>
+    <a href="/privacidad.html">Privacidad</a>
+  </footer>
+
+  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+</body>
+</html>

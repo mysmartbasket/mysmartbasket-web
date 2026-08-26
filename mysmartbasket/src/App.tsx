@@ -1662,7 +1662,9 @@ export default function App() {
 
           <p className="mt-8 text-sm text-slate-400">
             Al enviar aceptas nuestra{' '}
-            <a href="/privacidad.html" className="underline hover:text-slate-600 transition-colors">política de privacidad</a>.
+            <a href="/privacidad.html" className="underline hover:text-slate-600 transition-colors">política de privacidad</a>
+            {' '}y{' '}
+            <a href="/terminos.html" className="underline hover:text-slate-600 transition-colors">términos y condiciones</a>.
             Puedes darte de baja cuando quieras.
           </p>
         </div>
@@ -1703,6 +1705,7 @@ export default function App() {
               <li><a href="#solution"                          className="hover:text-brand-green transition-colors">Sobre nosotros</a></li>
               <li><a href="mailto:contacto@mysmartbasket.app"      className="hover:text-brand-green transition-colors">Contacto</a></li>
               <li><a href="/privacidad.html"                   className="hover:text-brand-green transition-colors">Privacidad</a></li>
+              <li><a href="/terminos.html"                     className="hover:text-brand-green transition-colors">Términos y Condiciones</a></li>
             </ul>
           </div>
         </div>
@@ -1711,6 +1714,7 @@ export default function App() {
           <p>© {year} MySmartBasket. Todos los derechos reservados.</p>
           <div className="flex gap-8">
             <a href="/privacidad.html"              className="hover:text-slate-600 transition-colors">Privacidad</a>
+            <a href="/terminos.html"                className="hover:text-slate-600 transition-colors">Términos</a>
             <a href="mailto:contacto@mysmartbasket.app" className="hover:text-slate-600 transition-colors">Contacto</a>
           </div>
         </div>

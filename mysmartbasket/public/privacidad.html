@@ -68,9 +68,17 @@
       letter-spacing: -.025em; line-height: 1.15; color: var(--black); margin-bottom: 10px;
     }
     .updated {
-      font-size: 13px; color: var(--slate-400); margin-bottom: 48px;
+      font-size: 13px; color: var(--slate-400); margin-bottom: 24px;
       padding-bottom: 32px; border-bottom: 1px solid var(--slate-100);
     }
+    .doc-links { display: flex; gap: 8px; margin-bottom: 32px; flex-wrap: wrap; }
+    .doc-links a {
+      font-size: 13px; font-weight: 600; padding: 8px 16px; border-radius: 999px;
+      border: 1px solid var(--slate-100); color: var(--slate-500);
+    }
+    .doc-links a.active { background: var(--black); color: #fff; border-color: var(--black); }
+    .doc-links a:hover { text-decoration: none; border-color: var(--green); color: var(--green); }
+    .doc-links a.active:hover { color: #fff; }
 
     section { margin-bottom: 40px; }
 
@@ -83,6 +91,7 @@
       border-radius: 8px; display: inline-flex; align-items: center; justify-content: center;
       font-size: 12px; font-weight: 700; color: var(--green); flex-shrink: 0;
     }
+    h3 { font-size: 14px; font-weight: 700; color: var(--slate-700); margin: 16px 0 8px; }
 
     p { color: var(--slate-500); font-size: 15px; line-height: 1.8; margin-bottom: 12px; }
     p:last-child { margin-bottom: 0; }
@@ -95,12 +104,17 @@
     }
 
     strong { color: var(--slate-700); font-weight: 600; }
+    code {
+      background: var(--slate-50); border: 1px solid var(--slate-100); border-radius: 4px;
+      padding: 1px 6px; font-size: 13px; font-family: ui-monospace, monospace; color: var(--slate-700);
+    }
 
     .info-box {
       background: var(--slate-50); border: 1px solid var(--slate-100);
       border-left: 3px solid var(--green); border-radius: 12px; padding: 16px 20px; margin-top: 16px;
     }
     .info-box p { margin: 0; font-size: 14px; }
+    .info-box.warn { border-left-color: #f59e0b; }
 
     .contact-card {
       background: var(--black); color: #fff; border-radius: 20px; padding: 28px 32px;
@@ -115,6 +129,10 @@
       border-radius: 999px; text-decoration: none; white-space: nowrap; flex-shrink: 0;
     }
     .contact-btn:hover { opacity: .9; text-decoration: none; }
+
+    table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 14px; }
+    th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--slate-100); color: var(--slate-500); }
+    th { color: var(--slate-700); font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: .03em; }
 
     footer {
       border-top: 1px solid var(--slate-100); padding: 24px;
@@ -140,12 +158,17 @@
     <div class="page-tag">Legal</div>
     <h1>Política de Privacidad</h1>
     <p class="updated">Última actualización: agosto de 2026</p>
+    <div class="doc-links">
+      <a href="/privacidad.html" class="active">Política de Privacidad</a>
+      <a href="/terminos.html">Términos y Condiciones</a>
+    </div>
 
     <section>
       <h2><span class="h2-num">1</span> Responsable del tratamiento</h2>
       <p>
         <strong>MySmartBasket</strong> (en adelante, «nosotros» o «la empresa») es responsable del tratamiento
-        de los datos personales recogidos a través del sitio web <strong>mysmartbasket.app</strong>.
+        de los datos personales recogidos a través del sitio web <strong>mysmartbasket.app</strong> y de la
+        aplicación MySmartBasket (web y, en el futuro, móvil).
       </p>
       <p>
         Puedes contactar con nosotros en cualquier momento escribiendo a
@@ -154,90 +177,165 @@
     </section>
 
     <section>
-      <h2><span class="h2-num">2</span> Datos que recogemos</h2>
-      <p>Recogemos los datos que nos proporcionas voluntariamente a través del formulario de lista de espera (dos pasos):</p>
+      <h2><span class="h2-num">2</span> A quién aplica esta política</h2>
+      <p>Esta política cubre a dos tipos de personas, según cómo interactúes con nosotros:</p>
+      <ul>
+        <li><strong>Visitantes de la lista de espera:</strong> personas que solo han dejado su correo en <code>mysmartbasket.app</code> para recibir acceso anticipado.</li>
+        <li><strong>Usuarios registrados:</strong> personas que tienen una cuenta activa en la aplicación, con hogar, cestas de la compra, preferencias, y opcionalmente una suscripción de pago.</li>
+      </ul>
+      <p>Cada sección indica a cuál de los dos grupos aplica cuando no es evidente por el contexto.</p>
+    </section>
+
+    <section>
+      <h2><span class="h2-num">3</span> Datos que recogemos</h2>
+
+      <h3>3.1 Lista de espera (visitantes)</h3>
       <ul>
         <li><strong>Dirección de correo electrónico</strong> — necesaria para enviarte la invitación de acceso anticipado.</li>
-        <li><strong>Gasto mensual aproximado en la compra</strong> — opcional, seleccionas uno de cuatro rangos predefinidos (&lt;200€, 200–400€, 400–600€, &gt;600€). Se usa para entender mejor el perfil de nuestros usuarios y mejorar el producto.</li>
+        <li><strong>Gasto mensual aproximado en la compra</strong> — opcional, uno de cuatro rangos predefinidos. Se usa para entender mejor el perfil de nuestros usuarios y mejorar el producto.</li>
       </ul>
       <p>Ambos datos se envían a través de <strong>Formspree</strong> y se almacenan en sus servidores.</p>
+
+      <h3>3.2 Cuenta de usuario (usuarios registrados)</h3>
+      <ul>
+        <li><strong>Datos de registro:</strong> correo electrónico, contraseña (cifrada, nunca la vemos en claro), nombre y foto de perfil opcionales.</li>
+        <li><strong>Datos de hogar y compra:</strong> hogares que creas o a los que te unes, miembros del hogar, cestas de la compra, productos añadidos, preferencias alimentarias/dietéticas que marcas, e historial de compras completadas.</li>
+        <li><strong>Datos de uso del Asistente de IA:</strong> ver sección 5.</li>
+        <li><strong>Datos de pago:</strong> solo si contratas un plan de pago — ver sección 6.</li>
+      </ul>
+
       <div class="info-box">
-        <p>No recogemos datos de pago ni de localización. Si aceptas la publicidad en el aviso de cookies, Google AdSense puede recoger identificadores de dispositivo y datos de navegación para mostrarte anuncios — ver sección 8.</p>
+        <p>No recogemos datos de localización GPS ni categorías especiales de datos (salud, origen étnico, religión, etc.), más allá de las preferencias dietéticas que tú decides indicarnos voluntariamente (p. ej. «sin gluten», «vegetariano»).</p>
       </div>
     </section>
 
     <section>
-      <h2><span class="h2-num">3</span> Finalidad y base legal</h2>
-      <p>Tus datos se usan exclusivamente para:</p>
-      <ul>
-        <li>Avisarte cuando abramos el acceso anticipado a la aplicación.</li>
-        <li>Enviarte actualizaciones relevantes del proyecto (máximo una vez al mes).</li>
-        <li>Mejorar el producto y priorizar funcionalidades según el perfil de los usuarios interesados.</li>
-      </ul>
-      <p>
-        La base legal del tratamiento es tu <strong>consentimiento expreso</strong> al enviar el formulario
-        (art. 6.1.a del Reglamento General de Protección de Datos — RGPD).
-      </p>
+      <h2><span class="h2-num">4</span> Finalidad y base legal</h2>
+      <table>
+        <tr><th>Finalidad</th><th>Base legal</th></tr>
+        <tr><td>Avisarte del acceso anticipado (lista de espera)</td><td>Consentimiento (art. 6.1.a RGPD)</td></tr>
+        <tr><td>Prestar el servicio (cuenta, hogares, cestas, comparador)</td><td>Ejecución de un contrato (art. 6.1.b RGPD)</td></tr>
+        <tr><td>Gestionar tu suscripción de pago</td><td>Ejecución de un contrato (art. 6.1.b RGPD)</td></tr>
+        <tr><td>Responder a través del Asistente de IA</td><td>Ejecución de un contrato (art. 6.1.b RGPD)</td></tr>
+        <tr><td>Mostrarte publicidad personalizada</td><td>Consentimiento (art. 6.1.a RGPD)</td></tr>
+        <tr><td>Seguridad, prevención de fraude y abuso</td><td>Interés legítimo (art. 6.1.f RGPD)</td></tr>
+        <tr><td>Comunicaciones sobre el proyecto (máx. 1/mes)</td><td>Consentimiento (art. 6.1.a RGPD)</td></tr>
+      </table>
     </section>
 
     <section>
-      <h2><span class="h2-num">4</span> Almacenamiento local (localStorage)</h2>
+      <h2><span class="h2-num">5</span> El Asistente de compra con Inteligencia Artificial</h2>
       <p>
-        Este sitio web utiliza el almacenamiento local del navegador (<strong>localStorage</strong>) para guardar
-        preferencias de usuario. Estos datos <strong>nunca se envían a ningún servidor</strong> y permanecen
-        únicamente en tu dispositivo:
-      </p>
-      <ul>
-        <li><strong>Preferencia de tema</strong> (<code>theme</code>) — guarda si has elegido el modo claro u oscuro.</li>
-        <li><strong>Contador de lista de espera</strong> (<code>msb_wl_count</code>) — almacena el número de personas apuntadas que ves en pantalla, para que se actualice correctamente entre visitas. No contiene datos personales.</li>
-      </ul>
-      <p>
-        Puedes borrar estos datos en cualquier momento desde los ajustes de tu navegador
-        (Configuración → Privacidad → Borrar datos del sitio).
-      </p>
-    </section>
-
-    <section>
-      <h2><span class="h2-num">5</span> Conservación de los datos</h2>
-      <p>
-        Conservamos tus datos mientras tengas interés en recibir información sobre MySmartBasket.
-        Si solicitas la baja o ejerces tu derecho de supresión, los eliminamos en un plazo máximo de
-        <strong>30 días naturales</strong>.
-      </p>
-      <p>
-        Tras el lanzamiento oficial de la aplicación, los datos de la lista de espera se eliminarán
-        una vez que todos los inscritos hayan recibido su invitación.
-      </p>
-    </section>
-
-    <section>
-      <h2><span class="h2-num">6</span> Destinatarios y transferencias</h2>
-      <p>
-        No vendemos ni cedemos tus datos a terceros. Únicamente los compartimos con proveedores
-        de servicios que actúan como <strong>encargados del tratamiento</strong>:
+        Cuando usas el Asistente de IA (chat, recomendaciones o el planificador de menú), enviamos a
+        <strong>Google (API de Gemini)</strong> el contenido necesario para generar una respuesta útil:
       </p>
       <ul>
-        <li><strong>Formspree</strong> — gestión del formulario de lista de espera. Sus servidores pueden estar ubicados en EE. UU., con garantías bajo el marco de transferencias EU-EE.UU.</li>
-        <li><strong>Google Fonts</strong> — fuente tipográfica Inter cargada desde los CDN de Google. Google puede registrar la IP de la solicitud. Consulta la <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">política de privacidad de Google</a>.</li>
-        <li><strong>Google AdSense</strong> — solo si aceptas la publicidad en el aviso de cookies. Google actúa como responsable independiente del tratamiento de los datos que recoge para personalizar y medir anuncios. Consulta cómo Google usa estos datos en <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener noreferrer">policies.google.com/technologies/partner-sites</a>.</li>
+        <li>El mensaje que escribes y el historial reciente de la conversación.</li>
+        <li>Tus preferencias alimentarias/dietéticas activas.</li>
+        <li>Los productos de tu cesta de la compra activa en ese momento.</li>
+        <li>Un resumen de tu consumo mensual, si lo tienes disponible (categorías compradas, gasto estimado).</li>
       </ul>
-      <p>No realizamos ninguna otra transferencia internacional de datos.</p>
+      <p>
+        Google procesa estos datos para generar la respuesta conforme a sus propias condiciones de
+        <a href="https://ai.google.dev/gemini-api/terms" target="_blank" rel="noopener noreferrer">API de Gemini</a> y no los usa para entrenar sus modelos generales
+        cuando se accede a través de la API de pago que utilizamos. Conservamos el historial de tu conversación en
+        nuestra base de datos para que puedas continuarla entre sesiones; puedes borrarlo en cualquier momento desde
+        el propio chat de la aplicación.
+      </p>
+      <div class="info-box warn">
+        <p><strong>El Asistente no sustituye a un profesional.</strong> Las sugerencias nutricionales, de dietas o de salud son orientativas y no constituyen consejo médico. No inventa precios: si no dispone de datos reales, te lo indica explícitamente.</p>
+      </div>
     </section>
 
     <section>
-      <h2><span class="h2-num">7</span> Tus derechos</h2>
+      <h2><span class="h2-num">6</span> Pagos y suscripciones</h2>
+      <p>
+        Si contratas un plan de pago, el procesamiento se realiza a través de <strong>Stripe, Inc.</strong>,
+        nuestro proveedor de pagos. Cuando introduces los datos de tu tarjeta, estos se envían
+        <strong>directamente a Stripe mediante conexión cifrada</strong>: nosotros no almacenamos ni tenemos
+        acceso en ningún momento al número completo de tu tarjeta ni al código de seguridad.
+      </p>
+      <p>De Stripe podemos recibir y almacenar únicamente los datos necesarios para gestionar tu suscripción:</p>
+      <ul>
+        <li>Los últimos 4 dígitos de la tarjeta y la marca (Visa, Mastercard, etc.), a efectos de identificación en tu panel de facturación.</li>
+        <li>El estado de tu suscripción (activa, cancelada, impago) y el historial de facturas.</li>
+        <li>Nombre y correo electrónico asociados al pago, si difieren de los de tu cuenta.</li>
+      </ul>
+      <p>
+        Stripe actúa como responsable independiente del tratamiento respecto a los datos que recoge para procesar
+        el pago (cumplimiento normativo, prevención de fraude). Consulta la
+        <a href="https://stripe.com/es/privacy" target="_blank" rel="noopener noreferrer">política de privacidad de Stripe</a>.
+      </p>
+    </section>
+
+    <section>
+      <h2><span class="h2-num">7</span> Almacenamiento local (localStorage)</h2>
+      <p>
+        Utilizamos el almacenamiento local del navegador (<strong>localStorage</strong>) para guardar
+        preferencias y estado de la interfaz. Estos datos <strong>nunca se envían a ningún servidor</strong> salvo
+        que se indique lo contrario:
+      </p>
+      <ul>
+        <li><strong>Preferencia de tema</strong> (<code>theme</code>) — modo claro u oscuro.</li>
+        <li><strong>Elección sobre el aviso de cookies</strong> (<code>msb_ad_consent</code>) — si aceptaste o rechazaste la publicidad personalizada.</li>
+        <li><strong>Sesión de la aplicación</strong> (token de acceso) — si has iniciado sesión, para mantenerte conectado. Se elimina al cerrar sesión.</li>
+      </ul>
+      <p>Puedes borrar estos datos en cualquier momento desde los ajustes de tu navegador.</p>
+    </section>
+
+    <section>
+      <h2><span class="h2-num">8</span> Conservación de los datos</h2>
+      <ul>
+        <li><strong>Lista de espera:</strong> hasta que recibas tu invitación o solicites la baja; máximo 30 días tras la solicitud de supresión.</li>
+        <li><strong>Cuenta de usuario:</strong> mientras la cuenta esté activa. Si la eliminas, borramos tus datos personales en un plazo máximo de 30 días, salvo obligación legal de conservación (p. ej. facturas, por motivos fiscales, durante el plazo exigido por ley).</li>
+        <li><strong>Historial de chat con el Asistente de IA:</strong> mientras mantengas la cuenta o hasta que lo borres manualmente.</li>
+        <li><strong>Datos de facturación:</strong> el plazo exigido por la normativa fiscal aplicable (en España, generalmente 4-6 años).</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2><span class="h2-num">9</span> Destinatarios y transferencias</h2>
+      <p>No vendemos tus datos. Los compartimos únicamente con proveedores que nos prestan servicio:</p>
+      <ul>
+        <li><strong>Formspree</strong> — gestión del formulario de lista de espera. Servidores en EE. UU., con garantías bajo el marco de transferencias EU-EE. UU.</li>
+        <li><strong>Supabase</strong> — base de datos y autenticación de la aplicación (cuentas, hogares, cestas, mensajes del chat).</li>
+        <li><strong>Google (API de Gemini)</strong> — procesamiento del Asistente de IA, ver sección 5.</li>
+        <li><strong>Stripe</strong> — procesamiento de pagos, ver sección 6.</li>
+        <li><strong>Google Fonts</strong> — fuente tipográfica Inter. Google puede registrar la IP de la solicitud.</li>
+        <li><strong>Google AdSense</strong> — solo si aceptas la publicidad. Ver sección 10.</li>
+        <li><strong>Meta (Facebook/Instagram Ads)</strong> — solo si aceptas la publicidad. Ver sección 10.</li>
+      </ul>
+      <p>Cuando un proveedor está fuera del Espacio Económico Europeo, nos aseguramos de que existan garantías adecuadas (cláusulas contractuales tipo de la Comisión Europea u otro mecanismo válido conforme al RGPD).</p>
+    </section>
+
+    <section>
+      <h2><span class="h2-num">10</span> Cookies y publicidad</h2>
+      <p>
+        Mostramos un aviso de cookies antes de activar cualquier cookie publicitaria. Rechazar la publicidad no
+        afecta a ninguna funcionalidad de la web ni de la aplicación.
+      </p>
+      <ul>
+        <li><strong>Técnicas (siempre activas):</strong> localStorage descrito en la sección 7, y las cookies de sesión necesarias para que Stripe procese un pago.</li>
+        <li><strong>Google AdSense (solo si aceptas):</strong> cookies publicitarias que Google usa para mostrar y medir anuncios, incluida personalización entre sitios. Más información en la <a href="https://policies.google.com/technologies/ads" target="_blank" rel="noopener noreferrer">política de anuncios de Google</a>.</li>
+        <li><strong>Meta Ads / Píxel de Meta (solo si aceptas):</strong> utilizamos el Píxel de Meta y/o la API de Conversiones para medir la efectividad de nuestros anuncios en Facebook e Instagram y mostrarte publicidad relevante en esas plataformas. Esto puede implicar el envío a Meta Platforms Ireland Limited de tu IP, información del dispositivo y acciones que realizas en el sitio (p. ej. completar el registro), de forma seudonimizada. Meta actúa como responsable independiente de este tratamiento — consulta su <a href="https://www.facebook.com/privacy/policy/" target="_blank" rel="noopener noreferrer">política de privacidad</a> y gestiona tus preferencias de anuncios desde tu cuenta de Meta.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2><span class="h2-num">11</span> Tus derechos</h2>
       <p>De acuerdo con el RGPD y la LOPDGDD, puedes ejercer en cualquier momento los siguientes derechos:</p>
       <ul>
         <li><strong>Acceso</strong> — saber qué datos tenemos sobre ti.</li>
         <li><strong>Rectificación</strong> — corregir datos inexactos.</li>
-        <li><strong>Supresión</strong> — solicitar que eliminemos tus datos.</li>
+        <li><strong>Supresión</strong> — solicitar que eliminemos tus datos o cuenta.</li>
         <li><strong>Limitación</strong> — solicitar que suspendamos el tratamiento.</li>
         <li><strong>Oposición</strong> — oponerte al tratamiento de tus datos.</li>
         <li><strong>Portabilidad</strong> — recibir tus datos en formato estructurado.</li>
       </ul>
       <p>
-        También puedes presentar una reclamación ante la
-        <a href="https://www.aepd.es" target="_blank" rel="noopener noreferrer">Agencia Española de Protección de Datos (AEPD)</a>.
+        Muchos de estos derechos (borrar el historial de chat, editar tu perfil, eliminar tu cuenta) puedes
+        ejercerlos directamente desde los ajustes de la aplicación. También puedes presentar una reclamación
+        ante la <a href="https://www.aepd.es" target="_blank" rel="noopener noreferrer">Agencia Española de Protección de Datos (AEPD)</a>.
       </p>
       <div class="contact-card">
         <div>
@@ -251,44 +349,38 @@
     </section>
 
     <section>
-      <h2><span class="h2-num">8</span> Cookies y tecnologías de seguimiento</h2>
+      <h2><span class="h2-num">12</span> Menores de edad</h2>
       <p>
-        Este sitio web muestra un aviso de cookies antes de activar cualquier cookie publicitaria.
-        Las tecnologías de almacenamiento utilizadas son:
-      </p>
-      <ul>
-        <li><strong>localStorage (siempre activo)</strong> — preferencia de tema, contador de lista de espera y tu elección sobre el aviso de cookies (<code>msb_ad_consent</code>), ver sección 4. No son cookies y no se comparten con terceros.</li>
-        <li><strong>Google Fonts</strong> — carga de fuentes tipográficas; puede implicar una petición HTTP a servidores de Google.</li>
-        <li><strong>Formspree</strong> — procesamiento del formulario; puede establecer cookies técnicas propias.</li>
-        <li><strong>Google AdSense (solo si aceptas)</strong> — cookies publicitarias que Google usa para mostrar y medir anuncios, y que pueden emplearse para personalización de anuncios entre sitios. No se cargan hasta que aceptas expresamente en el aviso de cookies, y puedes retirar tu consentimiento en cualquier momento borrando los datos del sitio desde los ajustes de tu navegador. Más información en la <a href="https://policies.google.com/technologies/ads" target="_blank" rel="noopener noreferrer">política de anuncios de Google</a>.</li>
-      </ul>
-      <div class="info-box">
-        <p>Rechazar la publicidad no afecta a ninguna funcionalidad de la web ni a tu inscripción en la lista de espera.</p>
-      </div>
-    </section>
-
-    <section>
-      <h2><span class="h2-num">9</span> Seguridad</h2>
-      <p>
-        Aplicamos medidas técnicas y organizativas razonables para proteger tus datos contra accesos no
-        autorizados, pérdida o alteración. Toda la comunicación con este sitio se realiza mediante
-        <strong>HTTPS con cifrado TLS</strong>.
+        MySmartBasket no está dirigida a menores de 18 años y no recogemos conscientemente datos de menores.
+        Si detectamos que un menor se ha registrado sin el consentimiento de sus padres o tutores, eliminaremos
+        la cuenta y los datos asociados.
       </p>
     </section>
 
     <section>
-      <h2><span class="h2-num">10</span> Cambios en esta política</h2>
+      <h2><span class="h2-num">13</span> Seguridad</h2>
       <p>
-        Podemos actualizar esta política para reflejar cambios en nuestras prácticas o en la normativa aplicable.
-        Publicaremos la nueva versión en esta misma página con la fecha de actualización.
-        Si los cambios son significativos y estás en nuestra lista de espera, te lo comunicaremos por email.
+        Aplicamos medidas técnicas y organizativas para proteger tus datos: cifrado de contraseñas, políticas de
+        acceso a nivel de fila en nuestra base de datos (cada usuario solo puede ver los datos de su propio hogar),
+        validación de sesión en el servidor, y límites de uso para prevenir abuso. Toda la comunicación con
+        nuestros servicios se realiza mediante <strong>HTTPS con cifrado TLS</strong>.
+      </p>
+    </section>
+
+    <section>
+      <h2><span class="h2-num">14</span> Cambios en esta política</h2>
+      <p>
+        Podemos actualizar esta política para reflejar cambios en nuestras prácticas, en las funcionalidades de
+        la aplicación (por ejemplo, al añadir un nuevo proveedor) o en la normativa aplicable. Publicaremos la
+        nueva versión en esta misma página con la fecha de actualización. Si los cambios son significativos, te
+        lo notificaremos por email o mediante un aviso en la aplicación.
       </p>
     </section>
   </main>
 
   <footer>
     <span>© <span id="year"></span> MySmartBasket. Todos los derechos reservados.</span>
-    <a href="mailto:contacto@mysmartbasket.app">contacto@mysmartbasket.app</a>
+    <a href="/terminos.html">Términos y Condiciones</a>
   </footer>
 
   <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
