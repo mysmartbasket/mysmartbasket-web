@@ -1304,7 +1304,9 @@ export default function App() {
               transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
             >
               <motion.a
-                href="#demo"
+                href="https://mysmartbasket.github.io/MySmartBasket-MVP/"
+                target="_blank"
+                rel="noopener noreferrer"
                 whileHover={{ scale: 1.04 }}
                 whileTap={{ scale: 0.97 }}
                 className="inline-flex items-center gap-2 bg-green-50 border border-green-100 px-4 py-2 rounded-full text-brand-green text-sm font-bold mb-8 hover:bg-green-100 transition-colors"
@@ -1313,7 +1315,7 @@ export default function App() {
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-brand-green" />
                 </span>
-                Demo interactiva más abajo
+                Demo disponible — pruébala ahora
               </motion.a>
 
               <h1 className="text-5xl lg:text-7xl font-bold text-brand-black dark:text-white leading-[1.1] tracking-tight mb-8 overflow-hidden">
@@ -1359,7 +1361,7 @@ export default function App() {
                 className="mt-8 flex flex-wrap items-center gap-6 text-sm text-slate-500"
               >
                 <span className="flex items-center gap-1.5"><CheckCircle2 size={15} className="text-brand-green" /> Sin spam</span>
-                <span className="flex items-center gap-1.5"><CheckCircle2 size={15} className="text-brand-green" /> Gratis durante la beta</span>
+                <span className="flex items-center gap-1.5"><CheckCircle2 size={15} className="text-brand-green" /> Acceso anticipado, sin coste</span>
                 <span className="flex items-center gap-1.5"><CheckCircle2 size={15} className="text-brand-green" /> Cancelas cuando quieras</span>
               </motion.div>
 
