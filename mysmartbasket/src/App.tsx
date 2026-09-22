@@ -28,6 +28,7 @@ import {
   Carrot,
   Milk,
   Egg,
+  Gift,
 } from 'lucide-react';
 
 const ScrollProgress = memo(() => {
@@ -1603,9 +1604,18 @@ export default function App() {
             </div>
             <SectionHeading centered title="Solicita tu acceso anticipado" subtitle="Estamos dando acceso de forma gradual, por orden de inscripción." />
           </FadeUp>
-          <p className="text-slate-500 dark:text-slate-400 text-xl mb-12">
+          <p className="text-slate-500 dark:text-slate-400 text-xl mb-6">
             Estamos ampliando el acceso gradualmente. Deja tu correo y te notificamos en cuanto tu plaza esté disponible. Sin comunicaciones comerciales, solo el aviso de acceso.
           </p>
+
+          <FadeUp>
+            <div className="flex items-center justify-center gap-3 max-w-lg mx-auto mb-12 px-5 py-3.5 rounded-2xl bg-gradient-to-r from-brand-green to-emerald-500 shadow-lg shadow-green-500/20">
+              <Gift size={22} className="text-white flex-shrink-0" />
+              <p className="text-white font-bold text-sm sm:text-base">
+                Apúntate ahora y recibe 1 mes de plan Pro <span className="underline decoration-white/40">totalmente gratis</span>
+              </p>
+            </div>
+          </FadeUp>
 
           <AnimatePresence mode="wait">
             {formState.succeeded || formStep === 'done' ? (
