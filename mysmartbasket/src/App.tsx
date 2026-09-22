@@ -266,7 +266,7 @@ const StickyCTA = memo(() => {
 const FAQ_ITEMS = [
   { q: '¿Es gratuito?',                              a: 'Tenemos un plan gratuito y un plan Pro por 4,99€/mes con funciones avanzadas. Si te apuntas a la lista de espera, te llevas 1 mes de plan Pro totalmente gratis al lanzamiento.' },
   { q: '¿Cómo obtiene la app los precios?',          a: 'Contamos con un sistema propio que monitoriza precios en Mercadona, Día, Aldi y Alcampo cada 30 minutos, y seguimos ampliando la cobertura a más cadenas próximamente. No dependemos de fuentes externas, lo que garantiza mayor fiabilidad y actualización en tiempo real.' },
-  { q: '¿Cuándo está disponible?',                   a: 'Actualmente estamos en beta cerrada con los primeros usuarios. Ampliamos el acceso de forma gradual para asegurar una buena experiencia desde el primer día. Apúntate y te notificamos cuando tu plaza esté lista.' },
+  { q: '¿Cuándo está disponible?',                   a: 'Estamos en la fase final de desarrollo, con lanzamiento previsto en las próximas semanas. Iremos dando acceso de forma gradual a quienes estén en la lista de espera, para asegurar una buena experiencia desde el primer día. Apúntate y te notificamos en cuanto tu plaza esté lista.' },
   { q: '¿Está disponible en mi supermercado?',       a: 'Por ahora cubrimos Mercadona, Día, Aldi y Alcampo, y vamos incorporando más cadenas próximamente. Si tu cadena habitual no aparece todavía, puedes solicitarla — la añadimos por orden de demanda.' },
   { q: '¿Puedo compartirlo con mi familia?',         a: 'Sí. Puedes crear un hogar compartido con hasta 5 miembros. Todos acceden a la misma lista en tiempo real, sin duplicados ni necesidad de coordinación adicional.' },
   { q: '¿Cómo se tratan mis datos personales?',      a: 'Solo almacenamos tu correo electrónico y tus preferencias de compra. No vendemos ni compartimos datos con terceros. Puedes solicitar la eliminación completa de tu cuenta en cualquier momento escribiéndonos a contacto@mysmartbasket.app.' },
@@ -325,7 +325,7 @@ const DEMO_CATALOG = [
   { name: 'Yogur Natural x4 125g',             basePrice: '1,20€',  savings: '0,20€', brand: 'Danone'          },
   { name: 'Huevos Camperos M (12 u.)',         basePrice: '3,40€',  savings: '0,45€', brand: 'Camping'         },
   { name: 'Pechuga de Pollo 500g',             basePrice: '4,90€',  savings: '0,60€', brand: 'Aves Nobles'     },
-  { name: 'Salmón Noruego Fresco 300g',        basePrice: '6,20€',  savings: '0,80€', brand: 'Lidl'            },
+  { name: 'Salmón Noruego Fresco 300g',        basePrice: '6,20€',  savings: '0,80€', brand: 'Pescanova'       },
   { name: 'Tomate Triturado 800g',             basePrice: '0,85€',  savings: '0,15€', brand: 'Solís'           },
   { name: 'Arroz Redondo 1kg',                 basePrice: '1,45€',  savings: '0,25€', brand: 'Nomen'           },
   { name: 'Pasta Espagueti 500g',              basePrice: '0,75€',  savings: '0,10€', brand: 'Gallo'           },
@@ -626,8 +626,8 @@ const ScrollDownIndicator = () => (
 const SOLUTION_LIST = [
   { name: 'Aceite de Oliva Virgen Extra', store: 'FreshMart',  price: '9,50€', old: '10,70€' },
   { name: 'Leche Desnatada (pack 6)',     store: 'Mercadona',  price: '5,40€', old: '6,00€'  },
-  { name: 'Pechuga de Pollo (1kg)',       store: 'Lidl',       price: '6,90€', old: '8,20€'  },
-  { name: 'Aguacate Hass (2 uds)',        store: 'Carrefour',  price: '3,20€', old: '3,65€'  },
+  { name: 'Pechuga de Pollo (1kg)',       store: 'Alcampo',    price: '6,90€', old: '8,20€'  },
+  { name: 'Aguacate Hass (2 uds)',        store: 'Día',        price: '3,20€', old: '3,65€'  },
 ];
 
 const SolutionVisual = memo(() => (
