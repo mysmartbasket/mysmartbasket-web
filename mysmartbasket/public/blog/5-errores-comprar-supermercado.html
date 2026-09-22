@@ -17,6 +17,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8159510657807581"
+    crossorigin="anonymous"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
@@ -64,6 +66,19 @@
     footer { border-top: 1px solid var(--slate-100); padding: 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; color: var(--slate-400); font-size: 13px; max-width: 700px; margin: 0 auto; }
     footer a { color: var(--slate-400); }
     footer a:hover { color: var(--black); text-decoration: none; }
+
+    .msb-ad-slot { max-width: 680px; margin: 40px auto; }
+    .msb-ad-label { display: block; text-align: center; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: var(--slate-400); margin-bottom: 8px; }
+
+    #msb-consent-banner { position: fixed; bottom: 0; left: 0; right: 0; z-index: 70; background: var(--black); color: #fff; padding: 16px 24px; display: flex; flex-direction: column; gap: 12px; box-shadow: 0 -10px 30px rgba(0,0,0,.2); }
+    @media (min-width: 640px) { #msb-consent-banner { flex-direction: row; align-items: center; } }
+    .msb-consent-text { font-size: 13px; color: #cbd5e1; line-height: 1.5; flex: 1; margin: 0; }
+    .msb-consent-text a { color: #fff; text-decoration: underline; }
+    .msb-consent-actions { display: flex; gap: 8px; flex-shrink: 0; }
+    .msb-consent-btn { padding: 8px 16px; font-size: 12px; font-weight: 700; border-radius: 999px; border: none; cursor: pointer; font-family: inherit; }
+    .msb-consent-reject { background: #1e293b; color: #fff; }
+    .msb-consent-accept { background: var(--green); color: #fff; }
+    .msb-consent-btn:hover { opacity: .9; }
   </style>
 </head>
 <body>
@@ -128,6 +143,8 @@
         tenías.
       </p>
 
+      <div class="msb-ad-slot" data-ad-slot="blog_article_mid"></div>
+
       <h2><span class="num">4.</span> Ignorar las marcas blancas</h2>
       <p>
         En muchas categorías (pasta, arroz, legumbres, productos de limpieza) la diferencia entre la marca líder y
@@ -166,6 +183,8 @@
       </div>
     </article>
 
+    <div class="msb-ad-slot" data-ad-slot="blog_article_bottom"></div>
+
     <a class="back-blog" href="/blog/">← Volver al blog</a>
   </main>
 
@@ -175,5 +194,6 @@
   </footer>
 
   <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+  <script src="/consent-ads.js" defer></script>
 </body>
 </html>
