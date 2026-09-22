@@ -777,12 +777,6 @@ const HeroShowcase = ({ onOpenCanva }: { onOpenCanva: () => void }) => {
 
   return (
     <section className="pt-32 pb-20 px-6 relative overflow-hidden bg-white dark:bg-slate-950" style={{ contain: 'paint' }}>
-        {/* Background blobs — opacity-only animation avoids expensive blur+scale repaint */}
-        <div className="absolute inset-0 -z-10 overflow-hidden pointer-events-none">
-          <div className="absolute top-0 right-0 w-[60%] h-[80%] bg-gradient-to-bl from-green-50 dark:from-green-950/20 to-transparent" />
-          <div className="absolute -top-20 -right-20 w-96 h-96 rounded-full bg-brand-green/5 dark:bg-brand-green/10 blur-3xl animate-hero-glow" style={{ animationDelay: '3s' }} />
-          <div className="absolute top-40 left-0 w-64 h-64 rounded-full bg-green-100/40 dark:bg-green-900/10 blur-3xl animate-hero-glow" style={{ animationDelay: '1.5s' }} />
-        </div>
         <div className="max-w-7xl mx-auto w-full">
           <div className="max-w-3xl mx-auto text-center">
           <motion.div
