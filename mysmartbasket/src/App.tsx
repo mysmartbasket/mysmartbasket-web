@@ -16,7 +16,6 @@ import {
   X,
   ChevronRight,
   ChevronDown,
-  ShieldCheck,
   Zap,
   Leaf,
   Moon,
@@ -29,6 +28,9 @@ import {
   Milk,
   Egg,
   Gift,
+  MapPin,
+  HandCoins,
+  Sparkles,
 } from 'lucide-react';
 
 const ScrollProgress = memo(() => {
@@ -248,7 +250,7 @@ const StickyCTA = memo(() => {
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 100, opacity: 0 }}
           transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-          className="fixed bottom-0 left-0 right-0 z-[50] p-4 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-t border-slate-100 dark:border-slate-800 shadow-2xl md:hidden"
+          className="fixed bottom-0 left-0 right-0 z-[50] p-4 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-t border-slate-100 dark:border-slate-800 shadow-2xl lg:hidden"
         >
           <a
             href="#waitlist"
@@ -262,13 +264,19 @@ const StickyCTA = memo(() => {
   );
 });
 
+/* ── Team ── */
+const TEAM = [
+  { initials: 'MC', name: 'Mario Cohén Fernández',        role: 'Cofundador y CTO', bio: 'Lidera el desarrollo de producto y la tecnología detrás de MySmartBasket.' },
+  { initials: 'IG', name: 'Ignacio Gómez de Fernando',    role: 'Cofundador y CEO', bio: 'Lidera la estrategia y el crecimiento de MySmartBasket.' },
+];
+
 /* ── FAQ ── */
 const FAQ_ITEMS = [
   { q: '¿Es gratuito?',                              a: 'Tenemos un plan gratuito y un plan Pro por 4,99€/mes con funciones avanzadas. Si te apuntas a la lista de espera, te llevas 1 mes de plan Pro totalmente gratis al lanzamiento.' },
-  { q: '¿Cómo obtiene la app los precios?',          a: 'Contamos con un sistema propio que monitoriza precios en Mercadona, Día, Aldi y Alcampo cada 30 minutos, y seguimos ampliando la cobertura a más cadenas próximamente. No dependemos de fuentes externas, lo que garantiza mayor fiabilidad y actualización en tiempo real.' },
+  { q: '¿Cómo obtiene la app los precios?',          a: 'Contamos con un sistema propio que monitoriza precios en Mercadona, Día, Aldi y Alcampo cada 24 horas, y seguimos ampliando la cobertura a más cadenas próximamente. No dependemos de fuentes externas, lo que garantiza mayor fiabilidad.' },
   { q: '¿Cuándo está disponible?',                   a: 'Estamos en la fase final de desarrollo, con lanzamiento previsto en las próximas semanas. Iremos dando acceso de forma gradual a quienes estén en la lista de espera, para asegurar una buena experiencia desde el primer día. Apúntate y te notificamos en cuanto tu plaza esté lista.' },
   { q: '¿Está disponible en mi supermercado?',       a: 'Por ahora cubrimos Mercadona, Día, Aldi y Alcampo, y vamos incorporando más cadenas próximamente. Si tu cadena habitual no aparece todavía, puedes solicitarla — la añadimos por orden de demanda.' },
-  { q: '¿Puedo compartirlo con mi familia?',         a: 'Sí. Puedes crear un hogar compartido con hasta 5 miembros. Todos acceden a la misma lista en tiempo real, sin duplicados ni necesidad de coordinación adicional.' },
+  { q: '¿Puedo compartirlo con mi familia?',         a: 'Sí. Puedes crear un hogar compartido con hasta 5 miembros que comparten la misma cesta, sin duplicados ni necesidad de coordinación adicional. Además, cada uno puede registrar lo que paga para repartir el gasto automáticamente.' },
   { q: '¿Cómo se tratan mis datos personales?',      a: 'Solo almacenamos tu correo electrónico y tus preferencias de compra. No vendemos ni compartimos datos con terceros. Puedes solicitar la eliminación completa de tu cuenta en cualquier momento escribiéndonos a contacto@mysmartbasket.app.' },
 ];
 const FAQItem = ({ question, answer }: { question: string; answer: string }) => {
@@ -312,9 +320,10 @@ const gridItem = {
 };
 
 const STORES = [
-  { label: 'FreshMart',   price: '41,20€', status: 'Mejor precio', width: '70%',  color: 'bg-brand-green', active: true  },
-  { label: 'MaxiMarket',  price: '43,80€', status: '+2.60€',        width: '85%',  color: 'bg-slate-200 dark:bg-slate-600',   active: false },
-  { label: 'EcoSuper',    price: '44,30€', status: '+3.10€',        width: '100%', color: 'bg-slate-200 dark:bg-slate-600',   active: false },
+  { label: 'Mercadona', price: '41,20€', status: 'Mejor precio', width: '60%',  color: 'bg-brand-green', active: true  },
+  { label: 'Alcampo',   price: '42,60€', status: '+1.40€',       width: '75%',  color: 'bg-slate-200 dark:bg-slate-600',   active: false },
+  { label: 'Día',       price: '43,80€', status: '+2.60€',       width: '90%',  color: 'bg-slate-200 dark:bg-slate-600',   active: false },
+  { label: 'Aldi',      price: '44,30€', status: '+3.10€',       width: '100%', color: 'bg-slate-200 dark:bg-slate-600',   active: false },
 ];
 
 const DEMO_CATALOG = [
@@ -514,7 +523,7 @@ const DemoSection = memo(() => {
           <div className="w-full lg:w-1/2">
             <div className="bg-white dark:bg-slate-800 rounded-[2.5rem] border border-slate-100 dark:border-slate-700 shadow-2xl p-8 relative overflow-hidden h-full min-h-[500px] flex flex-col">
               <h4 className="text-2xl font-bold dark:text-white mb-8">
-                Mejor opción detectada: <span className="text-brand-green">FreshMart</span>
+                Mejor opción detectada: <span className="text-brand-green">Mercadona</span>
               </h4>
 
               <div className="flex-1 space-y-6">
@@ -541,8 +550,8 @@ const DemoSection = memo(() => {
               <div className="mt-auto p-6 rounded-3xl border border-dashed border-slate-200 dark:border-slate-600 flex items-start gap-4">
                 <Zap size={22} className="text-brand-green mt-0.5 flex-shrink-0" />
                 <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
-                  Nuestro sistema ha detectado que comprando el aceite en <strong className="text-slate-700 dark:text-slate-200">FreshMart</strong> y
-                  los aguacates en <strong className="text-slate-700 dark:text-slate-200">EcoSuper</strong>, podrías ahorrar <strong className="text-slate-700 dark:text-slate-200">0,80€ adicionales</strong> esta semana.
+                  Nuestro sistema ha detectado que comprando el aceite en <strong className="text-slate-700 dark:text-slate-200">Mercadona</strong> y
+                  los aguacates en <strong className="text-slate-700 dark:text-slate-200">Día</strong>, podrías ahorrar <strong className="text-slate-700 dark:text-slate-200">0,80€ adicionales</strong> esta semana.
                 </p>
               </div>
             </div>
@@ -624,7 +633,7 @@ const ScrollDownIndicator = () => (
 );
 
 const SOLUTION_LIST = [
-  { name: 'Aceite de Oliva Virgen Extra', store: 'FreshMart',  price: '9,50€', old: '10,70€' },
+  { name: 'Aceite de Oliva Virgen Extra', store: 'Aldi',       price: '9,50€', old: '10,70€' },
   { name: 'Leche Desnatada (pack 6)',     store: 'Mercadona',  price: '5,40€', old: '6,00€'  },
   { name: 'Pechuga de Pollo (1kg)',       store: 'Alcampo',    price: '6,90€', old: '8,20€'  },
   { name: 'Aguacate Hass (2 uds)',        store: 'Día',        price: '3,20€', old: '3,65€'  },
@@ -709,14 +718,14 @@ const SolutionSection = memo(() => {
           >
             <SectionHeading title="La Solución" subtitle="Tecnología al servicio de tu compra diaria.">
               <p className="text-slate-500 dark:text-slate-400 text-lg leading-relaxed mb-8">
-                MySmartBasket analiza tus hábitos de compra, compara precios entre tus supermercados habituales y genera la lista óptima para cada semana — sin que tengas que hacer nada manualmente.
+                MySmartBasket junta en una sola app todo lo que hasta ahora hacías por separado — comparar precios, decidir qué cocinar y repartir la cuenta — pensado para el día a día de tu hogar.
               </p>
               <div className="space-y-4">
                 {[
-                  'Comparativa automática de precios entre supermercados',
-                  'Listas inteligentes basadas en tus hábitos de consumo',
-                  'Planificación de menús adaptada a lo que vas a comprar',
-                  'Integración con servicios de entrega a domicilio',
+                  'Ahorra hasta un 40% sin cambiar lo que compras',
+                  'Menos tiempo pensando qué cocinar cada día',
+                  'Cero líos para saber quién debe qué en casa',
+                  'Siempre sabrás dónde te compensa más comprar',
                 ].map((item, i) => (
                   <motion.div
                     key={i}
@@ -856,8 +865,7 @@ const HeroShowcase = ({ onOpenCanva }: { onOpenCanva: () => void }) => {
               >
                 <div className="flex flex-col items-center gap-1.5 cursor-not-allowed select-none">
                   <span className="text-[9px] uppercase tracking-wide font-bold text-slate-400">Próximamente</span>
-                  <div className="flex items-center gap-2 h-10 px-4 bg-black text-white rounded-lg">
-                    <Download size={15} />
+                  <div className="flex items-center justify-center h-10 w-[103px] bg-black text-white rounded-lg">
                     <span className="text-sm font-bold">App Store</span>
                   </div>
                 </div>
@@ -954,11 +962,12 @@ const Navbar = () => {
         </a>
 
         {/* Desktop Nav */}
-        <div className="hidden md:flex items-center gap-4 lg:gap-6 text-sm font-semibold text-slate-600 dark:text-slate-300 whitespace-nowrap">
+        <div className="hidden lg:flex items-center gap-4 lg:gap-6 text-sm font-semibold text-slate-600 dark:text-slate-300 whitespace-nowrap">
           <a href="#problem"      className="hover:text-brand-green transition-colors">Problema</a>
           <a href="#solution"     className="hover:text-brand-green transition-colors">Solución</a>
           <a href="#features"     className="hover:text-brand-green transition-colors">Funcionalidades</a>
           <a href="#how-it-works" className="hover:text-brand-green transition-colors">Cómo funciona</a>
+          <a href="#team"        className="hover:text-brand-green transition-colors">Equipo</a>
           <a href="#faq"         className="hover:text-brand-green transition-colors">FAQ</a>
           <a href="/blog/"       className="hover:text-brand-green transition-colors">Blog</a>
           <button
@@ -977,7 +986,7 @@ const Navbar = () => {
         </div>
 
         {/* Mobile right */}
-        <div className="flex items-center gap-1 md:hidden">
+        <div className="flex items-center gap-1 lg:hidden">
           <button onClick={toggleDark} className="p-2 text-slate-500 dark:text-slate-300" aria-label="Cambiar tema">
             {dark ? <Sun size={18} /> : <Moon size={18} />}
           </button>
@@ -999,12 +1008,13 @@ const Navbar = () => {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -10, scale: 0.98 }}
             transition={{ duration: 0.18 }}
-            className="mt-2 max-w-6xl mx-auto bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-3xl p-6 flex flex-col gap-4 md:hidden shadow-2xl"
+            className="mt-2 max-w-6xl mx-auto bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-3xl p-6 flex flex-col gap-4 lg:hidden shadow-2xl"
           >
             <a href="#problem"      onClick={close} className="text-base font-semibold text-slate-700 dark:text-slate-200 hover:text-brand-green transition-colors">Problema</a>
             <a href="#solution"     onClick={close} className="text-base font-semibold text-slate-700 dark:text-slate-200 hover:text-brand-green transition-colors">Solución</a>
             <a href="#features"     onClick={close} className="text-base font-semibold text-slate-700 dark:text-slate-200 hover:text-brand-green transition-colors">Funcionalidades</a>
             <a href="#how-it-works" onClick={close} className="text-base font-semibold text-slate-700 dark:text-slate-200 hover:text-brand-green transition-colors">Cómo funciona</a>
+            <a href="#team"         onClick={close} className="text-base font-semibold text-slate-700 dark:text-slate-200 hover:text-brand-green transition-colors">Equipo</a>
             <a href="#faq"          onClick={close} className="text-base font-semibold text-slate-700 dark:text-slate-200 hover:text-brand-green transition-colors">FAQ</a>
             <a href="/blog/"        onClick={close} className="text-base font-semibold text-slate-700 dark:text-slate-200 hover:text-brand-green transition-colors">Blog</a>
             <a
@@ -1159,9 +1169,10 @@ const SCREENS = [
         </div>
         <div className="space-y-2">
           {[
-            { name: 'FreshMart',  price: '41,20€', width: '70%',  best: true },
-            { name: 'MaxiMarket', price: '43,80€', width: '85%',  best: false },
-            { name: 'EcoSuper',   price: '44,30€', width: '100%', best: false },
+            { name: 'Mercadona', price: '41,20€', width: '60%',  best: true },
+            { name: 'Alcampo',   price: '42,60€', width: '75%',  best: false },
+            { name: 'Día',       price: '43,80€', width: '90%',  best: false },
+            { name: 'Aldi',      price: '44,30€', width: '100%', best: false },
           ].map((s, i) => (
             <div key={i} className={`p-3 rounded-xl border ${s.best ? 'border-brand-green bg-green-50/50' : 'border-slate-100 bg-white'}`}>
               <div className="flex justify-between items-center mb-1.5">
@@ -1234,7 +1245,7 @@ const SCREENS = [
               <Zap size={10} className="text-white" />
             </div>
             <div className="bg-slate-100 rounded-2xl rounded-tl-none p-2.5 max-w-[85%]">
-              <p className="text-[10px] text-slate-700">Esta semana ahorras <span className="font-bold text-brand-green">11,40€</span> en FreshMart. 🎉</p>
+              <p className="text-[10px] text-slate-700">Esta semana ahorras <span className="font-bold text-brand-green">11,40€</span> en Mercadona. 🎉</p>
             </div>
           </div>
         </div>
@@ -1346,6 +1357,7 @@ const SECTIONS: { id: string; label: string }[] = [
   { id: 'features',     label: 'MySmartBasket - Funcionalidades'      },
   { id: 'demo',         label: 'MySmartBasket - Demo interactiva'     },
   { id: 'how-it-works', label: 'MySmartBasket - Cómo funciona'        },
+  { id: 'team',         label: 'MySmartBasket - Equipo'               },
   { id: 'waitlist',     label: 'MySmartBasket - Únete'                },
 ];
 
@@ -1500,14 +1512,6 @@ export default function App() {
           >
             <motion.div variants={gridItem} className="md:col-span-2 lg:col-span-6">
               <HeroFeatureCard
-                icon={Zap}
-                title="Reposición automática"
-                description="Aprende tus ciclos de consumo y anticipa lo que vas a necesitar antes de que se agote, sin intervención manual."
-                stat="Cero listas olvidadas"
-              />
-            </motion.div>
-            <motion.div variants={gridItem} className="md:col-span-2 lg:col-span-6">
-              <HeroFeatureCard
                 icon={TrendingDown}
                 title="Optimización por supermercado"
                 description="Identifica en qué cadena cada producto está más barato en ese momento y propone la combinación más rentable."
@@ -1515,11 +1519,19 @@ export default function App() {
                 accent
               />
             </motion.div>
+            <motion.div variants={gridItem} className="md:col-span-2 lg:col-span-6">
+              <HeroFeatureCard
+                icon={Sparkles}
+                title="Recetas con IA a tu medida"
+                description="Un agente de IA propone recetas según tus preferencias y añade los ingredientes que te faltan directamente a la cesta."
+                stat="Menos pensar qué cocinar"
+              />
+            </motion.div>
             {[
-              { icon: Users,       title: 'Listas compartidas en tiempo real',      description: 'Varios miembros del hogar pueden editar la misma lista simultáneamente, sin duplicados ni coordinación extra.' },
-              { icon: ShieldCheck, title: 'Alternativas más saludables',            description: 'Cuando hay opciones con mejor perfil nutricional y sabor equivalente, las sugiere como alternativa sin imponer nada.' },
-              { icon: Leaf,        title: 'Reducción de desperdicio alimentario',   description: 'Registra las fechas de caducidad y avisa de qué consumir primero para minimizar lo que se tira cada semana.' },
-              { icon: Search,      title: 'Cobertura en ampliación constante',      description: 'Ya disponible en Mercadona, Día, Aldi y Alcampo, con más cadenas incorporándose próximamente. Precios actualizados cada 30 minutos de forma automática.' },
+              { icon: Users,       title: 'Cestas compartidas',                     description: 'Comparte la cesta con el resto del hogar para que todos vean la misma lista, sin duplicados ni coordinación extra.' },
+              { icon: HandCoins,   title: 'Reparto de gastos',      description: 'Cada persona de la cesta registra lo que ha pagado y la app calcula automáticamente quién le debe qué a quién.' },
+              { icon: MapPin,      title: 'Supermercado compatible más cercano',     description: 'Localiza el supermercado compatible más próximo a ti entre los disponibles, para que sepas dónde aprovechar cada precio.' },
+              { icon: Search,      title: 'Cobertura en ampliación constante',      description: 'Ya disponible en Mercadona, Día, Aldi y Alcampo, con más cadenas incorporándose próximamente. Precios actualizados cada 24 horas de forma automática.' },
             ].map((f, i) => (
               <motion.div key={i} variants={gridItem} className="lg:col-span-3">
                 <FeatureCard icon={f.icon} title={f.title} description={f.description} />
@@ -1554,8 +1566,8 @@ export default function App() {
             </div>
             {[
               { step: '01', title: 'Configura tu perfil de compra',    text: 'Indícanos cuántas personas sois, qué supermercados tienes cerca y cuál es tu presupuesto habitual.' },
-              { step: '02', title: 'Recibe tu lista semanal',          text: 'Generada en base a tus hábitos de consumo, lo que ya tienes en casa y los precios actuales de tu zona.' },
-              { step: '03', title: 'Compra en tienda o desde casa',    text: 'Usa la lista en el móvil durante la compra, o realiza el pedido online directamente desde la app.' },
+              { step: '02', title: 'Recibe tu lista semanal',          text: 'Cada semana te llega la lista con el mejor precio de cada producto y alguna idea para cocinar, lista para revisar en un momento.' },
+              { step: '03', title: 'Compra y reparte con tu hogar',    text: 'Compra desde el móvil junto al resto de la cesta y anota quién ha pagado — la app calcula el resto por ti.' },
             ].map((s, i) => (
               <motion.div key={i} variants={gridItem}>
                 <div className="text-center group">
@@ -1569,6 +1581,35 @@ export default function App() {
                   <h3 className="text-xl font-bold dark:text-white mb-4">{s.title}</h3>
                   <p className="text-slate-500 dark:text-slate-400 px-4">{s.text}</p>
                 </div>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+      </section>
+
+      {/* TEAM */}
+      <section id="team" className="py-24 px-6">
+        <div className="max-w-5xl mx-auto">
+          <FadeUp><SectionHeading centered title="Equipo" subtitle="Quiénes estamos detrás" /></FadeUp>
+          <motion.div
+            className="grid sm:grid-cols-2 gap-8 max-w-2xl mx-auto"
+            variants={gridContainer}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, margin: '-60px' }}
+          >
+            {TEAM.map((member, i) => (
+              <motion.div
+                key={i}
+                variants={gridItem}
+                className="p-8 bg-white dark:bg-slate-800 rounded-3xl border border-slate-100 dark:border-slate-700 shadow-sm text-center"
+              >
+                <div className="w-20 h-20 mx-auto mb-5 rounded-full bg-green-50 dark:bg-green-900/30 text-brand-green flex items-center justify-center text-2xl font-extrabold">
+                  {member.initials}
+                </div>
+                <h3 className="text-lg font-bold text-brand-black dark:text-white mb-1">{member.name}</h3>
+                <p className="text-brand-green text-sm font-semibold mb-3">{member.role}</p>
+                <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">{member.bio}</p>
               </motion.div>
             ))}
           </motion.div>
@@ -1714,12 +1755,12 @@ export default function App() {
               <span className="text-xl font-bold dark:text-white">MySmartBasket</span>
             </div>
             <p className="text-slate-500 dark:text-slate-400 max-w-sm mb-6">
-              Hacemos que la compra semanal sea más barata y fácil para las familias españolas.
+              Compara. Ahorra. Disfruta.
             </p>
-            <div className="flex gap-3">
+            {/* <div className="flex gap-3">
               <div title="App Store — próximamente" className="w-10 h-10 rounded-full bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-slate-400 hover:text-brand-green cursor-not-allowed transition-colors border border-slate-100 dark:border-slate-700"><Download size={18} /></div>
               <div title="Google Play — próximamente" className="w-10 h-10 rounded-full bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-slate-400 hover:text-brand-green cursor-not-allowed transition-colors border border-slate-100 dark:border-slate-700"><Smartphone size={18} /></div>
-            </div>
+            </div> */}
           </div>
 
           <div>
@@ -1736,7 +1777,7 @@ export default function App() {
           <div>
             <h4 className="font-bold mb-6">Compañía</h4>
             <ul className="space-y-4 text-slate-500 dark:text-slate-400 text-sm">
-              <li><a href="#solution"                          className="hover:text-brand-green transition-colors">Sobre nosotros</a></li>
+              <li><a href="#team"                              className="hover:text-brand-green transition-colors">Sobre nosotros</a></li>
               <li><a href="mailto:contacto@mysmartbasket.app"      className="hover:text-brand-green transition-colors">Contacto</a></li>
               <li><a href="/privacidad.html"                   className="hover:text-brand-green transition-colors">Privacidad</a></li>
               <li><a href="/terminos.html"                     className="hover:text-brand-green transition-colors">Términos y Condiciones</a></li>
