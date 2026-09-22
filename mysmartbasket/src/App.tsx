@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, memo, useCallback } from 'react';
 import { useForm, ValidationError } from '@formspree/react';
-import { motion, AnimatePresence, MotionConfig, useScroll, useSpring, useInView, useMotionValue, useTransform, animate as motionAnimate } from 'motion/react';
+import { motion, AnimatePresence, MotionConfig, useScroll, useSpring, useInView, useMotionValue, useMotionValueEvent, useTransform, animate as motionAnimate } from 'motion/react';
 import {
   ShoppingBasket,
   ShoppingCart,
@@ -661,7 +661,7 @@ const ScrollDownIndicator = () => (
     initial={{ opacity: 0, y: 10 }}
     animate={{ opacity: 1, y: 0 }}
     transition={{ delay: 1.4, duration: 0.6 }}
-    className="hidden lg:flex flex-col items-center gap-2 mt-16"
+    className="hidden lg:flex flex-col items-center gap-2 mt-16 mx-auto"
   >
     <span className="text-[10px] text-slate-400 font-semibold tracking-[0.2em] uppercase">Scroll</span>
     <div className="w-5 h-8 rounded-full border-2 border-slate-300 dark:border-slate-600 flex items-start justify-center pt-1.5">
@@ -674,7 +674,46 @@ const ScrollDownIndicator = () => (
   </motion.div>
 );
 
-/* ── Solution section (parallax image) ── */
+const SOLUTION_LIST = [
+  { name: 'Aceite de Oliva Virgen Extra', store: 'FreshMart',  price: '9,50€', old: '10,70€' },
+  { name: 'Leche Desnatada (pack 6)',     store: 'Mercadona',  price: '5,40€', old: '6,00€'  },
+  { name: 'Pechuga de Pollo (1kg)',       store: 'Lidl',       price: '6,90€', old: '8,20€'  },
+  { name: 'Aguacate Hass (2 uds)',        store: 'Carrefour',  price: '3,20€', old: '3,65€'  },
+];
+
+const SolutionVisual = memo(() => (
+  <div className="p-7 sm:p-9">
+    <div className="flex items-center justify-between mb-6">
+      <div>
+        <div className="text-[11px] font-bold text-brand-green uppercase tracking-wider mb-1">Lista de esta semana</div>
+        <div className="text-lg font-bold text-brand-black dark:text-white">Compra optimizada</div>
+      </div>
+      <div className="w-11 h-11 rounded-2xl bg-green-50 dark:bg-green-900/30 flex items-center justify-center text-brand-green flex-shrink-0">
+        <ShoppingBasket size={20} />
+      </div>
+    </div>
+    <div className="space-y-2.5">
+      {SOLUTION_LIST.map((item, i) => (
+        <div key={i} className="flex items-center justify-between gap-3 p-3.5 bg-slate-50 dark:bg-slate-900/60 rounded-2xl">
+          <div className="min-w-0">
+            <div className="text-sm font-semibold text-slate-800 dark:text-white truncate">{item.name}</div>
+            <div className="text-[11px] text-slate-400 font-medium">{item.store}</div>
+          </div>
+          <div className="text-right flex-shrink-0">
+            <div className="text-sm font-bold text-brand-black dark:text-white">{item.price}</div>
+            <div className="text-[10px] text-slate-300 dark:text-slate-500 line-through">{item.old}</div>
+          </div>
+        </div>
+      ))}
+    </div>
+    <div className="mt-6 pt-6 border-t border-slate-100 dark:border-slate-700 flex items-center justify-between">
+      <span className="text-sm font-medium text-slate-500 dark:text-slate-400">Total con MySmartBasket</span>
+      <span className="text-2xl font-bold text-brand-green">25,00€</span>
+    </div>
+  </div>
+));
+
+/* ── Solution section (parallax visual) ── */
 const SolutionSection = memo(() => {
   const sectionRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({ target: sectionRef, offset: ['start end', 'end start'] });
@@ -692,27 +731,24 @@ const SolutionSection = memo(() => {
             viewport={{ once: true, margin: '-60px' }}
             transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
           >
-            {/* Image with parallax inside rounded mask */}
-            <div className="relative z-10 rounded-[2.5rem] overflow-hidden shadow-2xl border-4 border-white">
-              <motion.img
-                style={{ y: imageY, scale: imageScale }}
-                src="https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=800&h=600"
-                alt="Cesta de la compra saludable"
-                className="w-full block"
-                referrerPolicy="no-referrer"
-              />
-            </div>
             <div className="absolute -top-10 -left-10 w-40 h-40 bg-brand-green/10 rounded-full blur-3xl pointer-events-none" />
             <div className="absolute -bottom-10 -right-10 w-60 h-60 bg-green-200/20 rounded-full blur-3xl pointer-events-none" />
+            {/* Product visual (own UI, not a stock photo) */}
+            <div className="relative z-10 rounded-[2.5rem] overflow-hidden shadow-2xl border-4 border-white dark:border-slate-800 bg-white dark:bg-slate-800">
+              <motion.div style={{ y: imageY, scale: imageScale }}>
+                <SolutionVisual />
+              </motion.div>
+            </div>
+            {/* Stat callout — sits below the card so it never overlaps its content */}
             <motion.div
-              initial={{ opacity: 0, x: 20, y: 20 }}
-              whileInView={{ opacity: 1, x: 0, y: 0 }}
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
-              className="absolute bottom-10 -right-10 bg-brand-black text-white p-6 rounded-3xl shadow-2xl z-20 max-w-[200px]"
+              className="relative z-10 mt-6 flex items-center gap-4 bg-brand-black text-white rounded-2xl px-6 py-5 max-w-sm"
             >
-              <div className="text-3xl font-bold mb-1">–€85</div>
-              <div className="text-sm text-slate-400">Ahorro medio en el primer mes de uso.</div>
+              <div className="text-3xl font-extrabold text-brand-green flex-shrink-0">–85€</div>
+              <div className="text-sm text-slate-300 leading-snug">Ahorro medio en el primer mes de uso.</div>
             </motion.div>
           </motion.div>
 
@@ -723,7 +759,7 @@ const SolutionSection = memo(() => {
             transition={{ duration: 0.7, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
           >
             <SectionHeading title="La Solución" subtitle="Tecnología al servicio de tu compra diaria.">
-              <p className="text-slate-500 text-lg leading-relaxed mb-8">
+              <p className="text-slate-500 dark:text-slate-400 text-lg leading-relaxed mb-8">
                 MySmartBasket analiza tus hábitos de compra, compara precios entre tus supermercados habituales y genera la lista óptima para cada semana — sin que tengas que hacer nada manualmente.
               </p>
               <div className="space-y-4">
@@ -749,7 +785,7 @@ const SolutionSection = memo(() => {
                     >
                       <CheckCircle2 size={14} />
                     </motion.div>
-                    <span className="font-medium text-slate-700">{item}</span>
+                    <span className="font-medium text-slate-700 dark:text-slate-200">{item}</span>
                   </motion.div>
                 ))}
               </div>
@@ -761,23 +797,165 @@ const SolutionSection = memo(() => {
   );
 });
 
-/* ── Hero mockup with parallax ── */
-const HeroMockup = memo(() => {
-  const { scrollY } = useScroll();
-  const y = useTransform(scrollY, [0, 700], [0, -60]);
-  const rotate = useTransform(scrollY, [0, 700], [0, 3]);
+/* ── Desktop breakpoint hook (drives the scroll-showcase, off on mobile) ── */
+const useIsDesktop = () => {
+  const [isDesktop, setIsDesktop] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia('(min-width: 1024px)');
+    const update = () => setIsDesktop(mq.matches);
+    update();
+    mq.addEventListener('change', update);
+    return () => mq.removeEventListener('change', update);
+  }, []);
+  return isDesktop;
+};
+
+/* ── Hero: pinned showcase — the phone's screen advances as you scroll, Apple-style ── */
+const HeroShowcase = ({ onOpenCanva }: { onOpenCanva: () => void }) => {
+  // --- Scroll-driven phone showcase: disabled for now (collided with the floating navbar) ---
+  // const sectionRef = useRef<HTMLElement>(null);
+  // const isDesktop = useIsDesktop();
+  // const [active, setActive] = useState(0);
+  // const { scrollYProgress } = useScroll({ target: sectionRef, offset: ['start start', 'end end'] });
+  // useMotionValueEvent(scrollYProgress, 'change', (v) => {
+  //   if (!isDesktop) return;
+  //   setActive(Math.min(SCREENS.length - 1, Math.max(0, Math.floor(v * SCREENS.length))));
+  // });
+  // useEffect(() => {
+  //   if (isDesktop) return;
+  //   const t = setInterval(() => setActive((i) => (i + 1) % SCREENS.length), 3000);
+  //   return () => clearInterval(t);
+  // }, [isDesktop]);
+
   return (
-    <motion.div
-      style={{ y, rotateZ: rotate }}
-      initial={{ opacity: 0, scale: 0.95 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.6, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-      className="perspective-1000"
-    >
-      <MockupApp />
-    </motion.div>
+    <section className="pt-32 pb-20 px-6 relative overflow-hidden bg-white dark:bg-slate-950" style={{ contain: 'paint' }}>
+        {/* Background blobs — opacity-only animation avoids expensive blur+scale repaint */}
+        <div className="absolute inset-0 -z-10 overflow-hidden pointer-events-none">
+          <div className="absolute top-0 right-0 w-[60%] h-[80%] bg-gradient-to-bl from-green-50 dark:from-green-950/20 to-transparent" />
+          <div className="absolute -top-20 -right-20 w-96 h-96 rounded-full bg-brand-green/5 dark:bg-brand-green/10 blur-3xl animate-hero-glow" style={{ animationDelay: '3s' }} />
+          <div className="absolute top-40 left-0 w-64 h-64 rounded-full bg-green-100/40 dark:bg-green-900/10 blur-3xl animate-hero-glow" style={{ animationDelay: '1.5s' }} />
+        </div>
+        <div className="max-w-7xl mx-auto w-full">
+          <div className="max-w-3xl mx-auto text-center">
+          <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <motion.a
+                href="https://mysmartbasket.github.io/MySmartBasket-MVP/"
+                target="_blank"
+                rel="noopener noreferrer"
+                whileHover={{ scale: 1.04 }}
+                whileTap={{ scale: 0.97 }}
+                className="inline-flex items-center gap-2 bg-green-50 border border-green-100 px-4 py-2 rounded-full text-brand-green text-sm font-bold mb-8 hover:bg-green-100 transition-colors"
+              >
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-brand-green" />
+                </span>
+                Demo disponible — pruébala ahora
+              </motion.a>
+
+              <h1 className="text-5xl lg:text-7xl font-extrabold text-brand-black dark:text-white leading-[1.05] tracking-[-0.03em] mb-8 overflow-hidden">
+                <WordReveal text="Ahorra en la compra semanal" delay={0.1} />
+                {' '}
+                <WordReveal text="sin cambiar lo que compras." className="text-brand-green" delay={0.55} />
+              </h1>
+
+              <motion.p
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.55, delay: 0.9 }}
+                className="text-xl text-slate-500 dark:text-slate-400 leading-relaxed mb-10 max-w-lg mx-auto"
+              >
+                Cada semana pagas más de lo que deberías sin saber exactamente por qué. MySmartBasket analiza los precios de los supermercados de tu zona, genera tu lista y te indica dónde comprar cada producto para gastar lo menos posible.
+              </motion.p>
+
+              <motion.div
+                initial={{ opacity: 0, y: 14 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 1.0 }}
+                className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center justify-center"
+              >
+                <MagneticCTA
+                  href="#waitlist"
+                  className="bg-brand-green text-white px-7 py-4 rounded-full font-bold text-base hover:opacity-90 transition-opacity flex items-center justify-center gap-2 shadow-xl shadow-green-100"
+                >
+                  Reservar mi plaza <ArrowRight size={18} />
+                </MagneticCTA>
+                <MagneticCTA
+                  onClick={onOpenCanva}
+                  className="bg-brand-black text-white px-7 py-4 rounded-full font-bold text-base hover:bg-slate-800 transition-all flex items-center justify-center gap-2"
+                >
+                  Conócenos mejor
+                </MagneticCTA>
+              </motion.div>
+
+              {/* Trust badges */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.5, delay: 1.1 }}
+                className="mt-8 flex flex-wrap items-center justify-center gap-6 text-sm text-slate-500"
+              >
+                <span className="flex items-center gap-1.5"><CheckCircle2 size={15} className="text-brand-green" /> Sin spam</span>
+                <span className="flex items-center gap-1.5"><CheckCircle2 size={15} className="text-brand-green" /> Acceso anticipado, sin coste</span>
+                <span className="flex items-center gap-1.5"><CheckCircle2 size={15} className="text-brand-green" /> Cancelas cuando quieras</span>
+              </motion.div>
+
+              {/* Store Banners */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.5, delay: 1.2 }}
+                className="mt-8 flex flex-wrap justify-center gap-4 opacity-70"
+              >
+                <div className="flex items-center gap-3 bg-black text-white px-4 py-2 rounded-xl border border-white/10 cursor-not-allowed select-none">
+                  <Apple size={20} fill="white" />
+                  <div className="leading-none">
+                    <div className="text-[9px] uppercase opacity-60">Próximamente en</div>
+                    <div className="text-sm font-bold">App Store</div>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3 bg-black text-white px-4 py-2 rounded-xl border border-white/10 cursor-not-allowed select-none">
+                  <Play size={18} fill="white" />
+                  <div className="leading-none">
+                    <div className="text-[9px] uppercase opacity-60">Próximamente en</div>
+                    <div className="text-sm font-bold">Google Play</div>
+                  </div>
+                </div>
+              </motion.div>
+
+              <ScrollDownIndicator />
+            </motion.div>
+
+          {/* Phone showcase — commented out for now, see note above
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.6, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+            className="relative mx-auto lg:mx-0"
+          >
+            <div className="absolute left-1/2 -translate-x-1/2 -bottom-2 w-52 h-10 bg-black/15 dark:bg-black/40 blur-2xl rounded-full" />
+            <MockupApp active={active} />
+            <div className="hidden lg:flex flex-col gap-2.5 absolute top-1/2 -translate-y-1/2 -right-8">
+              {SCREENS.map((_, i) => (
+                <div
+                  key={i}
+                  className={`w-1.5 rounded-full transition-all duration-300 ${
+                    i === active ? 'h-7 bg-brand-green' : 'h-3.5 bg-slate-200 dark:bg-slate-700'
+                  }`}
+                />
+              ))}
+            </div>
+          </motion.div>
+          */}
+          </div>
+        </div>
+    </section>
   );
-});
+};
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -813,24 +991,26 @@ const Navbar = () => {
     <nav
       role="navigation"
       aria-label="Navegación principal"
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled
-          ? 'bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-100 dark:border-slate-800 py-3'
-          : 'bg-transparent py-6'
-      }`}
+      className="fixed top-3 sm:top-4 left-3 sm:left-4 right-3 sm:right-4 z-50"
     >
-      <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
+      <div
+        className={`max-w-6xl mx-auto px-4 sm:px-5 flex justify-between items-center rounded-full transition-all duration-300 ${
+          isScrolled
+            ? 'bg-white/90 dark:bg-slate-900/85 backdrop-blur-md border border-slate-200/70 dark:border-slate-700/70 shadow-[0_8px_30px_rgba(15,23,42,0.08)] py-2'
+            : 'bg-white/70 dark:bg-slate-900/60 backdrop-blur-md border border-white/60 dark:border-slate-700/40 py-2.5'
+        }`}
+      >
         <a href="#top" className="flex items-center gap-2.5 group">
           <img
             src="/android-chrome-192x192.png"
             alt="MySmartBasket logo"
-            className="w-14 h-14 rounded-2xl group-hover:scale-105 transition-transform"
+            className="w-9 h-9 rounded-xl group-hover:scale-105 transition-transform"
           />
-          <span className="text-xl font-bold tracking-tight text-brand-black dark:text-white">MySmartBasket</span>
+          <span className="text-base font-extrabold tracking-tight text-brand-black dark:text-white">MySmartBasket</span>
         </a>
 
         {/* Desktop Nav */}
-        <div className="hidden md:flex items-center gap-8 text-sm font-medium text-slate-600 dark:text-slate-300">
+        <div className="hidden md:flex items-center gap-4 lg:gap-6 text-sm font-semibold text-slate-600 dark:text-slate-300 whitespace-nowrap">
           <a href="#problem"      className="hover:text-brand-green transition-colors">Problema</a>
           <a href="#solution"     className="hover:text-brand-green transition-colors">Solución</a>
           <a href="#features"     className="hover:text-brand-green transition-colors">Funcionalidades</a>
@@ -839,21 +1019,21 @@ const Navbar = () => {
           <a href="/blog/"       className="hover:text-brand-green transition-colors">Blog</a>
           <button
             onClick={toggleDark}
-            className="w-9 h-9 rounded-full flex items-center justify-center text-slate-500 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all"
+            className="w-9 h-9 rounded-full flex items-center justify-center text-slate-500 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all flex-shrink-0"
             aria-label="Cambiar tema"
           >
             {dark ? <Sun size={17} /> : <Moon size={17} />}
           </button>
           <a
             href="#waitlist"
-            className="bg-brand-black dark:bg-brand-green text-white px-5 py-2.5 rounded-full hover:bg-slate-800 dark:hover:opacity-90 transition-all active:scale-95 shadow-sm"
+            className="bg-brand-black dark:bg-brand-green text-white px-4 lg:px-5 py-2.5 rounded-full font-bold hover:bg-slate-800 dark:hover:opacity-90 transition-all active:scale-95 shadow-sm flex-shrink-0"
           >
             Acceso anticipado
           </a>
         </div>
 
         {/* Mobile right */}
-        <div className="flex items-center gap-2 md:hidden">
+        <div className="flex items-center gap-1 md:hidden">
           <button onClick={toggleDark} className="p-2 text-slate-500 dark:text-slate-300" aria-label="Cambiar tema">
             {dark ? <Sun size={18} /> : <Moon size={18} />}
           </button>
@@ -871,22 +1051,22 @@ const Navbar = () => {
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -12 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -12 }}
+            initial={{ opacity: 0, y: -10, scale: 0.98 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -10, scale: 0.98 }}
             transition={{ duration: 0.18 }}
-            className="absolute top-full left-0 right-0 bg-white dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800 p-6 flex flex-col gap-4 md:hidden shadow-xl"
+            className="mt-2 max-w-6xl mx-auto bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-3xl p-6 flex flex-col gap-4 md:hidden shadow-2xl"
           >
-            <a href="#problem"      onClick={close} className="text-base font-medium text-slate-700 dark:text-slate-200 hover:text-brand-green transition-colors">Problema</a>
-            <a href="#solution"     onClick={close} className="text-base font-medium text-slate-700 dark:text-slate-200 hover:text-brand-green transition-colors">Solución</a>
-            <a href="#features"     onClick={close} className="text-base font-medium text-slate-700 dark:text-slate-200 hover:text-brand-green transition-colors">Funcionalidades</a>
-            <a href="#how-it-works" onClick={close} className="text-base font-medium text-slate-700 dark:text-slate-200 hover:text-brand-green transition-colors">Cómo funciona</a>
-            <a href="#faq"          onClick={close} className="text-base font-medium text-slate-700 dark:text-slate-200 hover:text-brand-green transition-colors">FAQ</a>
-            <a href="/blog/"        onClick={close} className="text-base font-medium text-slate-700 dark:text-slate-200 hover:text-brand-green transition-colors">Blog</a>
+            <a href="#problem"      onClick={close} className="text-base font-semibold text-slate-700 dark:text-slate-200 hover:text-brand-green transition-colors">Problema</a>
+            <a href="#solution"     onClick={close} className="text-base font-semibold text-slate-700 dark:text-slate-200 hover:text-brand-green transition-colors">Solución</a>
+            <a href="#features"     onClick={close} className="text-base font-semibold text-slate-700 dark:text-slate-200 hover:text-brand-green transition-colors">Funcionalidades</a>
+            <a href="#how-it-works" onClick={close} className="text-base font-semibold text-slate-700 dark:text-slate-200 hover:text-brand-green transition-colors">Cómo funciona</a>
+            <a href="#faq"          onClick={close} className="text-base font-semibold text-slate-700 dark:text-slate-200 hover:text-brand-green transition-colors">FAQ</a>
+            <a href="/blog/"        onClick={close} className="text-base font-semibold text-slate-700 dark:text-slate-200 hover:text-brand-green transition-colors">Blog</a>
             <a
               href="#waitlist"
               onClick={close}
-              className="w-full bg-brand-green text-white py-4 rounded-xl font-bold mt-2 shadow-lg shadow-green-100 text-center block"
+              className="w-full bg-brand-green text-white py-4 rounded-full font-bold mt-2 shadow-lg shadow-green-100 text-center block"
             >
               Unirme a la lista de espera
             </a>
@@ -914,7 +1094,7 @@ const SectionHeading = ({ children, title, subtitle, centered = false }: { child
         initial={{ opacity: 0, y: 22 }}
         animate={isInView ? { opacity: 1, y: 0 } : {}}
         transition={{ duration: 0.65, delay: 0.12, ease: [0.22, 1, 0.36, 1] }}
-        className="text-3xl md:text-5xl font-bold text-brand-black dark:text-white tracking-tight mb-6"
+        className="text-3xl md:text-5xl font-extrabold text-brand-black dark:text-white tracking-[-0.02em] mb-6"
       >
         {subtitle}
       </motion.h2>
@@ -927,7 +1107,7 @@ const FeatureCard = ({ icon: Icon, title, description }: { icon: any, title: str
   <motion.div
     whileHover={{ y: -8, boxShadow: '0 24px 48px rgba(34,197,94,0.12)' }}
     transition={{ type: 'spring', stiffness: 280, damping: 20 }}
-    className="p-8 bg-white dark:bg-slate-800 rounded-3xl border border-slate-100 dark:border-slate-700 shadow-sm hover:border-green-100 dark:hover:border-brand-green/40 cursor-default"
+    className="h-full p-8 bg-white dark:bg-slate-800 rounded-3xl border border-slate-100 dark:border-slate-700 shadow-sm hover:border-green-100 dark:hover:border-brand-green/40 cursor-default"
   >
     <motion.div
       whileHover={{ rotate: 10, scale: 1.12 }}
@@ -938,6 +1118,37 @@ const FeatureCard = ({ icon: Icon, title, description }: { icon: any, title: str
     </motion.div>
     <h3 className="text-xl font-bold text-brand-black dark:text-white mb-3">{title}</h3>
     <p className="text-slate-500 dark:text-slate-400 leading-relaxed text-sm">{description}</p>
+  </motion.div>
+);
+
+const HeroFeatureCard = ({ icon: Icon, title, description, stat, accent = false }: { icon: any, title: string, description: string, stat?: string, accent?: boolean }) => (
+  <motion.div
+    whileHover={{ y: -8 }}
+    transition={{ type: 'spring', stiffness: 280, damping: 20 }}
+    className={`h-full p-8 md:p-10 rounded-3xl border cursor-default flex flex-col justify-between gap-10 ${
+      accent
+        ? 'bg-brand-black border-brand-black text-white'
+        : 'bg-white dark:bg-slate-800 border-slate-100 dark:border-slate-700 text-brand-black dark:text-white'
+    }`}
+  >
+    <div className="flex items-start justify-between gap-4">
+      <div className={`w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0 ${
+        accent ? 'bg-white/10 text-white' : 'bg-green-50 dark:bg-green-900/30 text-brand-green'
+      }`}>
+        <Icon size={26} />
+      </div>
+      {stat && (
+        <span className={`text-xs font-bold uppercase tracking-wide px-3 py-1.5 rounded-full whitespace-nowrap ${
+          accent ? 'bg-white/10 text-white' : 'bg-green-50 dark:bg-green-900/30 text-brand-green'
+        }`}>
+          {stat}
+        </span>
+      )}
+    </div>
+    <div>
+      <h3 className="text-2xl font-bold mb-3">{title}</h3>
+      <p className={`leading-relaxed ${accent ? 'text-slate-300' : 'text-slate-500 dark:text-slate-400'}`}>{description}</p>
+    </div>
   </motion.div>
 );
 
@@ -1123,14 +1334,7 @@ const SCREENS = [
   },
 ];
 
-const MockupApp = memo(() => {
-  const [active, setActive] = useState(0);
-
-  useEffect(() => {
-    const t = setInterval(() => setActive((i) => (i + 1) % SCREENS.length), 3000);
-    return () => clearInterval(t);
-  }, []);
-
+const MockupApp = memo(({ active }: { active: number }) => {
   return (
     <div className="relative w-[300px] h-[620px] bg-slate-900 rounded-[3.5rem] p-3 shadow-[0_30px_80px_rgba(0,0,0,0.25)] border-[8px] border-slate-800 overflow-hidden mx-auto lg:mx-0">
       {/* Notch */}
@@ -1173,17 +1377,16 @@ const MockupApp = memo(() => {
           ))}
         </div>
 
-        {/* Tab bar */}
+        {/* Tab bar — reflects scroll position, not clickable */}
         <div className="border-t border-slate-100 flex justify-around pb-3 pt-2 flex-shrink-0">
           {SCREENS.map((screen, i) => (
-            <button
+            <div
               key={i}
-              onClick={() => setActive(i)}
-              className={`flex flex-col items-center gap-1 px-1 transition-colors ${i === active ? 'text-brand-green' : 'text-slate-300'}`}
+              className={`flex flex-col items-center gap-1 px-1 transition-colors duration-300 ${i === active ? 'text-brand-green' : 'text-slate-300'}`}
             >
               {screen.tabIcon}
               <span className="text-[8px] font-medium">{screen.tab}</span>
-            </button>
+            </div>
           ))}
         </div>
       </div>
@@ -1292,120 +1495,17 @@ export default function App() {
       </AnimatePresence>
 
       {/* HERO */}
-      <section className="pt-32 pb-20 px-6 relative overflow-hidden bg-white dark:bg-slate-950" style={{ contain: 'paint' }}>
-        {/* Background blobs — opacity-only animation avoids expensive blur+scale repaint */}
-        <div className="absolute inset-0 -z-10 overflow-hidden pointer-events-none">
-          <div className="absolute top-0 right-0 w-[60%] h-[80%] bg-gradient-to-bl from-green-50 dark:from-green-950/20 to-transparent" />
-          <div className="absolute -top-20 -right-20 w-96 h-96 rounded-full bg-brand-green/5 dark:bg-brand-green/10 blur-3xl animate-hero-glow" style={{ animationDelay: '3s' }} />
-          <div className="absolute top-40 left-0 w-64 h-64 rounded-full bg-green-100/40 dark:bg-green-900/10 blur-3xl animate-hero-glow" style={{ animationDelay: '1.5s' }} />
-        </div>
-        <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 items-center">
-          <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-            >
-              <motion.a
-                href="https://mysmartbasket.github.io/MySmartBasket-MVP/"
-                target="_blank"
-                rel="noopener noreferrer"
-                whileHover={{ scale: 1.04 }}
-                whileTap={{ scale: 0.97 }}
-                className="inline-flex items-center gap-2 bg-green-50 border border-green-100 px-4 py-2 rounded-full text-brand-green text-sm font-bold mb-8 hover:bg-green-100 transition-colors"
-              >
-                <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-brand-green" />
-                </span>
-                Demo disponible — pruébala ahora
-              </motion.a>
-
-              <h1 className="text-5xl lg:text-7xl font-bold text-brand-black dark:text-white leading-[1.1] tracking-tight mb-8 overflow-hidden">
-                <WordReveal text="Ahorra en la compra semanal" delay={0.1} />
-                {' '}
-                <WordReveal text="sin cambiar lo que compras." className="text-brand-green" delay={0.55} />
-              </h1>
-
-              <motion.p
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.55, delay: 0.9 }}
-                className="text-xl text-slate-500 dark:text-slate-400 leading-relaxed mb-10 max-w-lg"
-              >
-                Cada semana pagas más de lo que deberías sin saber exactamente por qué. MySmartBasket analiza los precios de los supermercados de tu zona, genera tu lista y te indica dónde comprar cada producto para gastar lo menos posible.
-              </motion.p>
-
-              <motion.div
-                initial={{ opacity: 0, y: 14 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 1.0 }}
-                className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center"
-              >
-                <MagneticCTA
-                  href="#waitlist"
-                  className="bg-brand-green text-white px-7 py-4 rounded-2xl font-bold text-base hover:opacity-90 transition-opacity flex items-center justify-center gap-2 shadow-xl shadow-green-100"
-                >
-                  Reservar mi plaza <ArrowRight size={18} />
-                </MagneticCTA>
-                <MagneticCTA
-                  onClick={() => setIsCanvaOpen(true)}
-                  className="bg-brand-black text-white px-7 py-4 rounded-2xl font-bold text-base hover:bg-slate-800 transition-all flex items-center justify-center gap-2"
-                >
-                  Conócenos mejor
-                </MagneticCTA>
-              </motion.div>
-
-              {/* Trust badges */}
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.5, delay: 1.1 }}
-                className="mt-8 flex flex-wrap items-center gap-6 text-sm text-slate-500"
-              >
-                <span className="flex items-center gap-1.5"><CheckCircle2 size={15} className="text-brand-green" /> Sin spam</span>
-                <span className="flex items-center gap-1.5"><CheckCircle2 size={15} className="text-brand-green" /> Acceso anticipado, sin coste</span>
-                <span className="flex items-center gap-1.5"><CheckCircle2 size={15} className="text-brand-green" /> Cancelas cuando quieras</span>
-              </motion.div>
-
-              {/* Store Banners */}
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.5, delay: 1.2 }}
-                className="mt-8 flex flex-wrap gap-4 opacity-70"
-              >
-                <div className="flex items-center gap-3 bg-black text-white px-4 py-2 rounded-xl border border-white/10 cursor-not-allowed select-none">
-                  <Apple size={20} fill="white" />
-                  <div className="leading-none">
-                    <div className="text-[9px] uppercase opacity-60">Próximamente en</div>
-                    <div className="text-sm font-bold">App Store</div>
-                  </div>
-                </div>
-                <div className="flex items-center gap-3 bg-black text-white px-4 py-2 rounded-xl border border-white/10 cursor-not-allowed select-none">
-                  <Play size={18} fill="white" />
-                  <div className="leading-none">
-                    <div className="text-[9px] uppercase opacity-60">Próximamente en</div>
-                    <div className="text-sm font-bold">Google Play</div>
-                  </div>
-                </div>
-              </motion.div>
-
-              <ScrollDownIndicator />
-            </motion.div>
-
-          <HeroMockup />
-        </div>
-      </section>
+      <HeroShowcase onOpenCanva={() => setIsCanvaOpen(true)} />
 
       {/* STORE TICKER */}
       <StoreTicker />
 
       {/* PROBLEM */}
       <section id="problem" className="py-24 px-6 bg-slate-50 dark:bg-slate-900">
-        <div className="max-w-7xl mx-auto">
+        <div className="max-w-5xl mx-auto">
           <FadeUp><SectionHeading centered title="El Problema" subtitle="Tres problemas que tienen solución" /></FadeUp>
           <motion.div
-            className="grid md:grid-cols-3 gap-8 text-center"
+            className="border-y border-slate-200 dark:border-slate-800 divide-y divide-slate-200 dark:divide-slate-800"
             variants={gridContainer}
             initial="hidden"
             whileInView="show"
@@ -1416,17 +1516,22 @@ export default function App() {
               { icon: TrendingDown, title: 'Pagar de más sin saberlo',     text: 'El mismo producto puede variar hasta un 40% de precio según la cadena. Comparar manualmente cada semana no es viable.' },
               { icon: Leaf,         title: 'Desperdiciar comida y dinero', text: 'Comprar sin planificar los menús lleva a tirar alimentos y a que falten productos justo cuando más se necesitan.' },
             ].map((p, i) => (
-              <motion.div key={i} variants={gridItem}>
-                <div className="p-8">
+              <motion.div key={i} variants={gridItem} className="group grid md:grid-cols-[auto_1fr] gap-5 md:gap-10 items-start py-10 md:py-12">
+                <span className="text-6xl md:text-7xl font-extrabold text-slate-200 dark:text-slate-800 leading-none tabular-nums group-hover:text-brand-green/25 transition-colors duration-300">
+                  0{i + 1}
+                </span>
+                <div className="flex items-start gap-5">
                   <motion.div
-                    whileHover={{ scale: 1.12, rotate: 5 }}
+                    whileHover={{ scale: 1.1, rotate: 5 }}
                     transition={{ type: 'spring', stiffness: 300 }}
-                    className="inline-flex items-center justify-center w-16 h-16 bg-white dark:bg-slate-800 rounded-2xl shadow-sm mb-6 text-slate-400 dark:text-slate-300"
+                    className="w-12 h-12 rounded-xl bg-white dark:bg-slate-800 shadow-sm flex items-center justify-center text-brand-green flex-shrink-0 mt-1"
                   >
-                    <p.icon size={32} />
+                    <p.icon size={22} />
                   </motion.div>
-                  <h3 className="text-xl font-bold dark:text-white mb-4">{p.title}</h3>
-                  <p className="text-slate-500 dark:text-slate-400">{p.text}</p>
+                  <div>
+                    <h3 className="text-xl md:text-2xl font-bold text-brand-black dark:text-white mb-2">{p.title}</h3>
+                    <p className="text-slate-500 dark:text-slate-400 leading-relaxed max-w-xl">{p.text}</p>
+                  </div>
                 </div>
               </motion.div>
             ))}
@@ -1444,21 +1549,36 @@ export default function App() {
         <div className="max-w-7xl mx-auto">
           <FadeUp><SectionHeading centered title="Funcionalidades" subtitle="Qué hace MySmartBasket por ti" /></FadeUp>
           <motion.div
-            className="grid md:grid-cols-2 lg:grid-cols-3 gap-8"
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-6"
             variants={gridContainer}
             initial="hidden"
             whileInView="show"
             viewport={{ once: true, margin: '-60px' }}
           >
+            <motion.div variants={gridItem} className="md:col-span-2 lg:col-span-6">
+              <HeroFeatureCard
+                icon={Zap}
+                title="Reposición automática"
+                description="Aprende tus ciclos de consumo y anticipa lo que vas a necesitar antes de que se agote, sin intervención manual."
+                stat="Cero listas olvidadas"
+              />
+            </motion.div>
+            <motion.div variants={gridItem} className="md:col-span-2 lg:col-span-6">
+              <HeroFeatureCard
+                icon={TrendingDown}
+                title="Optimización por supermercado"
+                description="Identifica en qué cadena cada producto está más barato en ese momento y propone la combinación más rentable."
+                stat="Hasta 40% menos"
+                accent
+              />
+            </motion.div>
             {[
-              { icon: Zap,          title: 'Reposición automática',                  description: 'Aprende tus ciclos de consumo y anticipa lo que vas a necesitar antes de que se agote, sin intervención manual.' },
-              { icon: TrendingDown, title: 'Optimización por supermercado',          description: 'Identifica en qué cadena cada producto está más barato en ese momento y propone la combinación más rentable.' },
-              { icon: Users,        title: 'Listas compartidas en tiempo real',      description: 'Varios miembros del hogar pueden editar la misma lista simultáneamente, sin duplicados ni coordinación extra.' },
-              { icon: ShieldCheck,  title: 'Alternativas más saludables',            description: 'Cuando hay opciones con mejor perfil nutricional y sabor equivalente, las sugiere como alternativa sin imponer nada.' },
-              { icon: Leaf,         title: 'Reducción de desperdicio alimentario',   description: 'Registra las fechas de caducidad y avisa de qué consumir primero para minimizar lo que se tira cada semana.' },
-              { icon: Search,       title: 'Cobertura de más de 45 cadenas',        description: 'Mercadona, Lidl, Carrefour, Alcampo, Día y 40 cadenas más. Precios actualizados cada 30 minutos de forma automática.' },
+              { icon: Users,       title: 'Listas compartidas en tiempo real',      description: 'Varios miembros del hogar pueden editar la misma lista simultáneamente, sin duplicados ni coordinación extra.' },
+              { icon: ShieldCheck, title: 'Alternativas más saludables',            description: 'Cuando hay opciones con mejor perfil nutricional y sabor equivalente, las sugiere como alternativa sin imponer nada.' },
+              { icon: Leaf,        title: 'Reducción de desperdicio alimentario',   description: 'Registra las fechas de caducidad y avisa de qué consumir primero para minimizar lo que se tira cada semana.' },
+              { icon: Search,      title: 'Cobertura de más de 45 cadenas',         description: 'Mercadona, Lidl, Carrefour, Alcampo, Día y 40 cadenas más. Precios actualizados cada 30 minutos de forma automática.' },
             ].map((f, i) => (
-              <motion.div key={i} variants={gridItem}>
+              <motion.div key={i} variants={gridItem} className="lg:col-span-3">
                 <FeatureCard icon={f.icon} title={f.title} description={f.description} />
               </motion.div>
             ))}
@@ -1486,7 +1606,7 @@ export default function App() {
                 whileInView={{ scaleX: 1 }}
                 viewport={{ once: true }}
                 transition={{ duration: 1, delay: 0.4, ease: 'easeInOut' }}
-                className="h-px border-t-2 border-dashed border-slate-200 origin-left w-full"
+                className="h-px border-t-2 border-dashed border-slate-200 dark:border-slate-700 origin-left w-full"
               />
             </div>
             {[
@@ -1520,7 +1640,7 @@ export default function App() {
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <FadeUp>
               <span className="text-brand-green font-bold text-xs uppercase mb-3 block">El impacto que buscamos</span>
-              <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-12">Cuánto podrías ahorrar desde el primer mes.</h2>
+              <h2 className="text-4xl md:text-5xl font-extrabold tracking-[-0.02em] mb-12">Cuánto podrías ahorrar desde el primer mes.</h2>
               <div className="grid grid-cols-2 gap-8">
                 <AnimatedStat value="20%" label="De ahorro medio en la primera compra" />
                 <AnimatedStat value="90m" label="Menos de gestión de la compra al mes" />
@@ -1638,7 +1758,7 @@ export default function App() {
                   <button
                     type="submit"
                     disabled={submitting}
-                    className="absolute right-2 top-2 bottom-2 px-6 bg-brand-black dark:bg-brand-green text-white rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-slate-800 dark:hover:opacity-90 transition-all text-sm disabled:opacity-60"
+                    className="absolute right-2 top-2 bottom-2 px-6 bg-brand-black dark:bg-brand-green text-white rounded-full font-bold flex items-center justify-center gap-2 hover:bg-slate-800 dark:hover:opacity-90 transition-all text-sm disabled:opacity-60"
                   >
                     {submitting ? 'Enviando…' : <>Continuar <ArrowRight size={15} /></>}
                   </button>
@@ -1693,7 +1813,7 @@ export default function App() {
 
           <div>
             <h4 className="font-bold mb-6">Producto</h4>
-            <ul className="space-y-4 text-slate-500 text-sm">
+            <ul className="space-y-4 text-slate-500 dark:text-slate-400 text-sm">
               <li><a href="#features"     className="hover:text-brand-green transition-colors">Funcionalidades</a></li>
               <li><a href="#how-it-works" className="hover:text-brand-green transition-colors">Cómo funciona</a></li>
               <li><a href="#demo"         className="hover:text-brand-green transition-colors">Demo interactiva</a></li>
@@ -1704,7 +1824,7 @@ export default function App() {
 
           <div>
             <h4 className="font-bold mb-6">Compañía</h4>
-            <ul className="space-y-4 text-slate-500 text-sm">
+            <ul className="space-y-4 text-slate-500 dark:text-slate-400 text-sm">
               <li><a href="#solution"                          className="hover:text-brand-green transition-colors">Sobre nosotros</a></li>
               <li><a href="mailto:contacto@mysmartbasket.app"      className="hover:text-brand-green transition-colors">Contacto</a></li>
               <li><a href="/privacidad.html"                   className="hover:text-brand-green transition-colors">Privacidad</a></li>
@@ -1713,7 +1833,7 @@ export default function App() {
           </div>
         </div>
 
-        <div className="max-w-7xl mx-auto mt-16 pt-8 border-t border-slate-100 flex flex-col md:flex-row justify-between items-center gap-4 text-slate-400 text-sm">
+        <div className="max-w-7xl mx-auto mt-16 pt-8 border-t border-slate-100 dark:border-slate-800 flex flex-col md:flex-row justify-between items-center gap-4 text-slate-400 text-sm">
           <p>© {year} MySmartBasket. Todos los derechos reservados.</p>
           <div className="flex gap-8">
             <a href="/privacidad.html"              className="hover:text-slate-600 transition-colors">Privacidad</a>
