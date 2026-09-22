@@ -836,6 +836,7 @@ const Navbar = () => {
           <a href="#features"     className="hover:text-brand-green transition-colors">Funcionalidades</a>
           <a href="#how-it-works" className="hover:text-brand-green transition-colors">Cómo funciona</a>
           <a href="#faq"         className="hover:text-brand-green transition-colors">FAQ</a>
+          <a href="/blog/"       className="hover:text-brand-green transition-colors">Blog</a>
           <button
             onClick={toggleDark}
             className="w-9 h-9 rounded-full flex items-center justify-center text-slate-500 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all"
@@ -881,6 +882,7 @@ const Navbar = () => {
             <a href="#features"     onClick={close} className="text-base font-medium text-slate-700 dark:text-slate-200 hover:text-brand-green transition-colors">Funcionalidades</a>
             <a href="#how-it-works" onClick={close} className="text-base font-medium text-slate-700 dark:text-slate-200 hover:text-brand-green transition-colors">Cómo funciona</a>
             <a href="#faq"          onClick={close} className="text-base font-medium text-slate-700 dark:text-slate-200 hover:text-brand-green transition-colors">FAQ</a>
+            <a href="/blog/"        onClick={close} className="text-base font-medium text-slate-700 dark:text-slate-200 hover:text-brand-green transition-colors">Blog</a>
             <a
               href="#waitlist"
               onClick={close}
@@ -1695,6 +1697,7 @@ export default function App() {
               <li><a href="#features"     className="hover:text-brand-green transition-colors">Funcionalidades</a></li>
               <li><a href="#how-it-works" className="hover:text-brand-green transition-colors">Cómo funciona</a></li>
               <li><a href="#demo"         className="hover:text-brand-green transition-colors">Demo interactiva</a></li>
+              <li><a href="/blog/"        className="hover:text-brand-green transition-colors">Blog</a></li>
               <li><a href="#waitlist"     className="hover:text-brand-green transition-colors">Acceso anticipado</a></li>
             </ul>
           </div>
