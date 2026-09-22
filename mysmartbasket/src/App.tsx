@@ -263,7 +263,7 @@ const StickyCTA = memo(() => {
 
 /* ── FAQ ── */
 const FAQ_ITEMS = [
-  { q: '¿Es gratuito?',                              a: 'Sí, completamente gratuito durante la fase beta. Cuando lancemos planes de pago, los usuarios de la lista de espera mantendrán condiciones especiales de forma permanente.' },
+  { q: '¿Es gratuito?',                              a: 'Tenemos un plan gratuito y un plan Pro por 4,99€/mes con funciones avanzadas. Si te apuntas a la lista de espera, te llevas 1 mes de plan Pro totalmente gratis al lanzamiento.' },
   { q: '¿Cómo obtiene la app los precios?',          a: 'Contamos con un sistema propio que monitoriza precios en Mercadona, Día, Aldi y Alcampo cada 30 minutos, y seguimos ampliando la cobertura a más cadenas próximamente. No dependemos de fuentes externas, lo que garantiza mayor fiabilidad y actualización en tiempo real.' },
   { q: '¿Cuándo está disponible?',                   a: 'Actualmente estamos en beta cerrada con los primeros usuarios. Ampliamos el acceso de forma gradual para asegurar una buena experiencia desde el primer día. Apúntate y te notificamos cuando tu plaza esté lista.' },
   { q: '¿Está disponible en mi supermercado?',       a: 'Por ahora cubrimos Mercadona, Día, Aldi y Alcampo, y vamos incorporando más cadenas próximamente. Si tu cadena habitual no aparece todavía, puedes solicitarla — la añadimos por orden de demanda.' },
