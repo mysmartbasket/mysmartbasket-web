@@ -12,6 +12,21 @@
   var CONSENT_KEY = 'msb_ad_consent';
   var ADSENSE_CLIENT = 'ca-pub-8159510657807581';
 
+  var adsenseScriptPromise = null;
+  function loadAdSenseScript() {
+    if (adsenseScriptPromise) return adsenseScriptPromise;
+    adsenseScriptPromise = new Promise(function (resolve, reject) {
+      var script = document.createElement('script');
+      script.async = true;
+      script.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=' + ADSENSE_CLIENT;
+      script.crossOrigin = 'anonymous';
+      script.onload = function () { resolve(); };
+      script.onerror = function () { reject(new Error('Failed to load AdSense script')); };
+      document.head.appendChild(script);
+    });
+    return adsenseScriptPromise;
+  }
+
   function getConsent() {
     try {
       return window.localStorage.getItem(CONSENT_KEY);
@@ -50,11 +65,15 @@
       slot.appendChild(label);
       slot.appendChild(ins);
 
-      try {
-        (window.adsbygoogle = window.adsbygoogle || []).push({});
-      } catch (e) {
-        console.error('AdSense push failed:', e);
-      }
+      loadAdSenseScript().then(function () {
+        try {
+          (window.adsbygoogle = window.adsbygoogle || []).push({});
+        } catch (e) {
+          console.error('AdSense push failed:', e);
+        }
+      }).catch(function (e) {
+        console.error(e);
+      });
     }
   }
 

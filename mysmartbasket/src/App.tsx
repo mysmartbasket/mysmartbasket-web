@@ -1364,10 +1364,8 @@ const SECTIONS: { id: string; label: string }[] = [
 export default function App() {
   const [formState, handleSubmit] = useForm('mwvybvog');
   const [isCanvaOpen, setIsCanvaOpen] = useState(false);
-  const [formStep, setFormStep] = useState<'form' | 'done'>('form');
   const [emailValue, setEmailValue] = useState('');
   const [spendingValue, setSpendingValue] = useState('');
-  const [submitting, setSubmitting] = useState(false);
   const year = new Date().getFullYear();
 
   // Init dark mode from localStorage
@@ -1443,6 +1441,7 @@ export default function App() {
                 className="w-full h-full border-none"
                 allowFullScreen
                 referrerPolicy="no-referrer"
+                sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-presentation"
               />
             </motion.div>
           </motion.div>
@@ -1659,7 +1658,7 @@ export default function App() {
           </FadeUp>
 
           <AnimatePresence mode="wait">
-            {formState.succeeded || formStep === 'done' ? (
+            {formState.succeeded ? (
               <motion.div
                 key="done"
                 initial={{ opacity: 0, scale: 0.9 }}
@@ -1678,23 +1677,18 @@ export default function App() {
                 initial={{ opacity: 0, x: -40 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -40 }}
-                onSubmit={async (e) => {
-                  e.preventDefault();
-                  if (!emailValue || submitting) return;
-                  setSubmitting(true);
-                  try {
-                    const fd = new FormData();
-                    fd.append('email', emailValue);
-                    if (spendingValue) fd.append('gasto_mensual', spendingValue);
-                    await fetch('https://formspree.io/f/mwvybvog', { method: 'POST', body: fd, headers: { Accept: 'application/json' } });
-                    setFormStep('done');
-                  } finally {
-                    setSubmitting(false);
-                  }
-                }}
+                onSubmit={handleSubmit}
                 className="max-w-lg mx-auto"
                 noValidate
               >
+                <input
+                  type="text"
+                  name="_gotcha"
+                  tabIndex={-1}
+                  autoComplete="off"
+                  aria-hidden="true"
+                  className="absolute -left-[9999px] w-px h-px opacity-0"
+                />
                 <div className="relative">
                   <input
                     type="email"
@@ -1709,16 +1703,17 @@ export default function App() {
                   <ValidationError field="email" errors={formState.errors} className="mt-2 text-sm text-red-500 text-left absolute -bottom-6 left-2" />
                   <button
                     type="submit"
-                    disabled={submitting}
+                    disabled={formState.submitting}
                     className="absolute right-2 top-2 bottom-2 px-6 bg-brand-black dark:bg-brand-green text-white rounded-full font-bold flex items-center justify-center gap-2 hover:bg-slate-800 dark:hover:opacity-90 transition-all text-sm disabled:opacity-60"
                   >
-                    {submitting ? 'Enviando…' : <>Continuar <ArrowRight size={15} /></>}
+                    {formState.submitting ? 'Enviando…' : <>Continuar <ArrowRight size={15} /></>}
                   </button>
                 </div>
 
                 <label className="block mt-6 text-left">
                   <span className="text-xs text-slate-400 dark:text-slate-500">¿Cuánto sueles gastar al mes en la compra? (opcional, nos ayuda a priorizar funciones)</span>
                   <select
+                    name="gasto_mensual"
                     value={spendingValue}
                     onChange={(e) => setSpendingValue(e.target.value)}
                     className="mt-1.5 w-full sm:w-auto px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm text-slate-700 dark:text-slate-200 outline-none focus:border-brand-green"
