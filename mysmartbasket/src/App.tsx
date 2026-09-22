@@ -11,8 +11,7 @@ import {
   ArrowRight,
   CheckCircle2,
   Smartphone,
-  Apple,
-  Play,
+  Download,
   Menu,
   X,
   ChevronRight,
@@ -911,19 +910,20 @@ const HeroShowcase = ({ onOpenCanva }: { onOpenCanva: () => void }) => {
                 transition={{ duration: 0.5, delay: 1.2 }}
                 className="mt-8 flex flex-wrap justify-center gap-4 opacity-70"
               >
-                <div className="flex items-center gap-3 bg-black text-white px-4 py-2 rounded-xl border border-white/10 cursor-not-allowed select-none">
-                  <Apple size={20} fill="white" />
-                  <div className="leading-none">
-                    <div className="text-[9px] uppercase opacity-60">Próximamente en</div>
-                    <div className="text-sm font-bold">App Store</div>
+                <div className="flex flex-col items-center gap-1.5 cursor-not-allowed select-none">
+                  <span className="text-[9px] uppercase tracking-wide font-bold text-slate-400">Próximamente</span>
+                  <div className="flex items-center gap-2 h-10 px-4 bg-black text-white rounded-lg">
+                    <Download size={15} />
+                    <span className="text-sm font-bold">App Store</span>
                   </div>
                 </div>
-                <div className="flex items-center gap-3 bg-black text-white px-4 py-2 rounded-xl border border-white/10 cursor-not-allowed select-none">
-                  <Play size={18} fill="white" />
-                  <div className="leading-none">
-                    <div className="text-[9px] uppercase opacity-60">Próximamente en</div>
-                    <div className="text-sm font-bold">Google Play</div>
-                  </div>
+                <div className="flex flex-col items-center gap-1.5 cursor-not-allowed select-none">
+                  <span className="text-[9px] uppercase tracking-wide font-bold text-slate-400">Próximamente</span>
+                  <img
+                    src="/badges/google-play-es.png"
+                    alt="Disponible en Google Play (próximamente)"
+                    className="h-10 w-auto rounded-lg"
+                  />
                 </div>
               </motion.div>
 
@@ -1806,7 +1806,7 @@ export default function App() {
               Hacemos que la compra semanal sea más barata y fácil para las familias españolas.
             </p>
             <div className="flex gap-3">
-              <div title="App Store — próximamente" className="w-10 h-10 rounded-full bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-slate-400 hover:text-brand-green cursor-not-allowed transition-colors border border-slate-100 dark:border-slate-700"><Apple size={18} /></div>
+              <div title="App Store — próximamente" className="w-10 h-10 rounded-full bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-slate-400 hover:text-brand-green cursor-not-allowed transition-colors border border-slate-100 dark:border-slate-700"><Download size={18} /></div>
               <div title="Google Play — próximamente" className="w-10 h-10 rounded-full bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-slate-400 hover:text-brand-green cursor-not-allowed transition-colors border border-slate-100 dark:border-slate-700"><Smartphone size={18} /></div>
             </div>
           </div>
