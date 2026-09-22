@@ -227,9 +227,9 @@ const AnimatedStat = ({ value, label }: { value: string; label: string }) => {
 
 /* ── Store ticker ── */
 const TICKER_STORES = [
-  '🛒 Mercadona', '🏪 Lidl', '🛍️ Carrefour', '🏬 Alcampo',
-  '🏷️ Día', '🛒 El Corte Inglés', '🏪 Aldi', '🛍️ Eroski',
-  '🏬 Hipercor', '🏷️ Simply', '🛒 BM Supermercados', '🏪 Condis',
+  '🛒 Mercadona', '🏷️ Día', '🏪 Aldi', '🏬 Alcampo',
+  '🛒 Mercadona', '🏷️ Día', '🏪 Aldi', '🏬 Alcampo',
+  '🛒 Mercadona', '🏷️ Día', '🏪 Aldi', '🏬 Alcampo',
 ];
 const TICKER_ITEMS = [...TICKER_STORES, ...TICKER_STORES];
 const StoreTicker = memo(() => {
@@ -293,9 +293,9 @@ const StickyCTA = memo(() => {
 /* ── FAQ ── */
 const FAQ_ITEMS = [
   { q: '¿Es gratuito?',                              a: 'Sí, completamente gratuito durante la fase beta. Cuando lancemos planes de pago, los usuarios de la lista de espera mantendrán condiciones especiales de forma permanente.' },
-  { q: '¿Cómo obtiene la app los precios?',          a: 'Contamos con un sistema propio que monitoriza precios en más de 45 cadenas cada 30 minutos. No dependemos de fuentes externas, lo que garantiza mayor fiabilidad y actualización en tiempo real.' },
+  { q: '¿Cómo obtiene la app los precios?',          a: 'Contamos con un sistema propio que monitoriza precios en Mercadona, Día, Aldi y Alcampo cada 30 minutos, y seguimos ampliando la cobertura a más cadenas próximamente. No dependemos de fuentes externas, lo que garantiza mayor fiabilidad y actualización en tiempo real.' },
   { q: '¿Cuándo está disponible?',                   a: 'Actualmente estamos en beta cerrada con los primeros usuarios. Ampliamos el acceso de forma gradual para asegurar una buena experiencia desde el primer día. Apúntate y te notificamos cuando tu plaza esté lista.' },
-  { q: '¿Está disponible en mi supermercado?',       a: 'Cubrimos las principales cadenas en España: Mercadona, Lidl, Carrefour, Alcampo, El Corte Inglés, Día, Aldi, Eroski y más. Si tu cadena habitual no aparece, puedes solicitarla — la incorporamos por orden de demanda.' },
+  { q: '¿Está disponible en mi supermercado?',       a: 'Por ahora cubrimos Mercadona, Día, Aldi y Alcampo, y vamos incorporando más cadenas próximamente. Si tu cadena habitual no aparece todavía, puedes solicitarla — la añadimos por orden de demanda.' },
   { q: '¿Puedo compartirlo con mi familia?',         a: 'Sí. Puedes crear un hogar compartido con hasta 5 miembros. Todos acceden a la misma lista en tiempo real, sin duplicados ni necesidad de coordinación adicional.' },
   { q: '¿Cómo se tratan mis datos personales?',      a: 'Solo almacenamos tu correo electrónico y tus preferencias de compra. No vendemos ni compartimos datos con terceros. Puedes solicitar la eliminación completa de tu cuenta en cualquier momento escribiéndonos a contacto@mysmartbasket.app.' },
 ];
@@ -1576,7 +1576,7 @@ export default function App() {
               { icon: Users,       title: 'Listas compartidas en tiempo real',      description: 'Varios miembros del hogar pueden editar la misma lista simultáneamente, sin duplicados ni coordinación extra.' },
               { icon: ShieldCheck, title: 'Alternativas más saludables',            description: 'Cuando hay opciones con mejor perfil nutricional y sabor equivalente, las sugiere como alternativa sin imponer nada.' },
               { icon: Leaf,        title: 'Reducción de desperdicio alimentario',   description: 'Registra las fechas de caducidad y avisa de qué consumir primero para minimizar lo que se tira cada semana.' },
-              { icon: Search,      title: 'Cobertura de más de 45 cadenas',         description: 'Mercadona, Lidl, Carrefour, Alcampo, Día y 40 cadenas más. Precios actualizados cada 30 minutos de forma automática.' },
+              { icon: Search,      title: 'Cobertura en ampliación constante',      description: 'Ya disponible en Mercadona, Día, Aldi y Alcampo, con más cadenas incorporándose próximamente. Precios actualizados cada 30 minutos de forma automática.' },
             ].map((f, i) => (
               <motion.div key={i} variants={gridItem} className="lg:col-span-3">
                 <FeatureCard icon={f.icon} title={f.title} description={f.description} />
