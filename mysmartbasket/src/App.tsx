@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, memo, useCallback } from 'react';
 import { useForm, ValidationError } from '@formspree/react';
-import { motion, AnimatePresence, MotionConfig, useScroll, useSpring, useInView, useMotionValue, useMotionValueEvent, useTransform, animate as motionAnimate } from 'motion/react';
+import { motion, AnimatePresence, MotionConfig, useScroll, useSpring, useInView, useMotionValue, useMotionValueEvent, useTransform } from 'motion/react';
 import {
   ShoppingBasket,
   ShoppingCart,
@@ -195,35 +195,6 @@ const FadeUp =({ children, delay = 0, className = '', index }: { children: React
     {children}
   </motion.div>
 );
-
-const AnimatedStat = ({ value, label }: { value: string; label: string }) => {
-  const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: true, margin: '-80px' });
-  const num = parseFloat(value);
-  const suffix = value.replace(/^[\d.]+/, '');
-  const count = useMotionValue(0);
-  const display = useTransform(count, (v) => `${Math.round(v)}${suffix}`);
-
-  useEffect(() => {
-    if (isInView) {
-      motionAnimate(count, num, { duration: 1.8, ease: [0.16, 1, 0.3, 1] });
-    }
-  }, [isInView, count, num]);
-
-  return (
-    <div ref={ref}>
-      <motion.div
-        initial={{ opacity: 0, scale: 0.6 }}
-        animate={isInView ? { opacity: 1, scale: 1 } : {}}
-        transition={{ duration: 0.6, type: 'spring', bounce: 0.4 }}
-        className="text-5xl font-bold text-brand-green mb-2"
-      >
-        <motion.span>{display}</motion.span>
-      </motion.div>
-      <p className="text-slate-400 text-sm">{label}</p>
-    </div>
-  );
-};
 
 /* ── Store ticker ── */
 const TICKER_STORES = [
@@ -629,28 +600,6 @@ const MagneticCTA = ({
       onMouseMove={onMove} onMouseLeave={onLeave} whileTap={{ scale: 0.96 }} className={className}>
       {children}
     </motion.button>
-  );
-};
-
-/* ── 3-D tilt card ── */
-const TiltCard = ({ children, className }: { children: React.ReactNode; className: string }) => {
-  const ref = useRef<HTMLDivElement>(null);
-  const rx = useMotionValue(0);
-  const ry = useMotionValue(0);
-  const srx = useSpring(rx, { stiffness: 180, damping: 28 });
-  const sry = useSpring(ry, { stiffness: 180, damping: 28 });
-  const onMove = (e: React.MouseEvent) => {
-    const r = ref.current?.getBoundingClientRect();
-    if (!r) return;
-    rx.set(-((e.clientY - r.top) / r.height - 0.5) * 12);
-    ry.set(((e.clientX - r.left) / r.width - 0.5) * 12);
-  };
-  const onLeave = () => { rx.set(0); ry.set(0); };
-  return (
-    <motion.div ref={ref} style={{ rotateX: srx, rotateY: sry, transformStyle: 'preserve-3d' }}
-      onMouseMove={onMove} onMouseLeave={onLeave} className={className}>
-      {children}
-    </motion.div>
   );
 };
 
@@ -1402,7 +1351,6 @@ const SECTIONS: { id: string; label: string }[] = [
   { id: 'features',     label: 'MySmartBasket - Funcionalidades'      },
   { id: 'demo',         label: 'MySmartBasket - Demo interactiva'     },
   { id: 'how-it-works', label: 'MySmartBasket - Cómo funciona'        },
-  { id: 'social-proof', label: 'MySmartBasket - Métricas'             },
   { id: 'waitlist',     label: 'MySmartBasket - Únete'                },
 ];
 
@@ -1632,48 +1580,7 @@ export default function App() {
         </div>
       </section>
 
-      {/* SOCIAL PROOF */}
-      <section id="social-proof" className="py-24 px-6 bg-brand-black text-white rounded-[4rem] mx-4 overflow-hidden relative" style={{ contain: 'paint' }}>
-        <div className="absolute top-0 right-0 w-[50%] h-full bg-gradient-to-l from-green-500/10 to-transparent pointer-events-none"></div>
-        <div className="absolute bottom-0 left-0 w-72 h-72 rounded-full bg-brand-green/5 blur-3xl pointer-events-none animate-pulse-glow" />
-        <div className="max-w-7xl mx-auto relative z-10">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            <FadeUp>
-              <span className="text-brand-green font-bold text-xs uppercase mb-3 block">El impacto que buscamos</span>
-              <h2 className="text-4xl md:text-5xl font-extrabold tracking-[-0.02em] mb-12">Cuánto podrías ahorrar desde el primer mes.</h2>
-              <div className="grid grid-cols-2 gap-8">
-                <AnimatedStat value="20%" label="De ahorro medio en la primera compra" />
-                <AnimatedStat value="90m" label="Menos de gestión de la compra al mes" />
-              </div>
-              <p className="text-xs text-slate-500 mt-6 max-w-sm">
-                Estimación basada en el análisis de precios reales entre supermercados de la misma zona. Se confirmará con datos de uso una vez lancemos la beta.
-              </p>
-            </FadeUp>
-
-            <div className="space-y-6">
-              {[
-                { title: 'El mismo carro, hasta un 40% más barato', body: 'Un mismo producto puede variar hasta un 40% de precio según la cadena. Comprando cada cosa donde está más barata en ese momento, sin cambiar tu lista, ahí está el ahorro.' },
-                { title: 'Menos comida tirada a la basura', body: 'Registrando fechas de caducidad y lo que ya tienes en casa, la lista se ajusta para que compres lo que realmente vas a consumir esa semana.' },
-              ].map((t, i) => (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.55, delay: i * 0.2, ease: [0.22, 1, 0.36, 1] }}
-                >
-                  <TiltCard className="p-8 bg-white/5 border border-white/10 rounded-[2rem] cursor-default hover:bg-white/10 transition-colors">
-                    <p className="text-lg font-bold text-white mb-3">{t.title}</p>
-                    <p className="text-slate-400 leading-relaxed">{t.body}</p>
-                  </TiltCard>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <AdBreak slotId="landing_after_social_proof" />
+      <AdBreak slotId="landing_after_how_it_works" />
 
       {/* FAQ */}
       <section id="faq" className="py-24 px-6 dark:bg-slate-950">
