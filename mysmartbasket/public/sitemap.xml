@@ -21,6 +21,16 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://mysmartbasket.app/blog/habitos-ahorrar-compra-semanal.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://mysmartbasket.app/blog/coste-real-comprar-sin-plan.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://mysmartbasket.app/privacidad.html</loc>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
