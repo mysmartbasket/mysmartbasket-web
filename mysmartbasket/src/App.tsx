@@ -287,7 +287,7 @@ const FAQItem = ({ question, answer }: { question: string; answer: string }) => 
         onClick={() => setOpen(v => !v)}
         className="w-full flex items-center justify-between py-5 text-left gap-4 group"
       >
-        <span className="font-semibold text-slate-900 dark:text-white group-hover:text-brand-green transition-colors">{question}</span>
+        <span className="font-semibold text-slate-900 dark:text-white group-hover:text-brand-green dark:group-hover:text-brand-green transition-colors">{question}</span>
         <motion.div animate={{ rotate: open ? 180 : 0 }} transition={{ duration: 0.22 }}>
           <ChevronDown size={18} className="text-slate-400 flex-shrink-0" />
         </motion.div>
@@ -689,8 +689,8 @@ const SolutionSection = memo(() => {
             viewport={{ once: true, margin: '-60px' }}
             transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
           >
-            <div className="absolute -top-10 -left-10 w-40 h-40 bg-brand-green/10 rounded-full blur-3xl pointer-events-none" />
-            <div className="absolute -bottom-10 -right-10 w-60 h-60 bg-green-200/20 rounded-full blur-3xl pointer-events-none" />
+            <div className="absolute -top-10 -left-10 w-40 h-40 bg-brand-green/10 rounded-full blur-3xl pointer-events-none dark:hidden" />
+            <div className="absolute -bottom-10 -right-10 w-60 h-60 bg-green-200/20 rounded-full blur-3xl pointer-events-none dark:hidden" />
             {/* Product visual (own UI, not a stock photo) */}
             <div className="relative z-10 rounded-[2.5rem] overflow-hidden shadow-2xl border-4 border-white dark:border-slate-800 bg-white dark:bg-slate-800">
               <motion.div style={{ y: imageY, scale: imageScale }}>
@@ -832,7 +832,7 @@ const HeroShowcase = ({ onOpenCanva }: { onOpenCanva: () => void }) => {
               >
                 <MagneticCTA
                   href="#waitlist"
-                  className="bg-brand-green text-white px-7 py-4 rounded-full font-bold text-base hover:opacity-90 transition-opacity flex items-center justify-center gap-2 shadow-xl shadow-green-100"
+                  className="bg-brand-green text-white px-7 py-4 rounded-full font-bold text-base hover:opacity-90 transition-opacity flex items-center justify-center gap-2 shadow-xl shadow-green-100 dark:shadow-none"
                 >
                   Reservar mi plaza <ArrowRight size={18} />
                 </MagneticCTA>
@@ -909,10 +909,26 @@ const HeroShowcase = ({ onOpenCanva }: { onOpenCanva: () => void }) => {
   );
 };
 
+// Modo noche automático: activo solo entre las 21:00 y las 7:00 hora local,
+// salvo que el usuario haya elegido tema manualmente (se guarda en localStorage
+// y esa elección manda sobre la franja horaria).
+const isNightTime = (date = new Date()) => {
+  const hour = date.getHours();
+  return hour >= 21 || hour < 7;
+};
+
+const getInitialTheme = (): boolean => {
+  if (typeof window === 'undefined') return false;
+  const saved = localStorage.getItem('theme');
+  if (saved === 'dark') return true;
+  if (saved === 'light') return false;
+  return isNightTime();
+};
+
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [dark, setDark] = useState(() => typeof window !== 'undefined' && document.documentElement.classList.contains('dark'));
+  const [dark, setDark] = useState(getInitialTheme);
 
   useEffect(() => {
     let rafId = 0;
@@ -1010,13 +1026,13 @@ const Navbar = () => {
             transition={{ duration: 0.18 }}
             className="mt-2 max-w-6xl mx-auto bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-3xl p-6 flex flex-col gap-4 lg:hidden shadow-2xl"
           >
-            <a href="#problem"      onClick={close} className="text-base font-semibold text-slate-700 dark:text-slate-200 hover:text-brand-green transition-colors">Problema</a>
-            <a href="#solution"     onClick={close} className="text-base font-semibold text-slate-700 dark:text-slate-200 hover:text-brand-green transition-colors">Solución</a>
-            <a href="#features"     onClick={close} className="text-base font-semibold text-slate-700 dark:text-slate-200 hover:text-brand-green transition-colors">Funcionalidades</a>
-            <a href="#how-it-works" onClick={close} className="text-base font-semibold text-slate-700 dark:text-slate-200 hover:text-brand-green transition-colors">Cómo funciona</a>
-            <a href="#team"         onClick={close} className="text-base font-semibold text-slate-700 dark:text-slate-200 hover:text-brand-green transition-colors">Equipo</a>
-            <a href="#faq"          onClick={close} className="text-base font-semibold text-slate-700 dark:text-slate-200 hover:text-brand-green transition-colors">FAQ</a>
-            <a href="/blog/"        onClick={close} className="text-base font-semibold text-slate-700 dark:text-slate-200 hover:text-brand-green transition-colors">Blog</a>
+            <a href="#problem"      onClick={close} className="text-base font-semibold text-slate-700 dark:text-slate-200 hover:text-brand-green dark:hover:text-brand-green transition-colors">Problema</a>
+            <a href="#solution"     onClick={close} className="text-base font-semibold text-slate-700 dark:text-slate-200 hover:text-brand-green dark:hover:text-brand-green transition-colors">Solución</a>
+            <a href="#features"     onClick={close} className="text-base font-semibold text-slate-700 dark:text-slate-200 hover:text-brand-green dark:hover:text-brand-green transition-colors">Funcionalidades</a>
+            <a href="#how-it-works" onClick={close} className="text-base font-semibold text-slate-700 dark:text-slate-200 hover:text-brand-green dark:hover:text-brand-green transition-colors">Cómo funciona</a>
+            <a href="#team"         onClick={close} className="text-base font-semibold text-slate-700 dark:text-slate-200 hover:text-brand-green dark:hover:text-brand-green transition-colors">Equipo</a>
+            <a href="#faq"          onClick={close} className="text-base font-semibold text-slate-700 dark:text-slate-200 hover:text-brand-green dark:hover:text-brand-green transition-colors">FAQ</a>
+            <a href="/blog/"        onClick={close} className="text-base font-semibold text-slate-700 dark:text-slate-200 hover:text-brand-green dark:hover:text-brand-green transition-colors">Blog</a>
             <a
               href="#waitlist"
               onClick={close}
@@ -1368,12 +1384,10 @@ export default function App() {
   const [spendingValue, setSpendingValue] = useState('');
   const year = new Date().getFullYear();
 
-  // Init dark mode from localStorage
+  // Modo claro por defecto; modo noche automático solo entre las 21:00 y las
+  // 7:00 (hora local), salvo que el usuario haya elegido tema manualmente.
   useEffect(() => {
-    const saved = localStorage.getItem('theme');
-    if (saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-      document.documentElement.classList.add('dark');
-    }
+    document.documentElement.classList.toggle('dark', getInitialTheme());
   }, []);
 
   // Dynamic page title based on visible section
@@ -1471,7 +1485,7 @@ export default function App() {
               { icon: Leaf,         title: 'Desperdiciar comida y dinero', text: 'Comprar sin planificar los menús lleva a tirar alimentos y a que falten productos justo cuando más se necesitan.' },
             ].map((p, i) => (
               <motion.div key={i} variants={gridItem} className="group grid md:grid-cols-[auto_1fr] gap-5 md:gap-10 items-start py-10 md:py-12">
-                <span className="text-6xl md:text-7xl font-extrabold text-slate-200 dark:text-slate-800 leading-none tabular-nums group-hover:text-brand-green/25 transition-colors duration-300">
+                <span className="text-6xl md:text-7xl font-extrabold text-slate-200 dark:text-slate-800 leading-none tabular-nums group-hover:text-brand-green/25 dark:group-hover:text-brand-green/60 transition-colors duration-300">
                   0{i + 1}
                 </span>
                 <div className="flex items-start gap-5">
@@ -1571,9 +1585,9 @@ export default function App() {
               <motion.div key={i} variants={gridItem}>
                 <div className="text-center group">
                   <motion.div
-                    whileHover={{ scale: 1.15, backgroundColor: '#22C55E', color: '#fff' }}
+                    whileHover={{ scale: 1.15 }}
                     transition={{ type: 'spring', stiffness: 320, damping: 18 }}
-                    className="w-16 h-16 bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 shadow-sm rounded-full flex items-center justify-center mx-auto mb-8 text-xl font-bold text-brand-green cursor-default"
+                    className="w-16 h-16 bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 shadow-sm rounded-full flex items-center justify-center mx-auto mb-8 text-xl font-bold text-brand-green cursor-default transition-colors hover:bg-brand-green hover:text-white hover:border-brand-green dark:hover:bg-brand-green dark:hover:border-brand-green"
                   >
                     {s.step}
                   </motion.div>
