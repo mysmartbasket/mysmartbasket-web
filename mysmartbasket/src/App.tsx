@@ -930,6 +930,13 @@ const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [dark, setDark] = useState(getInitialTheme);
 
+  // Mantiene el icono sol/luna sincronizado si el tema cambia solo (franja
+  // horaria 21:00-7:00) mientras la página sigue abierta.
+  useEffect(() => {
+    const id = setInterval(() => setDark(getInitialTheme()), 60_000);
+    return () => clearInterval(id);
+  }, []);
+
   useEffect(() => {
     let rafId = 0;
     const handleScroll = () => {
@@ -1386,8 +1393,13 @@ export default function App() {
 
   // Modo claro por defecto; modo noche automático solo entre las 21:00 y las
   // 7:00 (hora local), salvo que el usuario haya elegido tema manualmente.
+  // Se reevalúa cada minuto para que el cambio se aplique solo con la página
+  // abierta, sin esperar a una recarga.
   useEffect(() => {
-    document.documentElement.classList.toggle('dark', getInitialTheme());
+    const applyTheme = () => document.documentElement.classList.toggle('dark', getInitialTheme());
+    applyTheme();
+    const id = setInterval(applyTheme, 60_000);
+    return () => clearInterval(id);
   }, []);
 
   // Dynamic page title based on visible section
