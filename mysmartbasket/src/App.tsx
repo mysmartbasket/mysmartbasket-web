@@ -769,7 +769,7 @@ const useIsDesktop = () => {
 };
 
 /* ── Hero: pinned showcase — the phone's screen advances as you scroll, Apple-style ── */
-const HeroShowcase = ({ onOpenCanva }: { onOpenCanva: () => void }) => {
+const HeroShowcase = ({ onOpenVideo }: { onOpenVideo: () => void }) => {
   // --- Scroll-driven phone showcase: disabled for now (collided with the floating navbar) ---
   // const sectionRef = useRef<HTMLElement>(null);
   // const isDesktop = useIsDesktop();
@@ -837,10 +837,10 @@ const HeroShowcase = ({ onOpenCanva }: { onOpenCanva: () => void }) => {
                   Reservar mi plaza <ArrowRight size={18} />
                 </MagneticCTA>
                 <MagneticCTA
-                  onClick={onOpenCanva}
+                  onClick={onOpenVideo}
                   className="bg-brand-black text-white px-7 py-4 rounded-full font-bold text-base hover:bg-slate-800 transition-all flex items-center justify-center gap-2"
                 >
-                  Conócenos mejor
+                  Tutorial App
                 </MagneticCTA>
               </motion.div>
 
@@ -1386,7 +1386,7 @@ const SECTIONS: { id: string; label: string }[] = [
 
 export default function App() {
   const [formState, handleSubmit] = useForm('mwvybvog');
-  const [isCanvaOpen, setIsCanvaOpen] = useState(false);
+  const [isVideoOpen, setIsVideoOpen] = useState(false);
   const [emailValue, setEmailValue] = useState('');
   const [spendingValue, setSpendingValue] = useState('');
   const year = new Date().getFullYear();
@@ -1420,7 +1420,7 @@ export default function App() {
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') { setIsCanvaOpen(false); }
+      if (e.key === 'Escape') { setIsVideoOpen(false); }
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
@@ -1438,36 +1438,35 @@ export default function App() {
       <Navbar />
 
       {/* VIDEO MODAL */}
-      {/* CANVA MODAL */}
       <AnimatePresence>
-        {isCanvaOpen && (
+        {isVideoOpen && (
           <motion.div
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
             className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-8"
-            role="dialog" aria-modal="true" aria-label="Presentación"
+            role="dialog" aria-modal="true" aria-label="Tutorial de la app"
           >
-            <div className="absolute inset-0 bg-brand-black/95 backdrop-blur-md" onClick={() => setIsCanvaOpen(false)} />
+            <div className="absolute inset-0 bg-brand-black/95 backdrop-blur-md" onClick={() => setIsVideoOpen(false)} />
             <motion.div
               initial={{ scale: 0.93, opacity: 0, y: 16 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.93, opacity: 0, y: 16 }}
               transition={{ duration: 0.2 }}
-              className="relative w-full max-w-6xl h-[85vh] bg-white rounded-[2rem] overflow-hidden shadow-[0_0_100px_rgba(34,197,94,0.15)] z-10"
+              className="relative w-full max-w-3xl bg-black rounded-[2rem] overflow-hidden shadow-[0_0_100px_rgba(34,197,94,0.15)] z-10"
             >
               <button
-                onClick={() => setIsCanvaOpen(false)}
-                className="absolute top-4 right-4 z-20 bg-brand-black/10 hover:bg-brand-black/20 text-brand-black p-3 rounded-full transition-all active:scale-90"
-                aria-label="Cerrar presentación"
+                onClick={() => setIsVideoOpen(false)}
+                className="absolute top-4 right-4 z-20 bg-white/10 hover:bg-white/20 text-white p-3 rounded-full transition-all active:scale-90"
+                aria-label="Cerrar tutorial"
               >
                 <X size={20} />
               </button>
-              <iframe
-                src="https://www.canva.com/design/DAG_-1iv9dM/YLG74bW3M2fHwS-ZTzSfGA/view?embed"
-                title="MySmartBasket Presentación"
-                className="w-full h-full border-none"
-                allowFullScreen
-                referrerPolicy="no-referrer"
-                sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-presentation"
+              <video
+                src="/videos/tutorial-app.mp4"
+                title="Tutorial de MySmartBasket"
+                className="w-full max-h-[85vh]"
+                controls
+                autoPlay
+                playsInline
               />
             </motion.div>
           </motion.div>
@@ -1475,7 +1474,7 @@ export default function App() {
       </AnimatePresence>
 
       {/* HERO */}
-      <HeroShowcase onOpenCanva={() => setIsCanvaOpen(true)} />
+      <HeroShowcase onOpenVideo={() => setIsVideoOpen(true)} />
 
       {/* STORE TICKER */}
       <StoreTicker />
