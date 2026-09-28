@@ -36,7 +36,7 @@ import {
 const ScrollProgress = memo(() => {
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, { stiffness: 120, damping: 30, restDelta: 0.001 });
-  return <motion.div style={{ scaleX }} className="fixed top-0 left-0 right-0 h-[3px] bg-brand-green origin-left z-[60] shadow-[0_0_8px_rgba(34,197,94,0.6)]" />;
+  return <motion.div style={{ scaleX }} className="fixed top-0 left-0 right-0 h-[3px] bg-brand-green origin-left z-[60] shadow-[0_0_8px_rgba(0,153,102,0.6)]" />;
 });
 
 /* ── Google AdSense + Analytics: consent + ad slots ──
@@ -734,7 +734,7 @@ const SolutionSection = memo(() => {
                     className="flex items-center gap-3 cursor-default"
                   >
                     <motion.div
-                      whileHover={{ scale: 1.2, backgroundColor: '#22C55E', color: '#fff' }}
+                      whileHover={{ scale: 1.2, backgroundColor: '#009966', color: '#fff' }}
                       transition={{ duration: 0.2 }}
                       className="w-6 h-6 bg-green-100 text-brand-green rounded-full flex items-center justify-center flex-shrink-0"
                     >
@@ -1079,7 +1079,7 @@ const SectionHeading = ({ children, title, subtitle, centered = false }: { child
 
 const FeatureCard = ({ icon: Icon, title, description }: { icon: any, title: string, description: string }) => (
   <motion.div
-    whileHover={{ y: -8, boxShadow: '0 24px 48px rgba(34,197,94,0.12)' }}
+    whileHover={{ y: -8, boxShadow: '0 24px 48px rgba(0,153,102,0.12)' }}
     transition={{ type: 'spring', stiffness: 280, damping: 20 }}
     className="h-full p-8 bg-white dark:bg-slate-800 rounded-3xl border border-slate-100 dark:border-slate-700 shadow-sm hover:border-green-100 dark:hover:border-brand-green/40 cursor-default"
   >
@@ -1459,7 +1459,7 @@ export default function App() {
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.93, opacity: 0, y: 16 }}
               transition={{ duration: 0.2 }}
-              className="relative w-full max-w-3xl bg-black rounded-[2rem] overflow-hidden shadow-[0_0_100px_rgba(34,197,94,0.15)] z-10"
+              className="relative w-full max-w-3xl bg-black rounded-[2rem] overflow-hidden shadow-[0_0_100px_rgba(0,153,102,0.15)] z-10"
             >
               <button
                 onClick={() => setIsVideoOpen(false)}
