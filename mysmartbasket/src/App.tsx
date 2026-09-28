@@ -31,6 +31,9 @@ import {
   MapPin,
   HandCoins,
   Sparkles,
+  Share2,
+  Copy,
+  Check,
 } from 'lucide-react';
 
 const ScrollProgress = memo(() => {
@@ -64,6 +67,12 @@ function updateConsentMode(value: 'granted' | 'denied'): void {
     ad_personalization: value,
     analytics_storage: value,
   });
+}
+
+/* Fires GA4 custom events. Safe to call regardless of consent: gtag's own
+   Consent Mode queues/drops the hit as needed, this never has to check. */
+function trackEvent(name: string, params?: Record<string, unknown>): void {
+  (window as any).gtag?.('event', name, params);
 }
 
 const ConsentBanner = () => {
@@ -251,6 +260,7 @@ const StickyCTA = memo(() => {
         >
           <a
             href="#waitlist"
+            onClick={() => trackEvent('cta_click', { cta_location: 'sticky_mobile' })}
             className="flex items-center justify-center gap-2 w-full bg-brand-green text-white py-4 rounded-2xl font-bold text-base shadow-lg shadow-green-200/50"
           >
             Reservar mi plaza gratis <ArrowRight size={18} />
@@ -597,7 +607,7 @@ const MagneticCTA = ({
   };
   const onLeave = () => { x.set(0); y.set(0); };
   if (href) return (
-    <motion.a ref={ref as React.Ref<HTMLAnchorElement>} href={href} style={{ x: sx, y: sy }}
+    <motion.a ref={ref as React.Ref<HTMLAnchorElement>} href={href} onClick={onClick} style={{ x: sx, y: sy }}
       onMouseMove={onMove} onMouseLeave={onLeave} whileTap={{ scale: 0.96 }} className={className}>
       {children}
     </motion.a>
@@ -829,6 +839,7 @@ const HeroShowcase = ({ onOpenVideo }: { onOpenVideo: () => void }) => {
               >
                 <MagneticCTA
                   href="#waitlist"
+                  onClick={() => trackEvent('cta_click', { cta_location: 'hero' })}
                   className="bg-brand-green text-white px-7 py-4 rounded-full font-bold text-base hover:opacity-90 transition-opacity flex items-center justify-center gap-2 shadow-xl shadow-green-100 dark:shadow-none"
                 >
                   Reservar mi plaza <ArrowRight size={18} />
@@ -999,6 +1010,7 @@ const Navbar = () => {
           </button>
           <a
             href="#waitlist"
+            onClick={() => trackEvent('cta_click', { cta_location: 'navbar_desktop' })}
             className="bg-brand-black dark:bg-brand-green text-white px-4 lg:px-5 py-2.5 rounded-full font-bold hover:bg-slate-800 dark:hover:opacity-90 transition-all active:scale-95 shadow-sm flex-shrink-0"
           >
             Acceso anticipado
@@ -1039,7 +1051,7 @@ const Navbar = () => {
             <a href="/blog/"        onClick={close} className="text-base font-semibold text-slate-700 dark:text-slate-200 hover:text-brand-green dark:hover:text-brand-green transition-colors">Blog</a>
             <a
               href="#waitlist"
-              onClick={close}
+              onClick={() => { trackEvent('cta_click', { cta_location: 'navbar_mobile' }); close(); }}
               className="w-full bg-brand-green text-white py-4 rounded-full font-bold mt-2 shadow-lg shadow-green-100 text-center block"
             >
               Unirme a la lista de espera
@@ -1370,6 +1382,57 @@ const MockupApp = memo(({ active }: { active: number }) => {
   );
 });
 
+const SHARE_URL = 'https://mysmartbasket.app/';
+const SHARE_TEXT = 'Estoy en la lista de espera de MySmartBasket: compara precios de supermercados en tiempo real y ahorra en la compra semanal. Únete tú también:';
+
+const ShareWaitlist = () => {
+  const [copied, setCopied] = useState(false);
+  const canNativeShare = typeof navigator !== 'undefined' && !!navigator.share;
+
+  const share = async (method: 'native' | 'whatsapp' | 'twitter' | 'copy') => {
+    trackEvent('waitlist_share', { method });
+    if (method === 'native') {
+      try { await navigator.share({ title: 'MySmartBasket', text: SHARE_TEXT, url: SHARE_URL }); } catch { /* user cancelled */ }
+      return;
+    }
+    if (method === 'whatsapp') {
+      window.open(`https://wa.me/?text=${encodeURIComponent(`${SHARE_TEXT} ${SHARE_URL}`)}`, '_blank', 'noopener,noreferrer');
+      return;
+    }
+    if (method === 'twitter') {
+      window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(SHARE_TEXT)}&url=${encodeURIComponent(SHARE_URL)}`, '_blank', 'noopener,noreferrer');
+      return;
+    }
+    try {
+      await navigator.clipboard.writeText(SHARE_URL);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch { /* clipboard unavailable */ }
+  };
+
+  return (
+    <div className="mt-5 pt-5 border-t border-green-100 dark:border-green-800">
+      <p className="text-sm font-semibold text-slate-700 dark:text-slate-200 mb-3">¿Conoces a alguien a quien le venga bien ahorrar en la compra? Compártelo:</p>
+      <div className="flex flex-wrap gap-2">
+        {canNativeShare && (
+          <button type="button" onClick={() => share('native')} className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-brand-green text-white text-sm font-bold hover:opacity-90 transition-opacity">
+            <Share2 size={14} /> Compartir
+          </button>
+        )}
+        <button type="button" onClick={() => share('whatsapp')} className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm font-bold text-slate-700 dark:text-slate-200 hover:border-brand-green transition-colors">
+          WhatsApp
+        </button>
+        <button type="button" onClick={() => share('twitter')} className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm font-bold text-slate-700 dark:text-slate-200 hover:border-brand-green transition-colors">
+          X
+        </button>
+        <button type="button" onClick={() => share('copy')} className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm font-bold text-slate-700 dark:text-slate-200 hover:border-brand-green transition-colors">
+          {copied ? <><Check size={14} className="text-brand-green" /> Copiado</> : <><Copy size={14} /> Copiar enlace</>}
+        </button>
+      </div>
+    </div>
+  );
+};
+
 const SECTIONS: { id: string; label: string }[] = [
   { id: 'top',          label: 'MySmartBasket'                        },
   { id: 'problem',      label: 'MySmartBasket - El Problema'          },
@@ -1398,6 +1461,11 @@ export default function App() {
     w.gtag?.('js', new Date());
     w.gtag?.('config', GA_MEASUREMENT_ID);
   }, []);
+
+  // GA4's recommended event name for a completed lead-gen form.
+  useEffect(() => {
+    if (formState.succeeded) trackEvent('generate_lead');
+  }, [formState.succeeded]);
 
   // Modo claro por defecto; modo noche automático solo entre las 21:00 y las
   // 7:00 (hora local), salvo que el usuario haya elegido tema manualmente.
@@ -1703,6 +1771,7 @@ export default function App() {
                 </div>
                 <p className="text-brand-green font-bold text-xl mb-1">Solicitud recibida</p>
                 <p className="text-slate-500 dark:text-slate-400 text-sm">Te notificaremos cuando tu plaza esté disponible. Revisa también la carpeta de correo no deseado.</p>
+                <ShareWaitlist />
               </motion.div>
             ) : (
               <motion.form
@@ -1802,7 +1871,7 @@ export default function App() {
               <li><a href="#how-it-works" className="hover:text-brand-green transition-colors">Cómo funciona</a></li>
               <li><a href="#demo"         className="hover:text-brand-green transition-colors">Demo interactiva</a></li>
               <li><a href="/blog/"        className="hover:text-brand-green transition-colors">Blog</a></li>
-              <li><a href="#waitlist"     className="hover:text-brand-green transition-colors">Acceso anticipado</a></li>
+              <li><a href="#waitlist"     onClick={() => trackEvent('cta_click', { cta_location: 'footer' })} className="hover:text-brand-green transition-colors">Acceso anticipado</a></li>
             </ul>
           </div>
 
