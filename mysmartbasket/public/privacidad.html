@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'self';" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://www.googletagmanager.com https://*.google-analytics.com; object-src 'none'; base-uri 'self'; form-action 'self';" />
   <title>Política de Privacidad · MySmartBasket</title>
   <meta name="description" content="Política de privacidad y tratamiento de datos personales de MySmartBasket." />
   <meta name="robots" content="noindex, follow" />
@@ -143,6 +143,16 @@
     }
     footer a { color: var(--slate-400); }
     footer a:hover { color: var(--black); text-decoration: none; }
+
+    #msb-consent-banner { position: fixed; bottom: 0; left: 0; right: 0; z-index: 70; background: var(--black); color: #fff; padding: 16px 24px; display: flex; flex-direction: column; gap: 12px; box-shadow: 0 -10px 30px rgba(0,0,0,.2); }
+    @media (min-width: 640px) { #msb-consent-banner { flex-direction: row; align-items: center; } }
+    .msb-consent-text { font-size: 13px; color: #cbd5e1; line-height: 1.5; flex: 1; margin: 0; }
+    .msb-consent-text a { color: #fff; text-decoration: underline; }
+    .msb-consent-actions { display: flex; gap: 8px; flex-shrink: 0; }
+    .msb-consent-btn { padding: 8px 16px; font-size: 12px; font-weight: 700; border-radius: 999px; border: none; cursor: pointer; font-family: inherit; }
+    .msb-consent-reject { background: #1e293b; color: #fff; }
+    .msb-consent-accept { background: var(--green); color: #fff; }
+    .msb-consent-btn:hover { opacity: .9; }
   </style>
 </head>
 <body>
@@ -219,6 +229,7 @@
         <tr><td>Gestionar tu suscripción de pago</td><td>Ejecución de un contrato (art. 6.1.b RGPD)</td></tr>
         <tr><td>Responder a través del Asistente de IA</td><td>Ejecución de un contrato (art. 6.1.b RGPD)</td></tr>
         <tr><td>Mostrarte publicidad personalizada</td><td>Consentimiento (art. 6.1.a RGPD)</td></tr>
+        <tr><td>Medir el uso de la web (analítica)</td><td>Consentimiento (art. 6.1.a RGPD)</td></tr>
         <tr><td>Seguridad, prevención de fraude y abuso</td><td>Interés legítimo (art. 6.1.f RGPD)</td></tr>
         <tr><td>Comunicaciones sobre el proyecto (máx. 1/mes)</td><td>Consentimiento (art. 6.1.a RGPD)</td></tr>
       </table>
@@ -278,7 +289,7 @@
       </p>
       <ul>
         <li><strong>Preferencia de tema</strong> (<code>theme</code>) — modo claro u oscuro.</li>
-        <li><strong>Elección sobre el aviso de cookies</strong> (<code>msb_ad_consent</code>) — si aceptaste o rechazaste la publicidad personalizada.</li>
+        <li><strong>Elección sobre el aviso de cookies</strong> (<code>msb_ad_consent</code>) — si aceptaste o rechazaste la publicidad personalizada y la analítica.</li>
         <li><strong>Sesión de la aplicación</strong> (token de acceso) — si has iniciado sesión, para mantenerte conectado. Se elimina al cerrar sesión.</li>
       </ul>
       <p>Puedes borrar estos datos en cualquier momento desde los ajustes de tu navegador.</p>
@@ -303,6 +314,7 @@
         <li><strong>Google (API de Gemini)</strong> — procesamiento del Asistente de IA, ver sección 5.</li>
         <li><strong>Stripe</strong> — procesamiento de pagos, ver sección 6.</li>
         <li><strong>Google Fonts</strong> — fuente tipográfica Plus Jakarta Sans. Google puede registrar la IP de la solicitud.</li>
+        <li><strong>Google Analytics</strong> — solo si aceptas la analítica. Ver sección 10.</li>
         <li><strong>Google AdSense</strong> — solo si aceptas la publicidad. Ver sección 10.</li>
         <li><strong>Meta (Facebook/Instagram Ads)</strong> — solo si aceptas la publicidad. Ver sección 10.</li>
       </ul>
@@ -310,13 +322,14 @@
     </section>
 
     <section>
-      <h2><span class="h2-num">10</span> Cookies y publicidad</h2>
+      <h2><span class="h2-num">10</span> Cookies, analítica y publicidad</h2>
       <p>
-        Mostramos un aviso de cookies antes de activar cualquier cookie publicitaria. Rechazar la publicidad no
+        Mostramos un aviso de cookies antes de activar cualquier cookie de analítica o publicitaria. Rechazarlas no
         afecta a ninguna funcionalidad de la web ni de la aplicación.
       </p>
       <ul>
         <li><strong>Técnicas (siempre activas):</strong> localStorage descrito en la sección 7, y las cookies de sesión necesarias para que Stripe procese un pago.</li>
+        <li><strong>Google Analytics (solo si aceptas):</strong> cookies analíticas que usamos para medir visitas y uso de la web de forma agregada. Más información en la <a href="https://policies.google.com/technologies/cookies" target="_blank" rel="noopener noreferrer">política de cookies de Google</a>.</li>
         <li><strong>Google AdSense (solo si aceptas):</strong> cookies publicitarias que Google usa para mostrar y medir anuncios, incluida personalización entre sitios. Más información en la <a href="https://policies.google.com/technologies/ads" target="_blank" rel="noopener noreferrer">política de anuncios de Google</a>.</li>
         <li><strong>Meta Ads / Píxel de Meta (solo si aceptas):</strong> utilizamos el Píxel de Meta y/o la API de Conversiones para medir la efectividad de nuestros anuncios en Facebook e Instagram y mostrarte publicidad relevante en esas plataformas. Esto puede implicar el envío a Meta Platforms Ireland Limited de tu IP, información del dispositivo y acciones que realizas en el sitio (p. ej. completar el registro), de forma seudonimizada. Meta actúa como responsable independiente de este tratamiento — consulta su <a href="https://www.facebook.com/privacy/policy/" target="_blank" rel="noopener noreferrer">política de privacidad</a> y gestiona tus preferencias de anuncios desde tu cuenta de Meta.</li>
       </ul>
@@ -385,5 +398,6 @@
   </footer>
 
   <script src="/year.js" defer></script>
+  <script src="/consent-ads.js" defer></script>
 </body>
 </html>

@@ -66,17 +66,55 @@ function loadAdSenseScript(): Promise<void> {
   return adsenseScriptPromise;
 }
 
+/* ── Google Analytics 4 ──
+ * Same consent gate as AdSense above (msb_ad_consent) — GA sets non-essential
+ * cookies too, so it must not load before the visitor accepts.
+ */
+const GA_MEASUREMENT_ID = import.meta.env.VITE_GA_MEASUREMENT_ID as string | undefined;
+const isGaConfigured = !!GA_MEASUREMENT_ID && !GA_MEASUREMENT_ID.includes('XXXXXXXXXX');
+
+let gaScriptPromise: Promise<void> | null = null;
+function loadGaScript(): Promise<void> {
+  if (gaScriptPromise) return gaScriptPromise;
+  gaScriptPromise = new Promise((resolve, reject) => {
+    const script = document.createElement('script');
+    script.async = true;
+    script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`;
+    script.onload = () => resolve();
+    script.onerror = () => reject(new Error('Failed to load Google Analytics script'));
+    document.head.appendChild(script);
+  });
+  return gaScriptPromise;
+}
+
+let gaInitialized = false;
+function initGa(): void {
+  if (!isGaConfigured || gaInitialized) return;
+  gaInitialized = true;
+  const w = window as any;
+  w.dataLayer = w.dataLayer || [];
+  w.gtag = function gtag() { w.dataLayer.push(arguments); };
+  loadGaScript()
+    .then(() => {
+      w.gtag('js', new Date());
+      w.gtag('config', GA_MEASUREMENT_ID);
+    })
+    .catch((err) => console.error(err));
+}
+
 const ConsentBanner = () => {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
     const saved = localStorage.getItem(ADSENSE_CONSENT_KEY);
     setVisible(saved !== 'granted' && saved !== 'denied');
+    if (saved === 'granted') initGa();
   }, []);
 
   const respond = (value: 'granted' | 'denied') => {
     localStorage.setItem(ADSENSE_CONSENT_KEY, value);
     window.dispatchEvent(new CustomEvent(ADSENSE_CONSENT_EVENT, { detail: value }));
+    if (value === 'granted') initGa();
     setVisible(false);
   };
 
@@ -91,8 +129,8 @@ const ConsentBanner = () => {
           className="fixed bottom-0 inset-x-0 z-[70] bg-brand-black text-white px-6 py-4 flex flex-col sm:flex-row items-center gap-4 shadow-2xl"
         >
           <p className="text-xs sm:text-sm text-slate-300 flex-1 text-center sm:text-left leading-relaxed">
-            Usamos cookies para mostrar publicidad y mantener la web gratuita. Puedes aceptar o rechazar la
-            personalizada — la página funciona igual en ambos casos. Más info en la{' '}
+            Usamos cookies para mostrar publicidad, medir visitas y mantener la web gratuita. Puedes aceptar o
+            rechazar — la página funciona igual en ambos casos. Más info en la{' '}
             <a href="/privacidad.html" className="underline hover:text-white">política de privacidad</a>.
           </p>
           <div className="flex gap-2 shrink-0">
@@ -1713,6 +1751,10 @@ export default function App() {
                   autoComplete="off"
                   aria-hidden="true"
                   className="absolute -left-[9999px] w-px h-px opacity-0"
+                />
+                <ValidationError
+                  errors={formState.errors}
+                  className="mb-4 px-4 py-3 rounded-2xl bg-red-50 dark:bg-red-900/20 border border-red-100 dark:border-red-800 text-sm text-red-600 dark:text-red-400 text-center"
                 />
                 <div className="relative">
                   <input

@@ -1,9 +1,9 @@
 /*
- * Shared cookie-consent banner + AdSense ad-slot loader for the static
- * pages (blog, legal) that live outside the React app's bundle.
+ * Shared cookie-consent banner + AdSense ad-slot loader + GA4 loader for the
+ * static pages (blog, legal) that live outside the React app's bundle.
  *
- * Mirrors src/App.tsx's ConsentBanner/AdSlot behavior and reads/writes the
- * SAME localStorage key, so a choice made on the main app or on any blog
+ * Mirrors src/App.tsx's ConsentBanner/AdSlot/initGa behavior and reads/writes
+ * the SAME localStorage key, so a choice made on the main app or on any blog
  * page is respected everywhere without asking again.
  */
 (function () {
@@ -11,6 +11,7 @@
 
   var CONSENT_KEY = 'msb_ad_consent';
   var ADSENSE_CLIENT = 'ca-pub-8159510657807581';
+  var GA_MEASUREMENT_ID = 'G-MJE8ENFTPB';
 
   var adsenseScriptPromise = null;
   function loadAdSenseScript() {
@@ -25,6 +26,23 @@
       document.head.appendChild(script);
     });
     return adsenseScriptPromise;
+  }
+
+  var gaInitialized = false;
+  function initGa() {
+    if (gaInitialized) return;
+    gaInitialized = true;
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = function () { window.dataLayer.push(arguments); };
+    var script = document.createElement('script');
+    script.async = true;
+    script.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA_MEASUREMENT_ID;
+    script.onload = function () {
+      window.gtag('js', new Date());
+      window.gtag('config', GA_MEASUREMENT_ID);
+    };
+    script.onerror = function () { console.error('Failed to load Google Analytics script'); };
+    document.head.appendChild(script);
   }
 
   function getConsent() {
@@ -78,7 +96,10 @@
   }
 
   function applyConsent(value) {
-    if (value === 'granted') renderAdSlots();
+    if (value === 'granted') {
+      renderAdSlots();
+      initGa();
+    }
   }
 
   function injectBanner() {
@@ -87,8 +108,8 @@
     var banner = document.createElement('div');
     banner.id = 'msb-consent-banner';
     banner.innerHTML =
-      '<p class="msb-consent-text">Usamos cookies para mostrar publicidad y mantener la web gratuita. ' +
-      'Puedes aceptar o rechazar la personalizada — la página funciona igual en ambos casos. ' +
+      '<p class="msb-consent-text">Usamos cookies para mostrar publicidad, medir visitas y mantener la web gratuita. ' +
+      'Puedes aceptar o rechazar — la página funciona igual en ambos casos. ' +
       'Más info en la <a href="/privacidad.html">política de privacidad</a>.</p>' +
       '<div class="msb-consent-actions">' +
       '<button type="button" class="msb-consent-btn msb-consent-reject">Rechazar</button>' +
