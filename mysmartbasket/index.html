@@ -3,22 +3,25 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-eval' https://pagead2.googlesyndication.com https://*.googlesyndication.com https://*.google.com https://*.doubleclick.net https://*.adtrafficquality.google https://www.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://formspree.io https://*.googlesyndication.com https://*.google.com https://*.doubleclick.net https://*.adtrafficquality.google; frame-src https://www.canva.com https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.adtrafficquality.google; object-src 'none'; base-uri 'self'; form-action 'self' https://formspree.io;" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-eval' https://pagead2.googlesyndication.com https://*.googlesyndication.com https://*.google.com https://*.doubleclick.net https://*.adtrafficquality.google https://www.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://formspree.io https://*.googlesyndication.com https://*.google.com https://*.doubleclick.net https://*.adtrafficquality.google; frame-src https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.adtrafficquality.google; object-src 'none'; base-uri 'self'; form-action 'self' https://formspree.io;" />
 
     <title>MySmartBasket | La compra inteligente que te ahorra tiempo y dinero</title>
     <meta name="description" content="MySmartBasket automatiza tu lista de la compra, compara precios en tiempo real y te ayuda a comer mejor. Únete a la lista de espera." />
     <meta name="robots" content="index, follow" />
     <link rel="canonical" href="https://mysmartbasket.app/" />
 
-    <meta property="og:title" content="MySmartBasket | La compra que te conoce, el ahorro que mereces." />
-    <meta property="og:description" content="Automatiza tu lista de la compra, compara precios en tiempo real y ahorra hasta un 20% cada mes. Próximamente." />
+    <meta property="og:title" content="MySmartBasket | La compra inteligente que te ahorra tiempo y dinero" />
+    <meta property="og:description" content="MySmartBasket automatiza tu lista de la compra, compara precios en tiempo real y te ayuda a comer mejor. Únete a la lista de espera." />
     <meta property="og:url" content="https://mysmartbasket.app/" />
     <meta property="og:type" content="website" />
+    <meta property="og:locale" content="es_ES" />
     <meta property="og:image" content="https://mysmartbasket.app/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
 
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="MySmartBasket | La compra que te conoce, el ahorro que mereces." />
-    <meta name="twitter:description" content="Automatiza tu lista de la compra, compara precios en tiempo real y ahorra hasta un 20% cada mes." />
+    <meta name="twitter:title" content="MySmartBasket | La compra inteligente que te ahorra tiempo y dinero" />
+    <meta name="twitter:description" content="MySmartBasket automatiza tu lista de la compra, compara precios en tiempo real y te ayuda a comer mejor. Únete a la lista de espera." />
     <meta name="twitter:image" content="https://mysmartbasket.app/og-image.png" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -32,6 +35,75 @@
     <!-- The AdSense script itself is NOT loaded here: it must only run after
          the visitor answers the cookie-consent banner. See loadAdSenseScript()
          in src/App.tsx, which injects it lazily once consent is 'granted'. -->
+
+    <!-- Structured data mirrors real copy from src/App.tsx (TEAM, FAQ_ITEMS,
+         pricing in the FAQ) — keep both in sync if that copy changes. -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Organization",
+          "@id": "https://mysmartbasket.app/#organization",
+          "name": "MySmartBasket",
+          "url": "https://mysmartbasket.app/",
+          "logo": "https://mysmartbasket.app/android-chrome-512x512.png"
+        },
+        {
+          "@type": "SoftwareApplication",
+          "@id": "https://mysmartbasket.app/#software",
+          "name": "MySmartBasket",
+          "url": "https://mysmartbasket.app/",
+          "description": "MySmartBasket automatiza tu lista de la compra, compara precios en tiempo real en Mercadona, Día, Aldi y Alcampo, y te ayuda a ahorrar cada mes.",
+          "applicationCategory": "ShoppingApplication",
+          "operatingSystem": "Web",
+          "publisher": { "@id": "https://mysmartbasket.app/#organization" },
+          "offers": [
+            { "@type": "Offer", "name": "Plan gratuito", "price": "0", "priceCurrency": "EUR" },
+            { "@type": "Offer", "name": "Plan Pro", "price": "4.99", "priceCurrency": "EUR" }
+          ]
+        }
+      ]
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "¿Es gratuito?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Tenemos un plan gratuito y un plan Pro por 4,99€/mes con funciones avanzadas. Si te apuntas a la lista de espera, te llevas 1 mes de plan Pro totalmente gratis al lanzamiento." }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Cómo obtiene la app los precios?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Contamos con un sistema propio que monitoriza precios en Mercadona, Día, Aldi y Alcampo cada 24 horas, y seguimos ampliando la cobertura a más cadenas próximamente. No dependemos de fuentes externas, lo que garantiza mayor fiabilidad." }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Cuándo está disponible?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Estamos en la fase final de desarrollo, con lanzamiento previsto en las próximas semanas. Iremos dando acceso de forma gradual a quienes estén en la lista de espera, para asegurar una buena experiencia desde el primer día. Apúntate y te notificamos en cuanto tu plaza esté lista." }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Está disponible en mi supermercado?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Por ahora cubrimos Mercadona, Día, Aldi y Alcampo, y vamos incorporando más cadenas próximamente. Si tu cadena habitual no aparece todavía, puedes solicitarla — la añadimos por orden de demanda." }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Puedo compartirlo con mi familia?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Sí. Puedes crear un hogar compartido con hasta 5 miembros que comparten la misma cesta, sin duplicados ni necesidad de coordinación adicional. Además, cada uno puede registrar lo que paga para repartir el gasto automáticamente." }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Cómo se tratan mis datos personales?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Solo almacenamos tu correo electrónico y tus preferencias de compra. No vendemos ni compartimos datos con terceros. Puedes solicitar la eliminación completa de tu cuenta en cualquier momento escribiéndonos a contacto@mysmartbasket.app." }
+        }
+      ]
+    }
+    </script>
   </head>
   <body>
     <div id="root"></div>
