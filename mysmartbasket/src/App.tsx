@@ -39,67 +39,31 @@ const ScrollProgress = memo(() => {
   return <motion.div style={{ scaleX }} className="fixed top-0 left-0 right-0 h-[3px] bg-brand-green origin-left z-[60] shadow-[0_0_8px_rgba(34,197,94,0.6)]" />;
 });
 
-/* ── Google AdSense: consent + ad slots ──
- * Google suspends AdSense accounts that serve ads or set cookies for EU
- * visitors without verifiable consent (AdSense ToS §10 / ePrivacy), so no
- * ad script may load before the visitor has answered this banner. Consent
- * is stored in localStorage and is separate from the theme/waitlist-count
- * keys already documented in privacidad.html — see section 8 there.
+/* ── Google AdSense + Analytics: consent + ad slots ──
+ * The gtag.js and adsbygoogle.js scripts themselves load unconditionally
+ * (static tags in index.html, right after consent-mode.js — see that file),
+ * so Google's AdSense site-verification crawler can always detect them.
+ * What's actually gated on consent is Google Consent Mode's ad/analytics
+ * storage flags (defaulted to 'denied' by consent-mode.js) and whether we
+ * request a real ad impression via AdSlot below — no ad or analytics
+ * cookies are set until the visitor accepts this banner. Consent is stored
+ * in localStorage and is separate from the theme/waitlist-count keys
+ * already documented in privacidad.html — see section 8 there.
  */
 const ADSENSE_CONSENT_KEY = 'msb_ad_consent';
 const ADSENSE_CONSENT_EVENT = 'msb-ad-consent-changed';
 const ADSENSE_CLIENT_ID = import.meta.env.VITE_ADSENSE_CLIENT_ID as string | undefined;
 const isAdSenseConfigured = !!ADSENSE_CLIENT_ID && !ADSENSE_CLIENT_ID.includes('XXXXXXXXXX');
-
-let adsenseScriptPromise: Promise<void> | null = null;
-function loadAdSenseScript(): Promise<void> {
-  if (adsenseScriptPromise) return adsenseScriptPromise;
-  adsenseScriptPromise = new Promise((resolve, reject) => {
-    const script = document.createElement('script');
-    script.async = true;
-    script.src = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT_ID}`;
-    script.crossOrigin = 'anonymous';
-    script.onload = () => resolve();
-    script.onerror = () => reject(new Error('Failed to load AdSense script'));
-    document.head.appendChild(script);
-  });
-  return adsenseScriptPromise;
-}
-
-/* ── Google Analytics 4 ──
- * Same consent gate as AdSense above (msb_ad_consent) — GA sets non-essential
- * cookies too, so it must not load before the visitor accepts.
- */
 const GA_MEASUREMENT_ID = import.meta.env.VITE_GA_MEASUREMENT_ID as string | undefined;
 const isGaConfigured = !!GA_MEASUREMENT_ID && !GA_MEASUREMENT_ID.includes('XXXXXXXXXX');
 
-let gaScriptPromise: Promise<void> | null = null;
-function loadGaScript(): Promise<void> {
-  if (gaScriptPromise) return gaScriptPromise;
-  gaScriptPromise = new Promise((resolve, reject) => {
-    const script = document.createElement('script');
-    script.async = true;
-    script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`;
-    script.onload = () => resolve();
-    script.onerror = () => reject(new Error('Failed to load Google Analytics script'));
-    document.head.appendChild(script);
+function updateConsentMode(value: 'granted' | 'denied'): void {
+  (window as any).gtag?.('consent', 'update', {
+    ad_storage: value,
+    ad_user_data: value,
+    ad_personalization: value,
+    analytics_storage: value,
   });
-  return gaScriptPromise;
-}
-
-let gaInitialized = false;
-function initGa(): void {
-  if (!isGaConfigured || gaInitialized) return;
-  gaInitialized = true;
-  const w = window as any;
-  w.dataLayer = w.dataLayer || [];
-  w.gtag = function gtag() { w.dataLayer.push(arguments); };
-  loadGaScript()
-    .then(() => {
-      w.gtag('js', new Date());
-      w.gtag('config', GA_MEASUREMENT_ID);
-    })
-    .catch((err) => console.error(err));
 }
 
 const ConsentBanner = () => {
@@ -108,13 +72,12 @@ const ConsentBanner = () => {
   useEffect(() => {
     const saved = localStorage.getItem(ADSENSE_CONSENT_KEY);
     setVisible(saved !== 'granted' && saved !== 'denied');
-    if (saved === 'granted') initGa();
   }, []);
 
   const respond = (value: 'granted' | 'denied') => {
     localStorage.setItem(ADSENSE_CONSENT_KEY, value);
     window.dispatchEvent(new CustomEvent(ADSENSE_CONSENT_EVENT, { detail: value }));
-    if (value === 'granted') initGa();
+    updateConsentMode(value);
     setVisible(false);
   };
 
@@ -174,16 +137,12 @@ const AdSlot = ({ slotId, className = '' }: { slotId?: string; className?: strin
 
   useEffect(() => {
     if (consent !== 'granted' || !isAdSenseConfigured || pushedRef.current) return;
-    loadAdSenseScript()
-      .then(() => {
-        try {
-          ((window as any).adsbygoogle = (window as any).adsbygoogle || []).push({});
-          pushedRef.current = true;
-        } catch (err) {
-          console.error('AdSense push failed:', err);
-        }
-      })
-      .catch((err) => console.error(err));
+    try {
+      ((window as any).adsbygoogle = (window as any).adsbygoogle || []).push({});
+      pushedRef.current = true;
+    } catch (err) {
+      console.error('AdSense push failed:', err);
+    }
   }, [consent]);
 
   if (consent !== 'granted') return null;
@@ -1428,6 +1387,17 @@ export default function App() {
   const [emailValue, setEmailValue] = useState('');
   const [spendingValue, setSpendingValue] = useState('');
   const year = new Date().getFullYear();
+
+  // gtag itself (dataLayer + consent defaults) is already set up by
+  // consent-mode.js before this bundle even loads — this just points GA at
+  // our Measurement ID. Safe to call regardless of consent: Consent Mode is
+  // what actually withholds analytics_storage until the visitor accepts.
+  useEffect(() => {
+    if (!isGaConfigured) return;
+    const w = window as any;
+    w.gtag?.('js', new Date());
+    w.gtag?.('config', GA_MEASUREMENT_ID);
+  }, []);
 
   // Modo claro por defecto; modo noche automático solo entre las 21:00 y las
   // 7:00 (hora local), salvo que el usuario haya elegido tema manualmente.

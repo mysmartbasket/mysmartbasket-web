@@ -1,10 +1,14 @@
 /*
- * Shared cookie-consent banner + AdSense ad-slot loader + GA4 loader for the
- * static pages (blog, legal) that live outside the React app's bundle.
+ * Shared cookie-consent banner + AdSense ad-slot renderer for the static
+ * pages (blog, legal) that live outside the React app's bundle.
  *
- * Mirrors src/App.tsx's ConsentBanner/AdSlot/initGa behavior and reads/writes
- * the SAME localStorage key, so a choice made on the main app or on any blog
- * page is respected everywhere without asking again.
+ * gtag.js/adsbygoogle.js themselves load unconditionally (see each page's
+ * <head> and consent-mode.js, which sets Consent Mode defaults to 'denied'
+ * before they run) — this file only reacts to the visitor's choice: it
+ * updates Consent Mode and renders real ad slots once accepted. Reads/writes
+ * the SAME localStorage key as src/App.tsx's ConsentBanner/AdSlot, so a
+ * choice made on the main app or on any blog page is respected everywhere
+ * without asking again.
  */
 (function () {
   'use strict';
@@ -13,36 +17,19 @@
   var ADSENSE_CLIENT = 'ca-pub-8159510657807581';
   var GA_MEASUREMENT_ID = 'G-MJE8ENFTPB';
 
-  var adsenseScriptPromise = null;
-  function loadAdSenseScript() {
-    if (adsenseScriptPromise) return adsenseScriptPromise;
-    adsenseScriptPromise = new Promise(function (resolve, reject) {
-      var script = document.createElement('script');
-      script.async = true;
-      script.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=' + ADSENSE_CLIENT;
-      script.crossOrigin = 'anonymous';
-      script.onload = function () { resolve(); };
-      script.onerror = function () { reject(new Error('Failed to load AdSense script')); };
-      document.head.appendChild(script);
-    });
-    return adsenseScriptPromise;
+  if (window.gtag) {
+    window.gtag('js', new Date());
+    window.gtag('config', GA_MEASUREMENT_ID);
   }
 
-  var gaInitialized = false;
-  function initGa() {
-    if (gaInitialized) return;
-    gaInitialized = true;
-    window.dataLayer = window.dataLayer || [];
-    window.gtag = function () { window.dataLayer.push(arguments); };
-    var script = document.createElement('script');
-    script.async = true;
-    script.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA_MEASUREMENT_ID;
-    script.onload = function () {
-      window.gtag('js', new Date());
-      window.gtag('config', GA_MEASUREMENT_ID);
-    };
-    script.onerror = function () { console.error('Failed to load Google Analytics script'); };
-    document.head.appendChild(script);
+  function updateConsentMode(value) {
+    if (!window.gtag) return;
+    window.gtag('consent', 'update', {
+      ad_storage: value,
+      ad_user_data: value,
+      ad_personalization: value,
+      analytics_storage: value,
+    });
   }
 
   function getConsent() {
@@ -83,22 +70,11 @@
       slot.appendChild(label);
       slot.appendChild(ins);
 
-      loadAdSenseScript().then(function () {
-        try {
-          (window.adsbygoogle = window.adsbygoogle || []).push({});
-        } catch (e) {
-          console.error('AdSense push failed:', e);
-        }
-      }).catch(function (e) {
-        console.error(e);
-      });
-    }
-  }
-
-  function applyConsent(value) {
-    if (value === 'granted') {
-      renderAdSlots();
-      initGa();
+      try {
+        (window.adsbygoogle = window.adsbygoogle || []).push({});
+      } catch (e) {
+        console.error('AdSense push failed:', e);
+      }
     }
   }
 
@@ -119,19 +95,21 @@
 
     banner.querySelector('.msb-consent-reject').addEventListener('click', function () {
       setConsent('denied');
+      updateConsentMode('denied');
       banner.remove();
     });
     banner.querySelector('.msb-consent-accept').addEventListener('click', function () {
       setConsent('granted');
+      updateConsentMode('granted');
       banner.remove();
-      applyConsent('granted');
+      renderAdSlots();
     });
   }
 
   function init() {
     var consent = getConsent();
     if (consent === 'granted') {
-      applyConsent('granted');
+      renderAdSlots();
     } else if (consent !== 'denied') {
       injectBanner();
     }
