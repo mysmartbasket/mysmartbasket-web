@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef, memo, useCallback } from 'react';
-import { useForm, ValidationError } from '@formspree/react';
 import { motion, AnimatePresence, MotionConfig, useScroll, useSpring, useInView, useMotionValue, useMotionValueEvent, useTransform } from 'motion/react';
 import {
   ShoppingBasket,
@@ -20,14 +19,12 @@ import {
   Leaf,
   Moon,
   Sun,
-  PartyPopper,
   Salad,
   UtensilsCrossed,
   ChefHat,
   Carrot,
   Milk,
   Egg,
-  Gift,
   MapPin,
   HandCoins,
   Sparkles,
@@ -50,8 +47,8 @@ const ScrollProgress = memo(() => {
  * storage flags (defaulted to 'denied' by consent-mode.js) and whether we
  * request a real ad impression via AdSlot below — no ad or analytics
  * cookies are set until the visitor accepts this banner. Consent is stored
- * in localStorage and is separate from the theme/waitlist-count keys
- * already documented in privacidad.html — see section 8 there.
+ * in localStorage and is separate from the theme key, already documented
+ * in privacidad.html — see section 8 there.
  */
 const ADSENSE_CONSENT_KEY = 'msb_ad_consent';
 const ADSENSE_CONSENT_EVENT = 'msb-ad-consent-changed';
@@ -59,6 +56,9 @@ const ADSENSE_CLIENT_ID = import.meta.env.VITE_ADSENSE_CLIENT_ID as string | und
 const isAdSenseConfigured = !!ADSENSE_CLIENT_ID && !ADSENSE_CLIENT_ID.includes('XXXXXXXXXX');
 const GA_MEASUREMENT_ID = import.meta.env.VITE_GA_MEASUREMENT_ID as string | undefined;
 const isGaConfigured = !!GA_MEASUREMENT_ID && !GA_MEASUREMENT_ID.includes('XXXXXXXXXX');
+
+// The live web app. Every CTA on this marketing site sends visitors here.
+const APP_URL = 'https://mysmartbasket-app-v2-production.up.railway.app';
 
 function updateConsentMode(value: 'granted' | 'denied'): void {
   (window as any).gtag?.('consent', 'update', {
@@ -259,11 +259,11 @@ const StickyCTA = memo(() => {
           className="fixed bottom-0 left-0 right-0 z-[50] p-4 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-t border-slate-100 dark:border-slate-800 shadow-2xl lg:hidden"
         >
           <a
-            href="#waitlist"
+            href={APP_URL}
             onClick={() => trackEvent('cta_click', { cta_location: 'sticky_mobile' })}
             className="flex items-center justify-center gap-2 w-full bg-brand-green text-white py-4 rounded-2xl font-bold text-base shadow-lg shadow-green-200/50"
           >
-            Reservar mi plaza gratis <ArrowRight size={18} />
+            Entrar a la app gratis <ArrowRight size={18} />
           </a>
         </motion.div>
       )}
@@ -279,9 +279,9 @@ const TEAM = [
 
 /* ── FAQ ── */
 const FAQ_ITEMS = [
-  { q: '¿Es gratuito?',                              a: 'Tenemos un plan gratuito y un plan Pro por 4,99€/mes con funciones avanzadas. Si te apuntas a la lista de espera, te llevas 1 mes de plan Pro totalmente gratis al lanzamiento.' },
+  { q: '¿Es gratuito?',                              a: 'Tenemos un plan gratuito y un plan Pro por 4,99€/mes con funciones avanzadas. Puedes registrarte gratis y empezar a usarla ahora mismo.' },
   { q: '¿Cómo obtiene la app los precios?',          a: 'Contamos con un sistema propio que monitoriza precios en Mercadona, Día, Aldi y Alcampo cada 24 horas, y seguimos ampliando la cobertura a más cadenas próximamente. No dependemos de fuentes externas, lo que garantiza mayor fiabilidad.' },
-  { q: '¿Cuándo está disponible?',                   a: 'Estamos en la fase final de desarrollo, con lanzamiento previsto en las próximas semanas. Iremos dando acceso de forma gradual a quienes estén en la lista de espera, para asegurar una buena experiencia desde el primer día. Apúntate y te notificamos en cuanto tu plaza esté lista.' },
+  { q: '¿Ya está disponible?',                       a: 'Sí, ya puedes usarla. Accede gratis desde el navegador, sin descargar nada — la app para iOS y Android llega próximamente.' },
   { q: '¿Está disponible en mi supermercado?',       a: 'Por ahora cubrimos Mercadona, Día, Aldi y Alcampo, y vamos incorporando más cadenas próximamente. Si tu cadena habitual no aparece todavía, puedes solicitarla — la añadimos por orden de demanda.' },
   { q: '¿Puedo compartirlo con mi familia?',         a: 'Sí. Puedes crear un hogar compartido con hasta 5 miembros que comparten la misma cesta, sin duplicados ni necesidad de coordinación adicional. Además, cada uno puede registrar lo que paga para repartir el gasto automáticamente.' },
   { q: '¿Cómo se tratan mis datos personales?',      a: 'Solo almacenamos tu correo electrónico y tus preferencias de compra. No vendemos ni compartimos datos con terceros. Puedes solicitar la eliminación completa de tu cuenta en cualquier momento escribiéndonos a contacto@mysmartbasket.app.' },
@@ -802,9 +802,8 @@ const HeroShowcase = ({ onOpenVideo }: { onOpenVideo: () => void }) => {
               transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
             >
               <motion.a
-                href="https://mysmartbasket.github.io/MySmartBasket-MVP/"
-                target="_blank"
-                rel="noopener noreferrer"
+                href={APP_URL}
+                onClick={() => trackEvent('cta_click', { cta_location: 'hero_badge' })}
                 whileHover={{ scale: 1.04 }}
                 whileTap={{ scale: 0.97 }}
                 className="inline-flex items-center gap-2 bg-green-50 border border-green-100 px-4 py-2 rounded-full text-brand-green text-sm font-bold mb-8 hover:bg-green-100 transition-colors"
@@ -813,7 +812,7 @@ const HeroShowcase = ({ onOpenVideo }: { onOpenVideo: () => void }) => {
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-brand-green" />
                 </span>
-                Demo disponible — pruébala ahora
+                Ya disponible — accede ahora
               </motion.a>
 
               <h1 className="text-5xl lg:text-7xl font-extrabold text-brand-black dark:text-white leading-[1.05] tracking-[-0.03em] mb-8 overflow-hidden">
@@ -838,11 +837,11 @@ const HeroShowcase = ({ onOpenVideo }: { onOpenVideo: () => void }) => {
                 className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center justify-center"
               >
                 <MagneticCTA
-                  href="#waitlist"
+                  href={APP_URL}
                   onClick={() => trackEvent('cta_click', { cta_location: 'hero' })}
                   className="bg-brand-green text-white px-7 py-4 rounded-full font-bold text-base hover:opacity-90 transition-opacity flex items-center justify-center gap-2 shadow-xl shadow-green-100 dark:shadow-none"
                 >
-                  Reservar mi plaza <ArrowRight size={18} />
+                  Entrar a la app <ArrowRight size={18} />
                 </MagneticCTA>
                 <MagneticCTA
                   onClick={onOpenVideo}
@@ -859,8 +858,8 @@ const HeroShowcase = ({ onOpenVideo }: { onOpenVideo: () => void }) => {
                 transition={{ duration: 0.5, delay: 1.1 }}
                 className="mt-8 flex flex-wrap items-center justify-center gap-6 text-sm text-slate-500"
               >
-                <span className="flex items-center gap-1.5"><CheckCircle2 size={15} className="text-brand-green" /> Sin spam</span>
-                <span className="flex items-center gap-1.5"><CheckCircle2 size={15} className="text-brand-green" /> Acceso anticipado, sin coste</span>
+                <span className="flex items-center gap-1.5"><CheckCircle2 size={15} className="text-brand-green" /> Gratis para empezar</span>
+                <span className="flex items-center gap-1.5"><CheckCircle2 size={15} className="text-brand-green" /> Sin instalación</span>
                 <span className="flex items-center gap-1.5"><CheckCircle2 size={15} className="text-brand-green" /> Cancelas cuando quieras</span>
               </motion.div>
 
@@ -1009,11 +1008,11 @@ const Navbar = () => {
             {dark ? <Sun size={17} /> : <Moon size={17} />}
           </button>
           <a
-            href="#waitlist"
+            href={APP_URL}
             onClick={() => trackEvent('cta_click', { cta_location: 'navbar_desktop' })}
             className="bg-brand-black dark:bg-brand-green text-white px-4 lg:px-5 py-2.5 rounded-full font-bold hover:bg-slate-800 dark:hover:opacity-90 transition-all active:scale-95 shadow-sm flex-shrink-0"
           >
-            Acceso anticipado
+            Entrar a la app
           </a>
         </div>
 
@@ -1050,11 +1049,11 @@ const Navbar = () => {
             <a href="#faq"          onClick={close} className="text-base font-semibold text-slate-700 dark:text-slate-200 hover:text-brand-green dark:hover:text-brand-green transition-colors">FAQ</a>
             <a href="/blog/"        onClick={close} className="text-base font-semibold text-slate-700 dark:text-slate-200 hover:text-brand-green dark:hover:text-brand-green transition-colors">Blog</a>
             <a
-              href="#waitlist"
+              href={APP_URL}
               onClick={() => { trackEvent('cta_click', { cta_location: 'navbar_mobile' }); close(); }}
               className="w-full bg-brand-green text-white py-4 rounded-full font-bold mt-2 shadow-lg shadow-green-100 text-center block"
             >
-              Unirme a la lista de espera
+              Entrar a la app
             </a>
           </motion.div>
         )}
@@ -1383,14 +1382,14 @@ const MockupApp = memo(({ active }: { active: number }) => {
 });
 
 const SHARE_URL = 'https://mysmartbasket.app/';
-const SHARE_TEXT = 'Estoy en la lista de espera de MySmartBasket: compara precios de supermercados en tiempo real y ahorra en la compra semanal. Únete tú también:';
+const SHARE_TEXT = 'Estoy usando MySmartBasket para ahorrar en la compra semanal comparando precios de supermercados en tiempo real. Pruébala tú también:';
 
-const ShareWaitlist = () => {
+const ShareApp = () => {
   const [copied, setCopied] = useState(false);
   const canNativeShare = typeof navigator !== 'undefined' && !!navigator.share;
 
   const share = async (method: 'native' | 'whatsapp' | 'twitter' | 'copy') => {
-    trackEvent('waitlist_share', { method });
+    trackEvent('app_share', { method });
     if (method === 'native') {
       try { await navigator.share({ title: 'MySmartBasket', text: SHARE_TEXT, url: SHARE_URL }); } catch { /* user cancelled */ }
       return;
@@ -1411,9 +1410,9 @@ const ShareWaitlist = () => {
   };
 
   return (
-    <div className="mt-5 pt-5 border-t border-green-100 dark:border-green-800">
+    <div>
       <p className="text-sm font-semibold text-slate-700 dark:text-slate-200 mb-3">¿Conoces a alguien a quien le venga bien ahorrar en la compra? Compártelo:</p>
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-wrap items-center justify-center gap-2">
         {canNativeShare && (
           <button type="button" onClick={() => share('native')} className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-brand-green text-white text-sm font-bold hover:opacity-90 transition-opacity">
             <Share2 size={14} /> Compartir
@@ -1441,14 +1440,11 @@ const SECTIONS: { id: string; label: string }[] = [
   { id: 'demo',         label: 'MySmartBasket - Demo interactiva'     },
   { id: 'how-it-works', label: 'MySmartBasket - Cómo funciona'        },
   { id: 'team',         label: 'MySmartBasket - Equipo'               },
-  { id: 'waitlist',     label: 'MySmartBasket - Únete'                },
+  { id: 'waitlist',     label: 'MySmartBasket - Empieza ahora'         },
 ];
 
 export default function App() {
-  const [formState, handleSubmit] = useForm('mwvybvog');
   const [isVideoOpen, setIsVideoOpen] = useState(false);
-  const [emailValue, setEmailValue] = useState('');
-  const [spendingValue, setSpendingValue] = useState('');
   const year = new Date().getFullYear();
 
   // gtag itself (dataLayer + consent defaults) is already set up by
@@ -1461,11 +1457,6 @@ export default function App() {
     w.gtag?.('js', new Date());
     w.gtag?.('config', GA_MEASUREMENT_ID);
   }, []);
-
-  // GA4's recommended event name for a completed lead-gen form.
-  useEffect(() => {
-    if (formState.succeeded) trackEvent('generate_lead');
-  }, [formState.succeeded]);
 
   // Modo claro por defecto; modo noche automático solo entre las 21:00 y las
   // 7:00 (hora local), salvo que el usuario haya elegido tema manualmente.
@@ -1732,7 +1723,7 @@ export default function App() {
         </div>
       </section>
 
-      {/* WAITLIST */}
+      {/* FINAL CTA */}
       <section id="waitlist" className="py-32 px-6 dark:bg-slate-950">
         <div className="max-w-3xl mx-auto text-center">
           <FadeUp>
@@ -1741,106 +1732,31 @@ export default function App() {
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-brand-green" />
               </span>
-              <span className="text-sm font-medium text-brand-green">Sé de los primeros en probarlo</span>
+              <span className="text-sm font-medium text-brand-green">Ya puedes empezar</span>
             </div>
-            <SectionHeading centered title="Solicita tu acceso anticipado" subtitle="Estamos dando acceso de forma gradual, por orden de inscripción." />
+            <SectionHeading centered title="Empieza a ahorrar hoy mismo" subtitle="Accede gratis desde el navegador, sin descargas ni esperas." />
           </FadeUp>
-          <p className="text-slate-500 dark:text-slate-400 text-xl mb-6">
-            Estamos ampliando el acceso gradualmente. Deja tu correo y te notificamos en cuanto tu plaza esté disponible. Sin comunicaciones comerciales, solo el aviso de acceso.
+          <p className="text-slate-500 dark:text-slate-400 text-xl mb-12">
+            Regístrate gratis y en un par de minutos tendrás tu primera lista optimizada con los mejores precios de tu zona.
           </p>
 
           <FadeUp>
-            <div className="flex items-center justify-center gap-3 max-w-lg mx-auto mb-12 px-5 py-3.5 rounded-2xl bg-gradient-to-r from-brand-green to-emerald-500 shadow-lg shadow-green-500/20">
-              <Gift size={22} className="text-white flex-shrink-0" />
-              <p className="text-white font-bold text-sm sm:text-base">
-                Apúntate ahora y recibe 1 mes de plan Pro <span className="underline decoration-white/40">totalmente gratis</span>
-              </p>
-            </div>
+            <a
+              href={APP_URL}
+              onClick={() => trackEvent('cta_click', { cta_location: 'final_cta' })}
+              className="inline-flex items-center justify-center gap-2 bg-brand-green text-white px-10 py-5 rounded-full font-bold text-lg hover:opacity-90 transition-opacity shadow-xl shadow-green-100 dark:shadow-none mb-14"
+            >
+              Entrar a la app <ArrowRight size={20} />
+            </a>
           </FadeUp>
 
-          <AnimatePresence mode="wait">
-            {formState.succeeded ? (
-              <motion.div
-                key="done"
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                className="max-w-lg mx-auto p-8 rounded-3xl bg-green-50 dark:bg-green-900/20 border border-green-100 dark:border-green-800"
-              >
-                <div className="w-12 h-12 rounded-2xl bg-brand-green/10 flex items-center justify-center mb-3">
-                  <PartyPopper size={24} className="text-brand-green" />
-                </div>
-                <p className="text-brand-green font-bold text-xl mb-1">Solicitud recibida</p>
-                <p className="text-slate-500 dark:text-slate-400 text-sm">Te notificaremos cuando tu plaza esté disponible. Revisa también la carpeta de correo no deseado.</p>
-                <ShareWaitlist />
-              </motion.div>
-            ) : (
-              <motion.form
-                key="email"
-                initial={{ opacity: 0, x: -40 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -40 }}
-                onSubmit={handleSubmit}
-                className="max-w-lg mx-auto"
-                noValidate
-              >
-                <input
-                  type="text"
-                  name="_gotcha"
-                  tabIndex={-1}
-                  autoComplete="off"
-                  aria-hidden="true"
-                  className="absolute -left-[9999px] w-px h-px opacity-0"
-                />
-                <ValidationError
-                  errors={formState.errors}
-                  className="mb-4 px-4 py-3 rounded-2xl bg-red-50 dark:bg-red-900/20 border border-red-100 dark:border-red-800 text-sm text-red-600 dark:text-red-400 text-center"
-                />
-                <div className="relative">
-                  <input
-                    type="email"
-                    name="email"
-                    required
-                    value={emailValue}
-                    onChange={(e) => setEmailValue(e.target.value)}
-                    placeholder="tu@email.com"
-                    className="w-full px-8 py-6 rounded-3xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-lg focus:ring-4 focus:ring-green-100 dark:focus:ring-green-900 focus:border-brand-green outline-none transition-all pr-48 dark:text-white dark:placeholder-slate-500"
-                    aria-label="Tu correo electrónico"
-                  />
-                  <ValidationError field="email" errors={formState.errors} className="mt-2 text-sm text-red-500 text-left absolute -bottom-6 left-2" />
-                  <button
-                    type="submit"
-                    disabled={formState.submitting}
-                    className="absolute right-2 top-2 bottom-2 px-6 bg-brand-black dark:bg-brand-green text-white rounded-full font-bold flex items-center justify-center gap-2 hover:bg-slate-800 dark:hover:opacity-90 transition-all text-sm disabled:opacity-60"
-                  >
-                    {formState.submitting ? 'Enviando…' : <>Continuar <ArrowRight size={15} /></>}
-                  </button>
-                </div>
+          <ShareApp />
 
-                <label className="block mt-6 text-left">
-                  <span className="text-xs text-slate-400 dark:text-slate-500">¿Cuánto sueles gastar al mes en la compra? (opcional, nos ayuda a priorizar funciones)</span>
-                  <select
-                    name="gasto_mensual"
-                    value={spendingValue}
-                    onChange={(e) => setSpendingValue(e.target.value)}
-                    className="mt-1.5 w-full sm:w-auto px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm text-slate-700 dark:text-slate-200 outline-none focus:border-brand-green"
-                  >
-                    <option value="">Prefiero no decirlo</option>
-                    <option value="Menos de 200€">Menos de 200€</option>
-                    <option value="200 – 400€">200 – 400€</option>
-                    <option value="400 – 600€">400 – 600€</option>
-                    <option value="Más de 600€">Más de 600€</option>
-                  </select>
-                </label>
-              </motion.form>
-            )}
-          </AnimatePresence>
-
-          <p className="mt-8 text-sm text-slate-400">
-            Al enviar aceptas nuestra{' '}
+          <p className="mt-10 text-sm text-slate-400">
+            Al registrarte aceptas nuestra{' '}
             <a href="/privacidad.html" className="underline hover:text-slate-600 transition-colors">política de privacidad</a>
             {' '}y{' '}
             <a href="/terminos.html" className="underline hover:text-slate-600 transition-colors">términos y condiciones</a>.
-            Puedes darte de baja cuando quieras.
           </p>
         </div>
       </section>
@@ -1871,7 +1787,7 @@ export default function App() {
               <li><a href="#how-it-works" className="hover:text-brand-green transition-colors">Cómo funciona</a></li>
               <li><a href="#demo"         className="hover:text-brand-green transition-colors">Demo interactiva</a></li>
               <li><a href="/blog/"        className="hover:text-brand-green transition-colors">Blog</a></li>
-              <li><a href="#waitlist"     onClick={() => trackEvent('cta_click', { cta_location: 'footer' })} className="hover:text-brand-green transition-colors">Acceso anticipado</a></li>
+              <li><a href={APP_URL}       onClick={() => trackEvent('cta_click', { cta_location: 'footer' })} className="hover:text-brand-green transition-colors">Entrar a la app</a></li>
             </ul>
           </div>
 
