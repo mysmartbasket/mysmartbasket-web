@@ -1711,6 +1711,16 @@ export default function App() {
       <section id="team" className="py-24 px-6">
         <div className="max-w-5xl mx-auto">
           <FadeUp><SectionHeading centered title="Equipo" subtitle="Quiénes estamos detrás" /></FadeUp>
+          <FadeUp>
+            <img
+              src="/team/cofundadores.webp"
+              alt="Los cofundadores de MySmartBasket sonriendo y sosteniendo el business plan del proyecto"
+              width={1200}
+              height={854}
+              loading="lazy"
+              className="w-full max-w-2xl mx-auto mb-10 rounded-3xl border border-slate-100 dark:border-slate-700 shadow-sm"
+            />
+          </FadeUp>
           <motion.div
             className="grid sm:grid-cols-2 gap-8 max-w-2xl mx-auto"
             variants={gridContainer}
