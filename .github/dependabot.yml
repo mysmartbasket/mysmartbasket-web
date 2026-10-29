@@ -8,6 +8,18 @@ updates:
     groups:
       minor-and-patch:
         update-types: [minor, patch]
+    # Saltos de versión mayor descartados tras probarlos (29/10/2026). Las
+    # actualizaciones menores y parches de estos paquetes siguen llegando.
+    ignore:
+      # motion 14 deja elementos sin aparecer en las animaciones de entrada.
+      - dependency-name: motion
+        update-types: ["version-update:semver-major"]
+      # lucide-react 1.x puede renombrar iconos y no hace falta ahora.
+      - dependency-name: lucide-react
+        update-types: ["version-update:semver-major"]
+      # Los tipos de Node deben seguir la versión de Node del build (22).
+      - dependency-name: "@types/node"
+        update-types: ["version-update:semver-major"]
   - package-ecosystem: github-actions
     directory: /
     schedule:
