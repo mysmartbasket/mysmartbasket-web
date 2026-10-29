@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://www.googletagmanager.com https://*.google-analytics.com https://*.analytics.google.com https://www.google.com; object-src 'none'; base-uri 'self'; form-action 'self';" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: https://*.google-analytics.com https://www.google.com https://www.googletagmanager.com; connect-src 'self' https://www.googletagmanager.com https://*.google-analytics.com https://*.analytics.google.com https://www.google.com; object-src 'none'; base-uri 'self'; form-action 'self';" />
   <script src="/consent-mode.js"></script>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-MJE8ENFTPB"></script>
   <title>Política de Privacidad · MySmartBasket</title>
@@ -11,9 +11,8 @@
   <meta name="robots" content="noindex, follow" />
   <link rel="canonical" href="https://mysmartbasket.app/privacidad.html" />
   <link rel="icon" href="/favicon.ico" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="preload" href="/fonts/plus-jakarta-sans-latin.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="stylesheet" href="/fonts.css" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -298,7 +297,6 @@
         <li><strong>Supabase</strong> — base de datos y autenticación de la aplicación (cuentas, hogares, cestas, mensajes del chat).</li>
         <li><strong>Google (API de Gemini)</strong> — procesamiento del Asistente de IA, ver sección 5.</li>
         <li><strong>Stripe</strong> — procesamiento de pagos, ver sección 6.</li>
-        <li><strong>Google Fonts</strong> — fuente tipográfica Plus Jakarta Sans. Google puede registrar la IP de la solicitud.</li>
         <li><strong>Google Analytics</strong> — solo si aceptas la analítica. Ver sección 10.</li>
         <li><strong>Meta (Facebook/Instagram Ads)</strong> — solo si aceptas la publicidad. Ver sección 10.</li>
       </ul>

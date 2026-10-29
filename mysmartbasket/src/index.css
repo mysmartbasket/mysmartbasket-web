@@ -1,6 +1,6 @@
-/* Font stylesheet is loaded via a <link> in index.html (not @import here)
-   so the browser discovers it while parsing the HTML instead of waiting
-   for this bundled CSS file to load first. */
+/* Plus Jakarta Sans is self-hosted (public/fonts.css) and loaded via a <link>
+   in index.html (not @import here) so the browser discovers it while parsing
+   the HTML instead of waiting for this bundled CSS file to load first. */
 @import "tailwindcss";
 
 @theme {
