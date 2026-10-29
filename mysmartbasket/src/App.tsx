@@ -31,6 +31,7 @@ import {
   Share2,
   Copy,
   Check,
+  Instagram,
 } from 'lucide-react';
 
 const ScrollProgress = memo(() => {
@@ -59,6 +60,34 @@ const isGaConfigured = !!GA_MEASUREMENT_ID && !GA_MEASUREMENT_ID.includes('XXXXX
 
 // The live web app. Every CTA on this marketing site sends visitors here.
 const APP_URL = 'https://mysmartbasket-app-v2-production.up.railway.app';
+const INSTAGRAM_URL = 'https://www.instagram.com/my.smartbasket/';
+
+/* Últimas 3 publicaciones de Instagram — se actualizan a mano: sustituir
+   image (public/instagram/, 4:5, ~480x600 WebP), href, caption y date. */
+const INSTAGRAM_POSTS = [
+  {
+    href: 'https://www.instagram.com/my.smartbasket/p/DfAE0RyDDQu/',
+    image: '/instagram/ranking-octubre.webp',
+    alt: 'Ranking del mes: cuál es la mejor cadena de supermercados según los usuarios, con los logos de Mercadona, Día, Lidl y Aldi',
+    caption: 'Ya tenemos el ranking de octubre. Mira los resultados y elige dónde empezar a ahorrar.',
+    date: '27 oct 2026',
+  },
+  {
+    href: 'https://www.instagram.com/my.smartbasket/p/Der9bfwjCK6/',
+    image: '/instagram/compra-estudiante.webp',
+    alt: 'Cómo hacer la compra semanal siendo estudiante: una cesta con huevos, arroz, verdura y fruta junto a una calculadora',
+    caption: '¿Eres estudiante y no sabes cómo ahorrar en tu compra semanal? Te proponemos una solución.',
+    date: '19 oct 2026',
+  },
+  {
+    href: 'https://www.instagram.com/my.smartbasket/reel/DefErJJMJJ7/',
+    image: '/instagram/asistente-reel.webp',
+    alt: 'Un niño con una cesta mira el móvil en el pasillo de un supermercado',
+    caption: 'Usa el asistente para aprender a comprar.',
+    date: '14 oct 2026',
+    isReel: true,
+  },
+];
 
 function updateConsentMode(value: 'granted' | 'denied'): void {
   (window as any).gtag?.('consent', 'update', {
@@ -1707,6 +1736,63 @@ export default function App() {
         </div>
       </section>
 
+      {/* INSTAGRAM */}
+      <section id="instagram" className="py-24 px-6 dark:bg-slate-950">
+        <div className="max-w-5xl mx-auto">
+          <FadeUp>
+            <SectionHeading centered title="Síguenos en Instagram" subtitle="Lo último que hemos publicado" />
+          </FadeUp>
+          <motion.div
+            className="grid sm:grid-cols-3 gap-6 mb-10"
+            variants={gridContainer}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, margin: '-60px' }}
+          >
+            {INSTAGRAM_POSTS.map((post) => (
+              <motion.a
+                key={post.href}
+                variants={gridItem}
+                href={post.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => trackEvent('social_click', { network: 'instagram', social_location: 'post' })}
+                className="group block bg-white dark:bg-slate-900 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm overflow-hidden hover:border-green-100 dark:hover:border-brand-green/40 transition-colors"
+              >
+                <div className="relative aspect-[4/5] overflow-hidden bg-slate-100 dark:bg-slate-800">
+                  <img
+                    src={post.image}
+                    alt={post.alt}
+                    width={480}
+                    height={600}
+                    loading="lazy"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                  {post.isReel && (
+                    <span className="absolute top-3 right-3 px-2.5 py-1 rounded-full bg-black/60 text-white text-[11px] font-bold backdrop-blur-sm">Reel</span>
+                  )}
+                </div>
+                <div className="p-5">
+                  <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed mb-3">{post.caption}</p>
+                  <span className="text-xs font-semibold text-slate-400">{post.date}</span>
+                </div>
+              </motion.a>
+            ))}
+          </motion.div>
+          <div className="text-center">
+            <a
+              href={INSTAGRAM_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => trackEvent('social_click', { network: 'instagram', social_location: 'section' })}
+              className="inline-flex items-center justify-center gap-2 bg-brand-green text-white px-7 py-3.5 rounded-full font-bold hover:opacity-90 transition-opacity"
+            >
+              <Instagram size={18} /> Seguir a @my.smartbasket
+            </a>
+          </div>
+        </div>
+      </section>
+
       <AdBreak slotId="landing_after_how_it_works" />
 
       {/* FAQ */}
@@ -1778,6 +1864,16 @@ export default function App() {
               <div title="App Store — próximamente" className="w-10 h-10 rounded-full bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-slate-400 hover:text-brand-green cursor-not-allowed transition-colors border border-slate-100 dark:border-slate-700"><Download size={18} /></div>
               <div title="Google Play — próximamente" className="w-10 h-10 rounded-full bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-slate-400 hover:text-brand-green cursor-not-allowed transition-colors border border-slate-100 dark:border-slate-700"><Smartphone size={18} /></div>
             </div> */}
+            <a
+              href={INSTAGRAM_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="MySmartBasket en Instagram"
+              onClick={() => trackEvent('social_click', { network: 'instagram', social_location: 'footer' })}
+              className="w-10 h-10 rounded-full bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-slate-400 hover:text-brand-green transition-colors border border-slate-100 dark:border-slate-700"
+            >
+              <Instagram size={18} />
+            </a>
           </div>
 
           <div>
