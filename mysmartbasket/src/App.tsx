@@ -40,21 +40,17 @@ const ScrollProgress = memo(() => {
   return <motion.div style={{ scaleX }} className="fixed top-0 left-0 right-0 h-[3px] bg-brand-green origin-left z-[60] shadow-[0_0_8px_rgba(0,153,102,0.6)]" />;
 });
 
-/* ── Google AdSense + Analytics: consent + ad slots ──
- * The gtag.js and adsbygoogle.js scripts themselves load unconditionally
- * (static tags in index.html, right after consent-mode.js — see that file),
- * so Google's AdSense site-verification crawler can always detect them.
- * What's actually gated on consent is Google Consent Mode's ad/analytics
- * storage flags (defaulted to 'denied' by consent-mode.js) and whether we
- * request a real ad impression via AdSlot below — no ad or analytics
- * cookies are set until the visitor accepts this banner. Consent is stored
- * in localStorage and is separate from the theme key, already documented
- * in privacidad.html — see section 8 there.
+/* ── Google Analytics: consent ──
+ * gtag.js itself loads unconditionally (static tag in index.html, right after
+ * consent-mode.js — see that file). What's gated on consent is Google Consent
+ * Mode's analytics_storage flag (defaulted to 'denied' by consent-mode.js):
+ * no analytics cookies are set until the visitor accepts this banner. The
+ * choice is stored in localStorage (key kept as 'msb_ad_consent' from when the
+ * site ran ads, so earlier answers are still honoured) and is separate from
+ * the theme key, already documented in privacidad.html — see section 8 there.
+ * The site shows no advertising, so the ad_* flags always stay 'denied'.
  */
-const ADSENSE_CONSENT_KEY = 'msb_ad_consent';
-const ADSENSE_CONSENT_EVENT = 'msb-ad-consent-changed';
-const ADSENSE_CLIENT_ID = import.meta.env.VITE_ADSENSE_CLIENT_ID as string | undefined;
-const isAdSenseConfigured = !!ADSENSE_CLIENT_ID && !ADSENSE_CLIENT_ID.includes('XXXXXXXXXX');
+const CONSENT_KEY = 'msb_ad_consent';
 const GA_MEASUREMENT_ID = import.meta.env.VITE_GA_MEASUREMENT_ID as string | undefined;
 const isGaConfigured = !!GA_MEASUREMENT_ID && !GA_MEASUREMENT_ID.includes('XXXXXXXXXX');
 
@@ -91,9 +87,6 @@ const INSTAGRAM_POSTS = [
 
 function updateConsentMode(value: 'granted' | 'denied'): void {
   (window as any).gtag?.('consent', 'update', {
-    ad_storage: value,
-    ad_user_data: value,
-    ad_personalization: value,
     analytics_storage: value,
   });
 }
@@ -108,13 +101,12 @@ const ConsentBanner = () => {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    const saved = localStorage.getItem(ADSENSE_CONSENT_KEY);
+    const saved = localStorage.getItem(CONSENT_KEY);
     setVisible(saved !== 'granted' && saved !== 'denied');
   }, []);
 
   const respond = (value: 'granted' | 'denied') => {
-    localStorage.setItem(ADSENSE_CONSENT_KEY, value);
-    window.dispatchEvent(new CustomEvent(ADSENSE_CONSENT_EVENT, { detail: value }));
+    localStorage.setItem(CONSENT_KEY, value);
     updateConsentMode(value);
     setVisible(false);
   };
@@ -130,8 +122,8 @@ const ConsentBanner = () => {
           className="fixed bottom-0 inset-x-0 z-[70] bg-brand-black text-white px-6 py-4 flex flex-col sm:flex-row items-center gap-4 shadow-2xl"
         >
           <p className="text-xs sm:text-sm text-slate-300 flex-1 text-center sm:text-left leading-relaxed">
-            Usamos cookies para mostrar publicidad, medir visitas y mantener la web gratuita. Puedes aceptar o
-            rechazar — la página funciona igual en ambos casos. Más info en la{' '}
+            Usamos cookies de analítica para medir las visitas y mejorar la web. Puedes aceptar o rechazar —
+            la página funciona igual en ambos casos. Más info en la{' '}
             <a href="/privacidad.html" className="underline hover:text-white">política de privacidad</a>.
           </p>
           <div className="flex gap-2 shrink-0">
@@ -153,75 +145,6 @@ const ConsentBanner = () => {
     </AnimatePresence>
   );
 };
-
-const AdSlot = ({ slotId, className = '' }: { slotId?: string; className?: string }) => {
-  // Starts null (no ad) so the prerendered HTML and the first client render
-  // match; the saved choice is read right after mount.
-  const [consent, setConsent] = useState<'granted' | 'denied' | null>(null);
-  const pushedRef = useRef(false);
-
-  useEffect(() => {
-    setConsent(localStorage.getItem(ADSENSE_CONSENT_KEY) as 'granted' | 'denied' | null);
-    // 'storage' fires only across tabs; the custom event covers the tab
-    // where the visitor actually clicked "Aceptar" in ConsentBanner.
-    const onStorage = () => setConsent(localStorage.getItem(ADSENSE_CONSENT_KEY) as 'granted' | 'denied' | null);
-    const onCustom = (e: Event) => setConsent((e as CustomEvent).detail);
-    window.addEventListener('storage', onStorage);
-    window.addEventListener(ADSENSE_CONSENT_EVENT, onCustom);
-    return () => {
-      window.removeEventListener('storage', onStorage);
-      window.removeEventListener(ADSENSE_CONSENT_EVENT, onCustom);
-    };
-  }, []);
-
-  useEffect(() => {
-    if (consent !== 'granted' || !isAdSenseConfigured || pushedRef.current) return;
-    try {
-      ((window as any).adsbygoogle = (window as any).adsbygoogle || []).push({});
-      pushedRef.current = true;
-    } catch (err) {
-      console.error('AdSense push failed:', err);
-    }
-  }, [consent]);
-
-  if (consent !== 'granted') return null;
-
-  if (!isAdSenseConfigured) {
-    // Real visitors on the live site should never see an empty ad box before
-    // there's an approved AdSense account — only show the placeholder locally
-    // so the layout can still be reviewed during development.
-    if (!import.meta.env.DEV) return null;
-    return (
-      <div className={`flex items-center justify-center border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-2xl text-slate-400 text-[11px] font-bold uppercase tracking-wider py-8 ${className}`}>
-        Espacio publicitario (solo visible en desarrollo — falta configurar AdSense)
-      </div>
-    );
-  }
-
-  return (
-    <ins
-      className={`adsbygoogle block ${className}`}
-      style={{ display: 'block' }}
-      data-ad-client={ADSENSE_CLIENT_ID}
-      data-ad-slot={slotId}
-      data-ad-format="auto"
-      data-full-width-responsive="true"
-    />
-  );
-};
-
-// Consistent ad break: clearly labeled "Publicidad" (AdSense requires ads to
-// be distinguishable from editorial content), placed at natural content
-// pauses — never inside the hero or right next to the waitlist form/CTA, to
-// avoid accidental clicks and to not compete with the primary conversion.
-const AdBreak = ({ slotId }: { slotId: string }) => (
-  <div className="max-w-3xl mx-auto px-6 my-4">
-    <span className="block text-center text-[10px] font-bold uppercase tracking-widest text-slate-300 dark:text-slate-600 mb-2">
-      Publicidad
-    </span>
-    <AdSlot slotId={slotId} />
-  </div>
-);
 
 const FadeUp =({ children, delay = 0, className = '', index }: { children: React.ReactNode; delay?: number; className?: string; index?: number }) => (
   <motion.div
@@ -1620,7 +1543,6 @@ export default function App() {
         </div>
       </section>
 
-      <AdBreak slotId="landing_after_problem" />
 
       {/* SOLUTION */}
       <SolutionSection />
@@ -1809,7 +1731,6 @@ export default function App() {
         </div>
       </section>
 
-      <AdBreak slotId="landing_after_how_it_works" />
 
       {/* FAQ */}
       <section id="faq" className="py-24 px-6 dark:bg-slate-950">
@@ -1863,7 +1784,6 @@ export default function App() {
         </div>
       </section>
 
-      <AdBreak slotId="landing_below_waitlist" />
 
       {/* FOOTER */}
       <footer className="py-20 px-6 border-t border-slate-100 dark:border-slate-800 dark:bg-slate-950">

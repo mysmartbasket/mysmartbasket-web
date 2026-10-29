@@ -3,11 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://pagead2.googlesyndication.com https://*.googlesyndication.com https://*.google.com https://*.doubleclick.net https://*.adtrafficquality.google https://www.gstatic.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://*.googlesyndication.com https://*.google.com https://*.doubleclick.net https://*.adtrafficquality.google https://www.googletagmanager.com https://*.google-analytics.com; frame-src https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.adtrafficquality.google; object-src 'none'; base-uri 'self'; form-action 'self';" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://www.googletagmanager.com https://*.google-analytics.com https://*.analytics.google.com https://www.google.com; object-src 'none'; base-uri 'self'; form-action 'self';" />
 
     <script src="/consent-mode.js"></script>
     <script async src="https://www.googletagmanager.com/gtag/js?id=%VITE_GA_MEASUREMENT_ID%"></script>
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=%VITE_ADSENSE_CLIENT_ID%" crossorigin="anonymous"></script>
 
     <title>MySmartBasket | La compra inteligente que te ahorra tiempo y dinero</title>
     <meta name="description" content="MySmartBasket automatiza tu lista de la compra, compara precios en tiempo real y te ayuda a comer mejor. Accede gratis ahora." />
@@ -37,9 +36,6 @@
     <link rel="apple-touch-icon" sizes="180x180"    href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
 
-    <!-- The AdSense script itself is NOT loaded here: it must only run after
-         the visitor answers the cookie-consent banner. See loadAdSenseScript()
-         in src/App.tsx, which injects it lazily once consent is 'granted'. -->
 
     <!-- Structured data mirrors real copy from src/App.tsx (TEAM, FAQ_ITEMS,
          pricing in the FAQ) — keep both in sync if that copy changes. -->
