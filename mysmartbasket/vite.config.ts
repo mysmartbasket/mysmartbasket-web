@@ -21,7 +21,7 @@ const servePublicDirectoryIndexes = () => ({
   },
 });
 
-export default defineConfig({
+export default defineConfig(({ isSsrBuild }) => ({
   plugins: [react(), tailwindcss(), servePublicDirectoryIndexes()],
   resolve: {
     alias: {
@@ -36,10 +36,12 @@ export default defineConfig({
         // Vendor code changes far less often than app code, so splitting it
         // into its own chunk lets browsers cache it across deploys instead
         // of re-downloading it every time src/App.tsx changes.
-        manualChunks: {
+        // Not for the SSR build used by scripts/prerender.mjs: there the
+        // dependencies stay external and a vendor chunk makes no sense.
+        manualChunks: isSsrBuild ? undefined : {
           vendor: ['react', 'react-dom', 'motion'],
         },
       },
     },
   },
-});
+}));

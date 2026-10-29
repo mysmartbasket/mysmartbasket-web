@@ -155,12 +155,13 @@ const ConsentBanner = () => {
 };
 
 const AdSlot = ({ slotId, className = '' }: { slotId?: string; className?: string }) => {
-  const [consent, setConsent] = useState<'granted' | 'denied' | null>(
-    () => localStorage.getItem(ADSENSE_CONSENT_KEY) as 'granted' | 'denied' | null
-  );
+  // Starts null (no ad) so the prerendered HTML and the first client render
+  // match; the saved choice is read right after mount.
+  const [consent, setConsent] = useState<'granted' | 'denied' | null>(null);
   const pushedRef = useRef(false);
 
   useEffect(() => {
+    setConsent(localStorage.getItem(ADSENSE_CONSENT_KEY) as 'granted' | 'denied' | null);
     // 'storage' fires only across tabs; the custom event covers the tab
     // where the visitor actually clicked "Aceptar" in ConsentBanner.
     const onStorage = () => setConsent(localStorage.getItem(ADSENSE_CONSENT_KEY) as 'granted' | 'denied' | null);
@@ -964,11 +965,14 @@ const getInitialTheme = (): boolean => {
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [dark, setDark] = useState(getInitialTheme);
+  // Arranca en claro para coincidir con el HTML prerenderizado; el tema real
+  // se aplica nada más montar (y se reevalúa cada minuto, ver abajo).
+  const [dark, setDark] = useState(false);
 
   // Mantiene el icono sol/luna sincronizado si el tema cambia solo (franja
   // horaria 21:00-7:00) mientras la página sigue abierta.
   useEffect(() => {
+    setDark(getInitialTheme());
     const id = setInterval(() => setDark(getInitialTheme()), 60_000);
     return () => clearInterval(id);
   }, []);
@@ -1415,7 +1419,9 @@ const SHARE_TEXT = 'Estoy usando MySmartBasket para ahorrar en la compra semanal
 
 const ShareApp = () => {
   const [copied, setCopied] = useState(false);
-  const canNativeShare = typeof navigator !== 'undefined' && !!navigator.share;
+  // false until mounted so the prerendered HTML and the first client render match.
+  const [canNativeShare, setCanNativeShare] = useState(false);
+  useEffect(() => { setCanNativeShare(!!navigator.share); }, []);
 
   const share = async (method: 'native' | 'whatsapp' | 'twitter' | 'copy') => {
     trackEvent('app_share', { method });
