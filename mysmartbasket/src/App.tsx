@@ -63,6 +63,13 @@ const INSTAGRAM_URL = 'https://www.instagram.com/my.smartbasket/';
    image (public/instagram/, 4:5, ~480x600 WebP), href, caption y date. */
 const INSTAGRAM_POSTS = [
   {
+    href: 'https://www.instagram.com/my.smartbasket/p/DfXMkVKjMe8/',
+    image: '/instagram/google-play-cuatro-supermercados.webp',
+    alt: 'Portada del carrusel «Misma cesta. Cuatro supermercados.» con la pregunta «¿Cuál sale más barata?»',
+    caption: 'Misma cesta, cuatro supermercados. MySmartBasket ya está disponible en Google Play.',
+    date: '5 nov 2026',
+  },
+  {
     href: 'https://www.instagram.com/my.smartbasket/p/DfAE0RyDDQu/',
     image: '/instagram/ranking-octubre.webp',
     alt: 'Ranking del mes: cuál es la mejor cadena de supermercados según los usuarios, con los logos de Mercadona, Día, Lidl y Aldi',
@@ -76,14 +83,7 @@ const INSTAGRAM_POSTS = [
     caption: '¿Eres estudiante y no sabes cómo ahorrar en tu compra semanal? Te proponemos una solución.',
     date: '19 oct 2026',
   },
-  {
-    href: 'https://www.instagram.com/my.smartbasket/reel/DefErJJMJJ7/',
-    image: '/instagram/asistente-reel.webp',
-    alt: 'Un niño con una cesta mira el móvil en el pasillo de un supermercado',
-    caption: 'Usa el asistente para aprender a comprar.',
-    date: '14 oct 2026',
-    isReel: true,
-  },
+
 ];
 
 function updateConsentMode(value: 'granted' | 'denied'): void {
