@@ -1397,17 +1397,6 @@ const ShareApp = () => {
   );
 };
 
-const SECTIONS: { id: string; label: string }[] = [
-  { id: 'top',          label: 'MySmartBasket'                        },
-  { id: 'problem',      label: 'MySmartBasket - El Problema'          },
-  { id: 'solution',     label: 'MySmartBasket - La Solución'          },
-  { id: 'features',     label: 'MySmartBasket - Funcionalidades'      },
-  { id: 'demo',         label: 'MySmartBasket - Demo interactiva'     },
-  { id: 'how-it-works', label: 'MySmartBasket - Cómo funciona'        },
-  { id: 'team',         label: 'MySmartBasket - Equipo'               },
-  { id: 'waitlist',     label: 'MySmartBasket - Empieza ahora'         },
-];
-
 export default function App() {
   const [isVideoOpen, setIsVideoOpen] = useState(false);
   const year = new Date().getFullYear();
@@ -1432,22 +1421,6 @@ export default function App() {
     applyTheme();
     const id = setInterval(applyTheme, 60_000);
     return () => clearInterval(id);
-  }, []);
-
-  // Dynamic page title based on visible section
-  useEffect(() => {
-    const observers: IntersectionObserver[] = [];
-    SECTIONS.forEach(({ id, label }) => {
-      const el = document.getElementById(id);
-      if (!el) return;
-      const obs = new IntersectionObserver(
-        ([entry]) => { if (entry.isIntersecting) document.title = label; },
-        { threshold: 0.3 }
-      );
-      obs.observe(el);
-      observers.push(obs);
-    });
-    return () => observers.forEach(o => o.disconnect());
   }, []);
 
   useEffect(() => {
@@ -1833,7 +1806,7 @@ export default function App() {
           <div>
             <h4 className="font-bold mb-6">Compañía</h4>
             <ul className="space-y-4 text-slate-500 dark:text-slate-400 text-sm">
-              <li><a href="#team"                              className="hover:text-brand-green transition-colors">Sobre nosotros</a></li>
+              <li><a href="/sobre-nosotros.html"               className="hover:text-brand-green transition-colors">Sobre nosotros</a></li>
               <li><a href="mailto:contacto@mysmartbasket.app"      className="hover:text-brand-green transition-colors">Contacto</a></li>
               <li><a href="/privacidad.html"                   className="hover:text-brand-green transition-colors">Privacidad</a></li>
               <li><a href="/terminos.html"                     className="hover:text-brand-green transition-colors">Términos y Condiciones</a></li>
