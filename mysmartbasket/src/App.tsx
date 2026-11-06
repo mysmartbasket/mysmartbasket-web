@@ -529,16 +529,20 @@ const WordReveal = ({ text, className = '', delay = 0 }: { text: string; classNa
   const isInView = useInView(ref, { once: true, margin: '-30px' });
   return (
     <span ref={ref} className={`inline ${className}`}>
-      {text.split(' ').map((word, i) => (
-        <motion.span
-          key={i}
-          className="inline-block mr-[0.28em] last:mr-0"
-          initial={{ opacity: 0, y: 32 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.55, delay: delay + i * 0.08, ease: [0.22, 1, 0.36, 1] }}
-        >
-          {word}
-        </motion.span>
+      {text.split(' ').map((word, i, words) => (
+        <React.Fragment key={i}>
+          <motion.span
+            className="inline-block"
+            initial={{ opacity: 0, y: 32 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.55, delay: delay + i * 0.08, ease: [0.22, 1, 0.36, 1] }}
+          >
+            {word}
+          </motion.span>
+          {/* Real space between words (not just CSS margin) so crawlers, screen
+              readers and copy/paste read "Ahorra en la compra", not "Ahorraenlacompra". */}
+          {i < words.length - 1 && ' '}
+        </React.Fragment>
       ))}
     </span>
   );
