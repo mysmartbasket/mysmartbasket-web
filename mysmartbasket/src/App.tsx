@@ -233,7 +233,7 @@ const TEAM = [
 
 /* ── FAQ ── */
 const FAQ_ITEMS = [
-  { q: '¿Es gratuito?',                              a: 'Tenemos un plan gratuito y un plan Pro por 4,99€/mes con funciones avanzadas. Puedes registrarte gratis y empezar a usarla ahora mismo.' },
+  { q: '¿Es gratuito?',                              a: 'Puedes registrarte y usarla gratis desde el navegador, sin descargar nada. También tienes la app para Android en Google Play.' },
   { q: '¿Cómo obtiene la app los precios?',          a: 'Contamos con un sistema propio que monitoriza precios en Mercadona, Día, Aldi y Alcampo cada 24 horas, y seguimos ampliando la cobertura a más cadenas próximamente. No dependemos de fuentes externas, lo que garantiza mayor fiabilidad.' },
   { q: '¿Ya está disponible?',                       a: 'Sí, ya puedes usarla. Accede gratis desde el navegador, sin descargar nada, o instala la app para Android desde Google Play. La versión para iOS llega próximamente.' },
   { q: '¿Está disponible en mi supermercado?',       a: 'Por ahora cubrimos Mercadona, Día, Aldi y Alcampo, y vamos incorporando más cadenas próximamente. Si tu cadena habitual no aparece todavía, puedes solicitarla — la añadimos por orden de demanda.' },
@@ -818,7 +818,6 @@ const HeroShowcase = ({ onOpenVideo }: { onOpenVideo: () => void }) => {
               >
                 <span className="flex items-center gap-1.5"><CheckCircle2 size={15} className="text-brand-green" /> Gratis para empezar</span>
                 <span className="flex items-center gap-1.5"><CheckCircle2 size={15} className="text-brand-green" /> Sin instalación</span>
-                <span className="flex items-center gap-1.5"><CheckCircle2 size={15} className="text-brand-green" /> Cancelas cuando quieras</span>
               </motion.div>
 
               {/* Store Banners */}
@@ -1279,7 +1278,7 @@ const SCREENS = [
           ))}
         </div>
         <div className="p-3 bg-green-50 border border-brand-green/20 rounded-xl text-center">
-          <p className="text-[10px] text-brand-green font-bold">Plan Premium · Activo</p>
+          <p className="text-[10px] text-brand-green font-bold">Hogar compartido · Activo</p>
           <p className="text-[9px] text-slate-400 mt-0.5">Comparte con hasta 5 personas</p>
         </div>
       </div>
