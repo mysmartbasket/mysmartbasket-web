@@ -63,6 +63,14 @@ const INSTAGRAM_URL = 'https://www.instagram.com/my.smartbasket/';
    image (public/instagram/, 4:5, ~480x600 WebP), href, caption y date. */
 const INSTAGRAM_POSTS = [
   {
+    href: 'https://www.instagram.com/my.smartbasket/reel/DffkOfTRz7t/',
+    image: '/instagram/empieza-a-ahorrar-hoy.webp',
+    alt: 'Vídeo de MySmartBasket: la app en un móvil comparando el precio de un producto entre supermercados, con el texto «tu súper»',
+    caption: 'Empieza a ahorrar hoy. MySmartBasket ya está disponible.',
+    date: '8 nov 2026',
+    isReel: true,
+  },
+  {
     href: 'https://www.instagram.com/my.smartbasket/p/DfXMkVKjMe8/',
     image: '/instagram/google-play-cuatro-supermercados.webp',
     alt: 'Portada del carrusel «Misma cesta. Cuatro supermercados.» con la pregunta «¿Cuál sale más barata?»',
@@ -75,13 +83,6 @@ const INSTAGRAM_POSTS = [
     alt: 'Ranking del mes: cuál es la mejor cadena de supermercados según los usuarios, con los logos de Mercadona, Día, Lidl y Aldi',
     caption: 'Ya tenemos el ranking de octubre. Mira los resultados y elige dónde empezar a ahorrar.',
     date: '27 oct 2026',
-  },
-  {
-    href: 'https://www.instagram.com/my.smartbasket/p/Der9bfwjCK6/',
-    image: '/instagram/compra-estudiante.webp',
-    alt: 'Cómo hacer la compra semanal siendo estudiante: una cesta con huevos, arroz, verdura y fruta junto a una calculadora',
-    caption: '¿Eres estudiante y no sabes cómo ahorrar en tu compra semanal? Te proponemos una solución.',
-    date: '19 oct 2026',
   },
 
 ];
