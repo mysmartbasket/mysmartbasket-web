@@ -838,9 +838,11 @@ const HeroShowcase = ({ onOpenVideo }: { onOpenVideo: () => void }) => {
                   className="flex flex-col items-center gap-1.5 hover:opacity-90 transition-opacity"
                 >
                   <span className="text-[9px] uppercase tracking-wide font-bold text-brand-green">Ya disponible</span>
-                  <div className="flex items-center justify-center h-10 w-[103px] bg-black text-white rounded-lg">
-                    <span className="text-sm font-bold">App Store</span>
-                  </div>
+                  <img
+                    src="/badges/apple-store-es.svg"
+                    alt="Descargar en la App Store"
+                    className="h-10 w-auto"
+                  />
                 </a>
                 <a
                   href={PLAY_STORE_URL}
