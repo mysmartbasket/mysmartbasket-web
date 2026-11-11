@@ -57,6 +57,7 @@ const isGaConfigured = !!GA_MEASUREMENT_ID && !GA_MEASUREMENT_ID.includes('XXXXX
 // The live web app. Every CTA on this marketing site sends visitors here.
 const APP_URL = 'https://mysmartbasket-app-v2-production.up.railway.app';
 const PLAY_STORE_URL = 'https://play.google.com/store/apps/details?id=com.mysmartbasket.app';
+const APP_STORE_URL = 'https://apps.apple.com/es/app/mysmartbasket/id6818565987';
 const INSTAGRAM_URL = 'https://www.instagram.com/my.smartbasket/';
 
 /* Últimas 3 publicaciones de Instagram — se actualizan a mano: sustituir
@@ -234,9 +235,9 @@ const TEAM = [
 
 /* ── FAQ ── */
 const FAQ_ITEMS = [
-  { q: '¿Es gratuito?',                              a: 'Puedes registrarte y usarla gratis desde el navegador, sin descargar nada. También tienes la app para Android en Google Play.' },
+  { q: '¿Es gratuito?',                              a: 'Puedes registrarte y usarla gratis desde el navegador, sin descargar nada. También tienes la app para iOS en App Store y para Android en Google Play.' },
   { q: '¿Cómo obtiene la app los precios?',          a: 'Contamos con un sistema propio que monitoriza precios en Mercadona, Día, Aldi y Alcampo cada 24 horas, y seguimos ampliando la cobertura a más cadenas próximamente. No dependemos de fuentes externas, lo que garantiza mayor fiabilidad.' },
-  { q: '¿Ya está disponible?',                       a: 'Sí, ya puedes usarla. Accede gratis desde el navegador, sin descargar nada, o instala la app para Android desde Google Play. La versión para iOS llega próximamente.' },
+  { q: '¿Ya está disponible?',                       a: 'Sí, ya puedes usarla. Accede gratis desde el navegador, sin descargar nada, o instala la app desde App Store (iOS) o Google Play (Android).' },
   { q: '¿Está disponible en mi supermercado?',       a: 'Por ahora cubrimos Mercadona, Día, Aldi y Alcampo, y vamos incorporando más cadenas próximamente. Si tu cadena habitual no aparece todavía, puedes solicitarla — la añadimos por orden de demanda.' },
   { q: '¿Puedo compartirlo con mi familia?',         a: 'Sí. Puedes crear un hogar compartido con hasta 5 miembros que comparten la misma cesta, sin duplicados ni necesidad de coordinación adicional. Además, cada uno puede registrar lo que paga para repartir el gasto automáticamente.' },
   { q: '¿Cómo se tratan mis datos personales?',      a: 'Solo almacenamos tu correo electrónico y tus preferencias de compra. No vendemos ni compartimos datos con terceros. Puedes solicitar la eliminación completa de tu cuenta en cualquier momento escribiéndonos a contacto@mysmartbasket.app.' },
@@ -828,12 +829,19 @@ const HeroShowcase = ({ onOpenVideo }: { onOpenVideo: () => void }) => {
                 transition={{ duration: 0.5, delay: 1.2 }}
                 className="mt-8 flex flex-wrap justify-center gap-4"
               >
-                <div className="flex flex-col items-center gap-1.5 cursor-not-allowed select-none opacity-70">
-                  <span className="text-[9px] uppercase tracking-wide font-bold text-slate-400">Próximamente</span>
+                <a
+                  href={APP_STORE_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Descargar MySmartBasket en App Store"
+                  onClick={() => trackEvent('store_click', { store: 'app_store', store_location: 'hero' })}
+                  className="flex flex-col items-center gap-1.5 hover:opacity-90 transition-opacity"
+                >
+                  <span className="text-[9px] uppercase tracking-wide font-bold text-brand-green">Ya disponible</span>
                   <div className="flex items-center justify-center h-10 w-[103px] bg-black text-white rounded-lg">
                     <span className="text-sm font-bold">App Store</span>
                   </div>
-                </div>
+                </a>
                 <a
                   href={PLAY_STORE_URL}
                   target="_blank"
